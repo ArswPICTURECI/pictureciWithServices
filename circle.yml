@@ -6,7 +6,7 @@ deployment:
   staging:
     branch: master
     heroku: 
-      appname: ARSW--2017-2-PICTURECI
+      appname: pictureciarsw
 
 test:
   post:
