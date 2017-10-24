@@ -6,7 +6,7 @@ deployment:
   staging:
     branch: master
     heroku: 
-      appname: posgrado-eci
+      appname: ARSW--2017-2-PICTURECI
 
 test:
   post:
