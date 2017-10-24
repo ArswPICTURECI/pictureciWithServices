@@ -7,7 +7,7 @@ package edu.eci.arsw.persistence;
 
 /**
  *
- * @author hcadavid
+ * @author daferrotru
  */
 public class DrawingNotFoundException extends Exception{
 

@@ -7,7 +7,7 @@ package edu.eci.arsw.persistence;
 
 /**
  *
- * @author hcadavid
+ * @author daferrotru
  */
 public class DrawingPersistenceException extends Exception{
 

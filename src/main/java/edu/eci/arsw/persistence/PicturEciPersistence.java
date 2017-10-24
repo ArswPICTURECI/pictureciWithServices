@@ -10,7 +10,7 @@ import java.util.Set;
 
 /**
  *
- * @author hcadavid
+ * @author daferrotru
  */
 public interface PicturEciPersistence {
     

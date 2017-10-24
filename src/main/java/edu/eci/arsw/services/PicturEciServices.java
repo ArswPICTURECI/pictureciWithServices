@@ -19,7 +19,7 @@ import edu.eci.arsw.persistence.PicturEciPersistence;
 
 /**
  *
- * @author hcadavid
+ * @author daferrotru
  */
 @Service
 public class PicturEciServices {
