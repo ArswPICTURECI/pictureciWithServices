@@ -6,7 +6,7 @@ deployment:
   staging:
     branch: master
     heroku: 
-      appname: pictureciarsw
+      appname: foo-bar-123
 
 test:
   post:
