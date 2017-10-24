@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PicturEciAPIController {
 
     @Autowired
-    PicturEciServices bps = null;
+    PicturEciServices pes = null;
 
 
     

@@ -25,7 +25,7 @@ import edu.eci.arsw.persistence.PicturEciPersistence;
 public class PicturEciServices {
    
     @Autowired
-    PicturEciPersistence pe=null;
+    PicturEciPersistence pep=null;
     
     
     
