@@ -9,13 +9,13 @@ package edu.eci.arsw.persistence;
  *
  * @author daferrotru
  */
-public class DrawingNotFoundException extends Exception{
+public class UserNotFoundException extends Exception{
 
-    public DrawingNotFoundException(String message) {
+    public UserNotFoundException(String message) {
         super(message);
     }
 
-    public DrawingNotFoundException(String message, Throwable cause) {
+    public UserNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
     

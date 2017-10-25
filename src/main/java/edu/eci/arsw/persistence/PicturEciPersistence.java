@@ -6,6 +6,7 @@
 package edu.eci.arsw.persistence;
 
 
+import edu.eci.arsw.model.User;
 import java.util.Set;
 
 /**
@@ -13,6 +14,12 @@ import java.util.Set;
  * @author daferrotru
  */
 public interface PicturEciPersistence {
+    
+    /**
+     * Registers the user 
+     * @param user
+     */
+    public void registerUser(User user) throws UserPersistenceException;
     
     
 }

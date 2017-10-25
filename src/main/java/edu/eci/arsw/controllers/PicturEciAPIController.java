@@ -5,8 +5,8 @@
  */
 package edu.eci.arsw.controllers;
 
-import edu.eci.arsw.persistence.DrawingNotFoundException;
-import edu.eci.arsw.persistence.DrawingPersistenceException;
+import edu.eci.arsw.persistence.UserNotFoundException;
+import edu.eci.arsw.persistence.UserPersistenceException;
 import edu.eci.arsw.services.PicturEciServices;
 import java.util.LinkedHashSet;
 import java.util.Set;

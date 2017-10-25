@@ -6,8 +6,9 @@
 package edu.eci.arsw.services;
 
 
-import edu.eci.arsw.persistence.DrawingNotFoundException;
-import edu.eci.arsw.persistence.DrawingPersistenceException;
+import edu.eci.arsw.model.User;
+import edu.eci.arsw.persistence.UserNotFoundException;
+import edu.eci.arsw.persistence.UserPersistenceException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -27,6 +28,8 @@ public class PicturEciServices {
     @Autowired
     PicturEciPersistence pep=null;
     
-    
+    public void registerUser(User user) throws UserPersistenceException{
+        pep.registerUser(user);
+    }
     
 }

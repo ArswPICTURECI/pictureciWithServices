@@ -5,9 +5,9 @@
  */
 package edu.eci.arsw.persistence.impl;
 
-
-import edu.eci.arsw.persistence.DrawingNotFoundException;
-import edu.eci.arsw.persistence.DrawingPersistenceException;
+import edu.eci.arsw.model.User;
+//import edu.eci.arsw.persistence.DrawingNotFoundException;
+//import edu.eci.arsw.persistence.DrawingPersistenceException;
 //import java.util.HashMap;
 import java.util.HashSet;
 //import java.util.Map;
@@ -19,6 +19,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.stereotype.Service;
 import edu.eci.arsw.persistence.PicturEciPersistence;
+import edu.eci.arsw.persistence.UserPersistenceException;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  *
@@ -27,5 +30,26 @@ import edu.eci.arsw.persistence.PicturEciPersistence;
 @Service
 public class InMemoryPicturEciPersistence implements PicturEciPersistence {
 
-    
+    private final ArrayList<User> users = new ArrayList<>();
+
+    public InMemoryPicturEciPersistence() {
+        User u1 = new User("Daniel", "dibuja", 1);
+        User u2 = new User("Camilo", "dibuja", 2);
+    }
+
+    @Override
+    public void registerUser(User user) throws UserPersistenceException {
+        if (users.contains(user)){
+            throw new UserPersistenceException("The given user already exist: "+ user);
+        }else{
+            users.add(user);
+        }
+        
+
+    }
+
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
 }
