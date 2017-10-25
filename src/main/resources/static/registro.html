@@ -6,9 +6,9 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>PicturEci</title>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>REGISTRO USUARIO PICTURECI</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="assets/css/main.css" />
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,27 +39,16 @@ and open the template in the editor.
             }
         </style>
     </head>
-
-
-
-    <body>
-        <h1>PicturEci</h1>
-
-
-        <h1>Que quieres hacer?</h1>
-        <select name="estilo">
-
-            <option>Dibujar</option>
-
-            <option>Adivinar</option>
-
-
-        </select>
-        <h1>En que sala?</h1>
-        Room:<input id="Topic" type="number"/> 
-
-        <button  onclick="rapida()" >Iniciar Partida</button>
-
-        <div>TODO write content</div>
+    <body>      
+        
+         <h1>Registro de Usuario</h1>
+        <br>
+        
+        <form>
+            <font >Username: </font>
+            <input type="text" name="username" id="username" value="" class="labell" placeholder="Enter a valid Username" />
+            <button type="button" onclick=" app.addUser(document.getElementById('username').value)" >Register</button>
+            
+        </form>
     </body>
 </html>

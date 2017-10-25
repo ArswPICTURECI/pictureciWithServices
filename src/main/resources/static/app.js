@@ -6,42 +6,53 @@
 
 
 
-var stompClient = null;
+var app = (function () {
+    var stompClient = null;
 
-function connect() {
-    var socket = new SockJS('/stompendpoint');
-    stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/TOPICOXX', function (data) {
+    var connect = function () {
+        var socket = new SockJS('/stompendpoint');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/TOPICOXX', function (data) {
 
 
+            });
         });
-    });
-}
+    };
 
-function disconnect() {
-    if (stompClient != null) {
-        stompClient.disconnect();
-    }
-    setConnected(false);
-    console.log("Disconnected");
-}
-
-
-
-partida= function () {
-    location.href = "partida.html";
-};
-
-rapida= function () {
-    location.href = "rapida.html";
-};
-
-$(document).ready(
-        function () {
-            connect();
-            console.info('connecting to websockets');
+    var disconnect = function () {
+        if (stompClient !== null) {
+            stompClient.disconnect();
         }
-);
+        setConnected(false);
+        console.log("Disconnected");
+    };
 
+    return{
+        partida: function () {
+            location.href = "partida.html";
+        },
+
+        rapida : function () {
+            location.href = "rapida.html";
+        },
+
+        registro: function () {
+            location.href = "registro.html";
+        }
+
+        /**
+        $(document).ready(
+                function () {
+                    connect();
+                    console.info('connecting to websockets');
+                }
+        )*/
+        
+    };
+
+
+
+
+})();
