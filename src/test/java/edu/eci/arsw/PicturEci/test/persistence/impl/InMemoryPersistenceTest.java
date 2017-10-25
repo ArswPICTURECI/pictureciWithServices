@@ -25,7 +25,7 @@ public class InMemoryPersistenceTest {
         InMemoryPicturEciPersistence ipep= new InMemoryPicturEciPersistence();
         User us1=new User("Camilo");
         ipep.registerUser(us1);
-        assertEquals(ipep.getUsers().get(0).getName(), "Camilo");
+        assertEquals(ipep.getAllUsers().get(2).getName(), "Camilo");
     }
     
     @Test
@@ -35,7 +35,20 @@ public class InMemoryPersistenceTest {
         User us2=new User("Andres","dibuja",1);
         ipep.registerUser(us1);
         ipep.registerUser(us2);
-        assertEquals(ipep.getUsers().get(0).getRol(), "dibuja");
-        assertEquals(ipep.getUsers().get(1).getName(), "Andres");
+        assertEquals(ipep.getAllUsers().get(1).getRol(), "dibuja");
+        assertEquals(ipep.getAllUsers().get(3).getName(), "Andres");
+    }
+    
+    @Test
+    public void registerUsers() throws UserPersistenceException{
+        InMemoryPicturEciPersistence ipep= new InMemoryPicturEciPersistence();
+        User us1=new User("Laura","dibuja",1);
+        User us2=new User("Andres","dibuja",1);
+        User us3=new User("Leonardo");
+        ipep.registerUser(us1);
+        ipep.registerUser(us2);
+        ipep.registerUser(us3);
+        assertEquals(ipep.getAllUsers().size(), 5);
+        
     }
 }

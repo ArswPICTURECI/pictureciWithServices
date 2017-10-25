@@ -9,6 +9,8 @@
 var app = (function () {
     var stompClient = null;
 
+
+    //FALTA CONECTAR 
     var connect = function () {
         var socket = new SockJS('/stompendpoint');
         stompClient = Stomp.over(socket);
@@ -28,6 +30,8 @@ var app = (function () {
         setConnected(false);
         console.log("Disconnected");
     };
+    
+    var callback=function (){};
 
     return{
 
@@ -41,15 +45,17 @@ var app = (function () {
             ;
         },
 
+        //BOTA UN ERROR EN EL AJAX, AUN NO LO LOGRO IDENTIFICAR
         addUser: function (userName) {
+            console.log("UserName: "+ userName);
             var data = {"name": userName, "rol": "", "room": 0};
             return $.ajax({
-                url: "/users/",
+                url: "/users/"+userName,
                 type: 'POST',
                 data: JSON.stringify(data),
                 contentType: "application/json"
             }).then(function () {
-                $.get("/users/" + userName);
+                $.get("/users/" + userName, callback);
             },
                     function () {
                         alert("Error al registrar el nuevo Usuario");
@@ -67,12 +73,9 @@ var app = (function () {
 
         registro: function () {
             location.href = "registro.html";
-        },
-
-        addUsers: function (userName) {
-
         }
 
+        
         /**
          $(document).ready(
          function () {
