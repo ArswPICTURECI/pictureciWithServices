@@ -30,30 +30,57 @@ var app = (function () {
     };
 
     return{
+
+        getUserName: function (userName) {
+            if (userName !== "") {
+                //$.get("/users/" + userName, callback);
+                $.get("/users/" + userName);
+            } else if (authname == "") {
+                alert("EL USUARIO NO PUEDE ESTAR VACIO");
+            }
+            ;
+        },
+
+        addUser: function (userName) {
+            var data = {"name": userName, "rol": "", "room": 0};
+            return $.ajax({
+                url: "/users/",
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: "application/json"
+            }).then(function () {
+                $.get("/users/" + userName);
+            },
+                    function () {
+                        alert("Error al registrar el nuevo Usuario");
+                    }
+            );
+        },
+
         partida: function () {
             location.href = "partida.html";
         },
 
-        rapida : function () {
+        rapida: function () {
             location.href = "rapida.html";
         },
 
         registro: function () {
             location.href = "registro.html";
         },
-        
-        addUsers: function (userName){
-            
+
+        addUsers: function (userName) {
+
         }
 
         /**
-        $(document).ready(
-                function () {
-                    connect();
-                    console.info('connecting to websockets');
-                }
-        )*/
-        
+         $(document).ready(
+         function () {
+         connect();
+         console.info('connecting to websockets');
+         }
+         )*/
+
     };
 
 
