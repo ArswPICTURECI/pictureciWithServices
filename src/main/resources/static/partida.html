@@ -44,17 +44,28 @@ and open the template in the editor.
                 text-align: left;
             }
         </style>
+    </head>
 
-    </head> 
+
+
     <body>
         <h1>PicturEci</h1>
-        <br>
-        <form>
-            <button type="button" style="text-align:center">Iniciar sesion</button>
-            <button type="button" style="text-align:center">Registrar Usuario</button>
-            <button type="button" onclick="partida()" style="text-align:center">Partida Rapida</button>
-        </form>
 
-        
+
+        <h1>Que quieres hacer?</h1>
+        <select name="estilo">
+
+            <option>Dibujar</option>
+
+            <option>Adivinar</option>
+
+
+        </select>
+        <h1>En que sala?</h1>
+        Room:<input id="Topic" type="number"/> 
+
+        <button  onclick="rapida()" >Iniciar Partida</button>
+
+        <div>TODO write content</div>
     </body>
 </html>
