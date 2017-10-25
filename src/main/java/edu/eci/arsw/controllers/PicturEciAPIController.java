@@ -5,6 +5,7 @@
  */
 package edu.eci.arsw.controllers;
 
+import edu.eci.arsw.model.User;
 import edu.eci.arsw.persistence.UserNotFoundException;
 import edu.eci.arsw.persistence.UserPersistenceException;
 import edu.eci.arsw.services.PicturEciServices;
@@ -27,14 +28,25 @@ import org.springframework.web.bind.annotation.RestController;
  * @author daferrotru
  */
 @RestController
-@RequestMapping(value = "")
+@RequestMapping(value = "/users")
 public class PicturEciAPIController {
 
     @Autowired
     PicturEciServices pes = null;
 
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<?> getUsers() {
+        return new ResponseEntity<>(pes.getAllUsers(), HttpStatus.ACCEPTED);
+
+    }
 
     
-
     
+    @RequestMapping(value = "/{author}" , method = RequestMethod.GET)
+    public ResponseEntity<?> getUser(@PathVariable String author) {
+        
+        return new ResponseEntity<>(pes.getUser(author),HttpStatus.ACCEPTED);
+      
+    }
+
 }

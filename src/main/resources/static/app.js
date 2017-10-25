@@ -40,6 +40,10 @@ var app = (function () {
 
         registro: function () {
             location.href = "registro.html";
+        },
+        
+        addUsers: function (userName){
+            
         }
 
         /**

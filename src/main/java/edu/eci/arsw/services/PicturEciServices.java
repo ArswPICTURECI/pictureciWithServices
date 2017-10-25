@@ -9,14 +9,12 @@ package edu.eci.arsw.services;
 import edu.eci.arsw.model.User;
 import edu.eci.arsw.persistence.UserNotFoundException;
 import edu.eci.arsw.persistence.UserPersistenceException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import edu.eci.arsw.persistence.PicturEciPersistence;
+import java.util.ArrayList;
 
 /**
  *
@@ -30,6 +28,14 @@ public class PicturEciServices {
     
     public void registerUser(User user) throws UserPersistenceException{
         pep.registerUser(user);
+    }
+    
+    public ArrayList<User> getAllUsers(){
+        return pep.getAllUsers();
+    }
+    
+    public User getUser(String userName){
+        return pep.getUser(userName);
     }
     
 }

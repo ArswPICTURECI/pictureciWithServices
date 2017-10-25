@@ -7,7 +7,8 @@ package edu.eci.arsw.persistence;
 
 
 import edu.eci.arsw.model.User;
-import java.util.Set;
+import java.util.ArrayList;
+
 
 /**
  *
@@ -20,6 +21,14 @@ public interface PicturEciPersistence {
      * @param user
      */
     public void registerUser(User user) throws UserPersistenceException;
+    
+    /**
+     *
+     * @return all registered users
+     */
+    public ArrayList<User> getAllUsers();
+    
+    public User getUser(String userName);
     
     
 }

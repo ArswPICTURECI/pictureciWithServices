@@ -35,6 +35,8 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
     public InMemoryPicturEciPersistence() {
         User u1 = new User("Daniel", "dibuja", 1);
         User u2 = new User("Camilo", "dibuja", 2);
+        users.add(u1);
+        users.add(u2);
     }
 
     @Override
@@ -47,9 +49,22 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
         
 
     }
-
-    public ArrayList<User> getUsers() {
+    
+    @Override
+    public ArrayList<User> getAllUsers() {
         return users;
+    }
+
+    @Override
+    public User getUser(String userName) {
+        User res=null;
+        for(int i=0; i< users.size();i++){
+            if (users.get(i).getName().equals(userName)){
+                res=users.get(i);
+            }
+        }
+        return res;
+        
     }
 
 }

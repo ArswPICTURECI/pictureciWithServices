@@ -26,6 +26,9 @@ public class User {
         this.rol=null;
         this.sala=0;
     }
+    
+    public User(){
+    }
 
     public String getName() {
         return name;
