@@ -35,9 +35,9 @@ A possible future advance in the architecture is considered to guarantee availab
 
 ## Limk Trello: https://trello.com/b/9cLVOejy/arsw-2017-2-pictureci-historias
 
-## Link CircleCI : 
+## Link CircleCI : https://circleci.com/gh/ArswPICTURECI/ARSW--2017-2-PICTURECI
 
-## Link Heroku app: 
+## Link Heroku app: https://pictureciarsw.herokuapp.com/
 
 
   
