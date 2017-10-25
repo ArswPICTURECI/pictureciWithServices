@@ -19,6 +19,7 @@ public interface PicturEciPersistence {
     /**
      * Registers the user 
      * @param user
+     * @throws edu.eci.arsw.persistence.UserPersistenceException
      */
     public void registerUser(User user) throws UserPersistenceException;
     
@@ -29,6 +30,8 @@ public interface PicturEciPersistence {
     public ArrayList<User> getAllUsers();
     
     public User getUser(String userName);
+    
+    public void addUser(User user) throws UserPersistenceException;
     
     
 }

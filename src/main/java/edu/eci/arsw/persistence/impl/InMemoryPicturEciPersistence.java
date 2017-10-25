@@ -67,4 +67,9 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
         
     }
 
+    @Override
+    public void addUser(User user) {
+        users.add(user);
+    }
+
 }

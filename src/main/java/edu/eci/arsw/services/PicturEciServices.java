@@ -38,4 +38,12 @@ public class PicturEciServices {
         return pep.getUser(userName);
     }
     
+    public void addUser(User user){
+        try {
+            pep.addUser(user);
+        } catch (UserPersistenceException ex) {
+            Logger.getLogger(PicturEciServices.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }

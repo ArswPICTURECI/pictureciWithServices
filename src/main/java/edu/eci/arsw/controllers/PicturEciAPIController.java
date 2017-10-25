@@ -40,13 +40,23 @@ public class PicturEciAPIController {
 
     }
 
-    
-    
-    @RequestMapping(value = "/{author}" , method = RequestMethod.GET)
+    @RequestMapping(value = "/{author}", method = RequestMethod.GET)
     public ResponseEntity<?> getUser(@PathVariable String author) {
+
+        return new ResponseEntity<>(pes.getUser(author), HttpStatus.ACCEPTED);
+
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<?> postUser(@RequestBody User user) {
+
+            if (pes.getUser(user.getName()) == null) {
+                pes.addUser(user);
+                return new ResponseEntity<>(HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
         
-        return new ResponseEntity<>(pes.getUser(author),HttpStatus.ACCEPTED);
-      
     }
 
 }
