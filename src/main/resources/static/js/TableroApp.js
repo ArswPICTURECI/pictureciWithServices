@@ -17,18 +17,17 @@ prepareCanvas = function () {
     canvas = document.getElementById("myCanvas");
     ctx = canvas.getContext("2d"); // obtenemos el contexto ( dibujar en 2d)
     canvasLimites = canvas.getBoundingClientRect(); // obtenemos los limites del canvas
-    ctx.lineWidth = 1;
-            if(Math.random()==0){
-                context.strokeStyle = '#3B83BD';
-            }else{
-                context.strokeStyle = '#CC0605';
-            }
+    ctx.lineWidth = 5;
+    context.strokeStyle = '#0000a0';
+    context.lineWidth = '5';
+    context.lineJoin = "round";
+    ctx.strokeStyle = '#0000a0';
+    ctx.lineWidth = '5';
+    ctx.lineJoin = "round";
     canvas.addEventListener('mousedown', cambiarEstado, false);
     canvas.addEventListener('mouseup', cambiarEstado, false);
     canvas.addEventListener('mousemove', pintarLinea, false);
-
     canvas.style.cursor = "hand";
-
 
 };
 
@@ -48,18 +47,20 @@ pintarLinea = function (event) {
             x: coordenadas.x,
             y: coordenadas.y
         };
-            if(Math.random()==0){
-                context.strokeStyle = '#3B83BD';
-            }else{
-                context.strokeStyle = '#CC0605';
-            } // color de la linea
+       
+        context.strokeStyle = '#0000a0';
+        context.lineWidth='5';
+        context.lineJoin = "round";     
+        ctx.strokeStyle = '#0000a0';
+        ctx.lineWidth='5';
+        ctx.lineJoin = "round";
+        // color de la linea
         ctx.stroke(); // dibujamos la linea
     }
 };
 obtenerCoordenadas = function (event) {
     var posX;
     var posY;
-
     if (event.pageX || event.pageY) {
         posX = event.pageX - canvasLimites.left;
         posY = event.pageY - canvasLimites.top;
@@ -67,44 +68,29 @@ obtenerCoordenadas = function (event) {
         posX = event.clientX - canvasLimites.left;
         posY = event.clientY - canvasLimites.top;
     }
-
     return {x: posX,
         y: posY
     };
 };
 
 
-
 function connect() {
     var socket = new SockJS('/stompendpoint');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
-        //console.log("Ya tengo los datossssssssssssssssssssssssssssssssssss");
-
-        clase = sessionStorage.getItem("clase");
-
-
-
-
-        stompClient.subscribe('/topic/newdibujo.' + clase, function (data) {
-            console.log("newdibujo");
+        console.log('Connected: da ' + frame+'  nose que poner ');
+        stompClient.subscribe('/topic/', function (data) {
+            console.log("newdibujo en topic nose");
             theObject = JSON.parse(data.body);
             var ctx = canvas.getContext('2d');
             ctx.beginPath();
             ctx.arc(theObject["x"], theObject["y"], 1, 0, 2 * Math.PI);
-
             ctx.stroke();
-
-
         });
     });
 }
-sendPoint = function () {
-
-    clase = sessionStorage.getItem("clase");
-
-    stompClient.send("/app/newdibujo." + clase, {}, JSON.stringify({x: x, y: y}));
+sendPoint = function () { 
+    stompClient.send("/topic/" , {}, JSON.stringify({x: x, y: y}));
 };
 
 function disconnect() {
@@ -123,22 +109,6 @@ function getMousePos(canvas, evt) {
     };
 }
 
-
-description = function () {
-
-    clase = sessionStorage.getItem("clase");
-    $.get("/Usuario/getClases", function (data) {
-
-        for (x in data) {
-
-
-            if (data[x].NombreClase == clase) {
-                alert(data[x].DescripcionClase);
-            }
-        }
-    });
-};
-
 hc = function () {
     flagPaint = !flagPaint;
 };
@@ -147,23 +117,7 @@ nc = function () {
     flagPaint = !flagPaint;
 };
 
-VerEstudiantes = function () {
 
-    clase = sessionStorage.getItem("clase");
-    $.get("/Usuario/getClases", function (data) {
-        var estu = [];
-        for (x in data) {
-            if (data[x].NombreClase == clase) {
-                for (index in data[x].Estudiantes) {
-                    estu = estu + data[x].Estudiantes[index] + "\n";
-                }
-
-            }
-        }
-        alert("Estudiantes Inscritos en esta materia\n\n" + estu);
-    });
-
-};
 
 $(document).ready(
         function () {
