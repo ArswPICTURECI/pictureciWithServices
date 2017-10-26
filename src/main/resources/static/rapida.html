@@ -8,11 +8,14 @@ and open the template in the editor.
     <head>
         <title>PicturEci</title>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />        
+        <!--meta name="viewport" content="width=device-width, initial-scale=1" />        
         <link rel="stylesheet" href="assets/css/main.css" />
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="/TableroApp.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"-->
+        <script src="/webjars/jquery/jquery.min.js"></script>
+        <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+        <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+        <script src="js/TableroApp.js"></script>
         <style type="text/css">
 
             h1{
@@ -41,8 +44,8 @@ and open the template in the editor.
     </head>
 
 
-    <body onload="Tapp.prepareCanvas()" >          
+    <body  >          
         <canvas id="myCanvas" width="800" height="600" style="border:1px solid #000000;"></canvas>
-        <button onclick="Tapp.connect()" >Dibujar </button>
+        <button onclick="connect()" >Dibujar </button>
     </body>
 </html>
