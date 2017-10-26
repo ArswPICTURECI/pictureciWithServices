@@ -45,10 +45,9 @@ var app = (function () {
             ;
         },
 
-        //BOTA UN ERROR EN EL AJAX, AUN NO LO LOGRO IDENTIFICAR
+
         addUser: function (userName) {
             console.log("UserName: "+ userName);
-            //var data = {"name": userName, "rol": "", "sala": 0};
             var data = {"name":userName,"rol":"","sala":0};
             return $.ajax({
                 url: "/users/",
