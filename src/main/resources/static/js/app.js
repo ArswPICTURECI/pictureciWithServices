@@ -48,14 +48,15 @@ var app = (function () {
         //BOTA UN ERROR EN EL AJAX, AUN NO LO LOGRO IDENTIFICAR
         addUser: function (userName) {
             console.log("UserName: "+ userName);
-            var data = {"name": userName, "rol": "", "sala": 0};
+            //var data = {"name": userName, "rol": "", "sala": 0};
+            var data = {"name":userName,"rol":"","sala":0};
             return $.ajax({
-                url: "/users/"+userName,
+                url: "/users/",
                 type: 'POST',
                 data: JSON.stringify(data),
                 contentType: "application/json"
             }).then(function () {
-                $.get("/users/" + userName, callback);
+                $.get("/users/" , callback);
             },
                     function () {
                         alert("Error al registrar el nuevo Usuario");
@@ -73,6 +74,10 @@ var app = (function () {
 
         registro: function () {
             location.href = "registro.html";
+        },
+        
+        principal:function (){
+            location.href = "index.html";
         }
 
         

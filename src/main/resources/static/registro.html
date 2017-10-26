@@ -12,6 +12,9 @@ and open the template in the editor.
         <link rel="stylesheet" href="assets/css/main.css" />
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="/webjars/jquery/jquery.min.js"></script>
+        <!--script src="/webjars/sockjs-client/sockjs.min.js"></script>
+        <script src="/webjars/stomp-websocket/stomp.min.js"></script-->
         <script src="js/app.js"></script>
         <style type="text/css">
 
@@ -47,7 +50,9 @@ and open the template in the editor.
         <form>
             <font >Username: </font>
             <input type="text" name="username" id="username" value="" class="labell" placeholder="Enter a valid Username" />
-            <button type="button" onclick=" app.addUser(document.getElementById('username').value)" >Register</button>
+            <!--button type="button" onclick=" app.addUser($('#username').val())" >Register</button-->
+            <button type="button" onclick="app.addUser($('#username').val())">Register</button>
+            <button type="button" onclick="app.principal()">Back To Menu</button>
             
         </form>
     </body>
