@@ -43,13 +43,15 @@ var app = (function () {
         }
         );
     };
+    
+    var callbackUS=function (){};
 
     return{
         getUserName: function (userName) {
             if (userName !== "") {
                 //$.get("/users/" + userName, callback);
-                $.get("/users/" + userName);
-            } else if (authname == "") {
+                $.get("/users/" + userName ,callbackUS);
+            } else {
                 alert("EL USUARIO NO PUEDE ESTAR VACIO");
             }
             ;
@@ -59,7 +61,7 @@ var app = (function () {
             if (userName !== "") {
                 var data = {"name": userName, "rol": "", "sala": 0};
                 currentUser = data;
-            }else{
+            } else {
                 alert("El nombre del usuario no puede estar vacio");
             }
 
@@ -77,6 +79,19 @@ var app = (function () {
                     }
             );
         },
+        login: function (user) {
+            if (user !== "") {
+                currentUser = $.get("/users/"+user,callbackUS).then(function (){
+                    location.href = "userSesion.html";
+                },function (){
+                    alert("El usuario que intenta agregar no esta Registrado");
+                });
+            }else{
+                alert("El usuario no puede estar vacio!!");
+            }
+
+
+        },
         queryUsers: function () {
             $.get("/users/", callback);
         },
@@ -91,6 +106,10 @@ var app = (function () {
         },
         principal: function () {
             location.href = "index.html";
+        },
+        inicioSesion: function () {
+            location.href = "sesion.html";
+
         }
 
 

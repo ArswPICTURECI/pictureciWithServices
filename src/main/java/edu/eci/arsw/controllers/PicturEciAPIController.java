@@ -42,8 +42,18 @@ public class PicturEciAPIController {
 
     @RequestMapping(value = "/{author}", method = RequestMethod.GET)
     public ResponseEntity<?> getUser(@PathVariable String author) {
+        if(author!=""){
+            if(pes.getUser(author)!=null){
+                return new ResponseEntity<>(pes.getUser(author), HttpStatus.ACCEPTED);
+            }else{
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            
+        }else{
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
 
-        return new ResponseEntity<>(pes.getUser(author), HttpStatus.ACCEPTED);
+        
 
     }
 
