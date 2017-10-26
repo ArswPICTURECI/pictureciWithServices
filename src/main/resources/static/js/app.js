@@ -31,13 +31,13 @@ var app = (function () {
         setConnected(false);
         console.log("Disconnected");
     };
-    
-    var callback=function (lista){
-        
+
+    var callback = function (lista) {
+
         $("#tablaUsers tbody").empty();
         lista.map(function (ur) {
             $(document).ready(function () {
-                var markup = "<tr><td>" + ur.name + "</td><td>" + ur.rol + "</td><td>" +ur.sala +"</td></tr>";
+                var markup = "<tr><td>" + ur.name + "</td><td>" + ur.rol + "</td><td>" + ur.sala + "</td></tr>";
                 $("#tablaUsers tbody").append(markup);
             });
         }
@@ -45,7 +45,6 @@ var app = (function () {
     };
 
     return{
-
         getUserName: function (userName) {
             if (userName !== "") {
                 //$.get("/users/" + userName, callback);
@@ -55,48 +54,46 @@ var app = (function () {
             }
             ;
         },
-
-
         addUser: function (userName) {
-            console.log("UserName: "+ userName);
-            var data = {"name":userName,"rol":"","sala":0};
-            currentUser=data;
+            console.log("UserName: " + userName);
+            if (userName !== "") {
+                var data = {"name": userName, "rol": "", "sala": 0};
+                currentUser = data;
+            }else{
+                alert("El nombre del usuario no puede estar vacio");
+            }
+
             return $.ajax({
                 url: "/users/",
                 type: 'POST',
                 data: JSON.stringify(data),
                 contentType: "application/json"
             }).then(function () {
-                $.get("/users/" , callback);
-                alert("El usuario: "+userName+" se ha creado satisfactoriamente");
+                $.get("/users/", callback);
+                alert("El usuario: " + userName + " se ha creado satisfactoriamente");
             },
                     function () {
                         alert("Error al registrar el nuevo Usuario");
                     }
             );
         },
-        
-        queryUsers:function (){
-            $.get("/users/" , callback);
+        queryUsers: function () {
+            $.get("/users/", callback);
         },
-
         partida: function () {
             location.href = "partida.html";
         },
-
         rapida: function () {
             location.href = "rapida.html";
         },
-
         registro: function () {
             location.href = "registro.html";
         },
-        
-        principal:function (){
+        principal: function () {
             location.href = "index.html";
         }
 
-        
+
         /**
          $(document).ready(
          function () {
