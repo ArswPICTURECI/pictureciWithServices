@@ -8,6 +8,7 @@
 
 var app = (function () {
     var stompClient = null;
+    var currentUser;
 
 
     //FALTA CONECTAR 
@@ -31,7 +32,17 @@ var app = (function () {
         console.log("Disconnected");
     };
     
-    var callback=function (){};
+    var callback=function (lista){
+        
+        $("#tablaUsers tbody").empty();
+        lista.map(function (ur) {
+            $(document).ready(function () {
+                var markup = "<tr><td>" + ur.name + "</td><td>" + ur.rol + "</td><td>" +ur.sala +"</td></tr>";
+                $("#tablaUsers tbody").append(markup);
+            });
+        }
+        );
+    };
 
     return{
 
@@ -49,6 +60,7 @@ var app = (function () {
         addUser: function (userName) {
             console.log("UserName: "+ userName);
             var data = {"name":userName,"rol":"","sala":0};
+            currentUser=data;
             return $.ajax({
                 url: "/users/",
                 type: 'POST',
@@ -56,11 +68,16 @@ var app = (function () {
                 contentType: "application/json"
             }).then(function () {
                 $.get("/users/" , callback);
+                alert("El usuario: "+userName+" se ha creado satisfactoriamente");
             },
                     function () {
                         alert("Error al registrar el nuevo Usuario");
                     }
             );
+        },
+        
+        queryUsers:function (){
+            $.get("/users/" , callback);
         },
 
         partida: function () {

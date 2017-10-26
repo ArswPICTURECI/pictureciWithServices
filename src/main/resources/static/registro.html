@@ -43,16 +43,39 @@ and open the template in the editor.
         </style>
     </head>
     <body>      
-        
-         <h1>Registro de Usuario</h1>
+
+        <h1>Registro de Usuario</h1>
         <br>
-        
+
         <form>
             <font >Username: </font>
             <input type="text" name="username" id="username" value="" class="labell" placeholder="Enter a valid Username" />
             <button type="button" onclick="app.addUser($('#username').val())">Register</button>
-            <button type="button" onclick="app.principal()">Back To Menu</button>
-            
+
         </form>
+
+        <div id="registerTable">
+            <div id="left" style="float: left" class="col-md-4"> 
+                <br>
+                <table id="tablaUsers" border="1" style="width:50%">
+                    <thead>
+                        <tr>
+                            <th>UserName</th>
+                            <th>Current Rol</th>
+                            <th>Current Room</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                
+                <button type="button" onclick="app.queryUsers()">Consultar Usuarios Registrados</button>
+                <button type="button" onclick="app.principal()">Back To Menu</button>
+
+                
+                
+            </div>
+        </div>
     </body>
 </html>
