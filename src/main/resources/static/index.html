@@ -15,14 +15,47 @@ and open the template in the editor.
         <script src="/webjars/sockjs-client/sockjs.min.js"></script>
         <script src="/webjars/stomp-websocket/stomp.min.js"></script>
         <script src="/js/App.js"></script>
+        <style type="text/css">
+
+            button{
+                margin:auto;
+                display:block;
+            }
+
+            /* BUTTON STYLES */
+            button{
+                padding:16px 32px;
+                font-family:helvetica;
+                font-size:16px;
+                font-weight:100;
+                color:#fff;
+                background: #587286;
+                border:0;
+                font-weight:100;
+            }
+            button:hover{
+                background: #3B5C76;
+            }
+
+
+        </style>
     </head>
     <body>
-        <h1>PicturEci</h1>
+        <h1>Bienvenido a PicturEci</h1>
+        <br>
+        <br>
         <br>
         <form>
-            <button type="button" onclick="app.inicioSesion()" style="text-align:center">Iniciar sesion</button>
-            <button type="button" onclick="app.registro()" style="text-align:center">Registrar Usuario</button>
-            <button type="button" onclick="app.partida()" style="text-align:center">Partida Rapida</button>
+            <div>
+                <button type="button" onclick="app.inicioSesion()" style="text-align:center">Iniciar sesion</button>
+                <br>
+                <br>
+                <button type="button" onclick="app.registro()" style="text-align:center">Registrar Usuario</button>
+                <br>
+                <br>
+                <button type="button" onclick="app.partida()" style="text-align:center">Partida Rapida</button>
+            </div>
+
         </form>
     </body>
 </html>
