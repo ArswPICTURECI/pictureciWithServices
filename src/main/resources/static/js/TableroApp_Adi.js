@@ -63,8 +63,9 @@ function connect() {
     var socket = new SockJS('/stompendpoint');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/'+sala, function (data) {            
+        console.log('Connected: ' + frame + '  ');
+        stompClient.subscribe('/topic/'+sala, function (data) {
+          
             theObject = JSON.parse(data.body);
             var ctx = canvas.getContext('2d');
             ctx.beginPath();
@@ -115,7 +116,7 @@ $(document).ready(
             context.strokeStyle = '#FFFFFF';
             context.lineWidth = '5';
             context.lineJoin = "round";
-            canvas.addEventListener('mousedown', hc, false);
+            /**canvas.addEventListener('mousedown', hc, false);
             canvas.addEventListener('mouseup', nc, false);
             canvas.addEventListener('mousemove', function (evt) {
                 if (flagPaint == false) {
@@ -129,7 +130,7 @@ $(document).ready(
                     //stompClient.send("/app/newpoint", {}, JSON.stringify({x: x, y: y}));
                     var mensaje = 'Position' + mousePos.x + mousePos.y;
                 }
-            }, false);
+            }, false);*/
 
         }
 );

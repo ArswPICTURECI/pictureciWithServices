@@ -13,13 +13,20 @@ and open the template in the editor.
         <script src="/webjars/jquery/jquery.min.js"></script>
         <script src="/webjars/sockjs-client/sockjs.min.js"></script>
         <script src="/webjars/stomp-websocket/stomp.min.js"></script>
-        <script src="/js/TableroApp.js"></script>
+        <script src="/js/TableroApp_Adi.js"></script>
         <script src="/js/App.js"></script>
     </head>
-    <body  >          
-        <canvas id="myCanvas" width="800" height="600"></canvas>
-        <button onclick="app.connect()" >Dibujar </button>
+    <body  >
+        <br>
+        <h1>PicturEci</h1>
+        <br>
+        <h1>Tienes que adivinar</h1>
+        <br> <br>
+        <canvas id="myCanvas" width="800" height="600"></canvas>      
+        <br><br>
         <input id="guess_input" type="text" placeholder="Guess here!"/>
+        <br>
         <button onclick="app.attempt()" >Guess</button>
+        <!--button onclick="erase()" >Borrar Todo</button-->
     </body>
 </html>

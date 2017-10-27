@@ -9,28 +9,23 @@ and open the template in the editor.
         <title>PicturEci</title>
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="/assets/css/main.css" type="text/css"/>
+        <link rel="stylesheet" href="/assets/css/rapida.css" type="text/css"/>
         <script src="/webjars/jquery/jquery.min.js"></script>
         <script src="/webjars/sockjs-client/sockjs.min.js"></script>
         <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+        <script src="/js/TableroApp.js"></script>
         <script src="/js/App.js"></script>
     </head>
-    <body>
+    <body  >
+        <br>
         <h1>PicturEci</h1>
-
-
-        <h1>Que quieres hacer?</h1>
-        <select id="rol" name="estilo">
-
-            <option>Dibujar</option>
-
-            <option>Adivinar</option>
-
-
-        </select>
-        <h1>En que sala?</h1>
-        Room:<input id="topic" type="number"/> 
-
-        <button onclick="app.rapida()" >Iniciar Partida</button>
-        <button onclick="app.principal()">Back</button>
+        <br>
+        <h1>Eres Dibujante</h1>
+        <br>
+        <canvas id="myCanvas" width="800" height="600"></canvas>        
+        <!--input id="guess_input" type="text" placeholder="Guess here!"/-->
+        <br>
+        <!--button onclick="app.attempt()" >Guess</button-->
+        <button onclick="erase()" >Borrar Todo</button>
     </body>
 </html>

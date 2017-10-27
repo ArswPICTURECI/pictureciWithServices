@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 
 /**
  *
- * @author 
+ * @author 2098167
  */
 public class JedisUtil {
     

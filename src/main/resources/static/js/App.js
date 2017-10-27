@@ -103,15 +103,22 @@ var app = (function () {
                 contentType: "application/json"
             });
         },
-
         queryUsers: function () {
             $.get("/users/", callback);
         },
         partida: function () {
             location.href = "partida.html";
+
         },
         rapida: function () {
-            location.href = "rapida.html";
+            sessionStorage.setItem('sala', $("#topic").val());
+            sessionStorage.setItem('rol', $("#rol").val());
+            if (sessionStorage.getItem('rol') === 'Adivinar') {
+                location.href = "rapidaAdivinador.html";
+
+            } else {
+                location.href = "rapidaDibujante.html";
+            }
         },
         registro: function () {
             location.href = "registro.html";
