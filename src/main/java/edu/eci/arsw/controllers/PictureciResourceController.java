@@ -34,10 +34,15 @@ public class PictureciResourceController {
     @Autowired
     SimpMessagingTemplate msmt;
 
-    @RequestMapping(path = "/creategame/{topic}", method = RequestMethod.POST)
-    public ResponseEntity<?> postGame(@PathVariable String topic) {
-        pes.addGame(new Game(topic));
-        return new ResponseEntity<>("Game Started!", HttpStatus.CREATED);
+    @RequestMapping(path = "/creategame/{gameid}", method = RequestMethod.POST)
+    public ResponseEntity<?> postGame(@PathVariable Integer gameid) {
+        try {
+            Game game = pes.addGame(gameid);
+            return new ResponseEntity<>(game, HttpStatus.CREATED);
+        } catch (PersistenceException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.CONFLICT);
+        }
     }
 
     @RequestMapping(path = "/{gameid}/guess", method = RequestMethod.POST)
@@ -45,7 +50,7 @@ public class PictureciResourceController {
         try {
             boolean win = pes.tryWord(gameid, attempt);
             if (win) {
-
+                msmt.convertAndSend("/topic/winner." + gameid, attempt.getUsername());
             }
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (PersistenceException ex) {

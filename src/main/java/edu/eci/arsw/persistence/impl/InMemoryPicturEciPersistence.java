@@ -67,16 +67,20 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
     }
 
     @Override
-    public void addGame(Game game) {
+    public void addGame(int gameid, Game game) throws PersistenceException {
         synchronized (games) {
-            games.putIfAbsent(games.size() + 1, game);
+            if (games.get(gameid) != null) {
+                games.putIfAbsent(gameid, game);
+            } else {
+                throw new PersistenceException("Game " + gameid + " already exists");
+            }
         }
     }
 
     @Override
     public Game getGame(Integer gameid) throws PersistenceException {
         Game game = games.get(gameid);
-        if(game != null){
+        if (game != null) {
             return game;
         }
         throw new PersistenceException("Game doesn't exist");

@@ -10,8 +10,6 @@ var app = (function () {
     var stompClient = null;
     var currentUser;
 
-
-    //FALTA CONECTAR 
     var connect = function () {
         var socket = new SockJS('/stompendpoint');
         stompClient = Stomp.over(socket);
@@ -111,19 +109,5 @@ var app = (function () {
             location.href = "sesion.html";
 
         }
-
-
-        /**
-         $(document).ready(
-         function () {
-         connect();
-         console.info('connecting to websockets');
-         }
-         )*/
-
     };
-
-
-
-
 })();

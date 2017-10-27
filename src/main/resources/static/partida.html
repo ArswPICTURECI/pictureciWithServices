@@ -7,44 +7,14 @@ and open the template in the editor.
 <html>
     <head>
         <title>PicturEci</title>
-        <meta charset="utf-8" />
-        <!--meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="assets/css/main.css" />
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"-->
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="/assets/css/main.css" type="text/css"/>
         <script src="/webjars/jquery/jquery.min.js"></script>
         <script src="/webjars/sockjs-client/sockjs.min.js"></script>
         <script src="/webjars/stomp-websocket/stomp.min.js"></script>
-        <script src="js/app.js"></script>
-        <style type="text/css">
-
-            h1{
-                text-align: center;
-            }
-
-            form{
-                margin: 20px 0;
-            }
-            form input, button{
-                padding: 5px;
-            }
-            table{
-                width: 100%;
-                margin-bottom: 20px;
-                border-collapse: collapse;
-            }
-            table, th, td{
-                border: 1px solid #cdcdcd;
-            }
-            table th, table td{
-                padding: 10px;
-                text-align: left;
-            }
-        </style>
+        <script src="/js/GameApp.js"></script>
+        <script src="/js/App.js"></script>
     </head>
-
-
-
     <body>
         <h1>PicturEci</h1>
 
@@ -59,10 +29,9 @@ and open the template in the editor.
 
         </select>
         <h1>En que sala?</h1>
-        Room:<input id="Topic" type="number"/> 
+        Room:<input id="topic" type="number"/> 
 
-        <button  onclick="app.rapida()" >Iniciar Partida</button>
-
-       
+        <button onclick="game.connect()" >Iniciar Partida</button>
+        <button onclick="app.principal()">Back</button>
     </body>
 </html>
