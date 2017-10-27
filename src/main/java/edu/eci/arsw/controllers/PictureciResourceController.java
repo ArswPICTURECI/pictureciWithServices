@@ -28,14 +28,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/pictureci")
 public class PictureciResourceController {
-
+    
     @Autowired
     PicturEciServices pes = null;
-
+    
     @Autowired
     SimpMessagingTemplate msmt;
-
-    @RequestMapping(value="/{gameid}", method = RequestMethod.POST)
+    
+    @RequestMapping(value = "/{gameid}", method = RequestMethod.POST)
     public ResponseEntity<?> postGame(@PathVariable Integer gameid, @RequestBody Game game) {
         try {
             pes.addGame(gameid, game);
@@ -46,12 +46,13 @@ public class PictureciResourceController {
             return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.CONFLICT);
         }
     }
-
-    @RequestMapping(method = RequestMethod.POST)
+    
+    @RequestMapping(value = "/{gameid}/guess", method = RequestMethod.POST)
     public ResponseEntity<?> guessDrawing(@PathVariable Integer gameid, @RequestBody DrawingGuess attempt) {
         try {
             boolean win = pes.tryWord(gameid, attempt);
             if (win) {
+                pes.getGame(gameid).setWinner(attempt.getUsername());
                 msmt.convertAndSend("/topic/winner." + gameid, attempt.getUsername());
             }
             return new ResponseEntity<>(HttpStatus.CREATED);

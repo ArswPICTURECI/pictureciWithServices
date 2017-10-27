@@ -5,8 +5,7 @@
  */
 package edu.eci.arsw.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  *
@@ -14,10 +13,9 @@ import java.util.Set;
  */
 public class Game {
 
-    private final Set<String> used_words = new HashSet<>();
+    private final ConcurrentLinkedQueue<String> used_words = new ConcurrentLinkedQueue<>();
     private String word;
     private String winner;
-    private int id;
 
     public String[] getUsed_words() {
         return (String[]) used_words.toArray();
@@ -25,14 +23,6 @@ public class Game {
 
     public void setUsed_words() {
 
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public boolean addWord(String word) {
@@ -59,8 +49,7 @@ public class Game {
     @Override
     public String toString() {
         return "{"
-                + "id: " + id
-                + ", used_words: " + used_words.toString()
+                + "used_words: " + used_words.toString()
                 + ", word: " + word
                 + ", winner: " + winner
                 + "}";

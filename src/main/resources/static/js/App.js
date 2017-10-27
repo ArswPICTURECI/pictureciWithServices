@@ -10,27 +10,6 @@ var app = (function () {
 
     var stompClient = null;
 
-    var subscribe = function () {
-        let socket = new SockJS('/stompendpoint');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function (frame) {
-            console.log('Connected: ' + frame);
-            let gameid = sessionStorage.getItem("currentgame");
-            stompClient.subscribe('/topic/winner.' + gameid, function (data) {
-                alert("Winner: " + data.body);
-                disconnect();
-            });
-        });
-    };
-
-    var disconnect = function () {
-        if (stompClient !== null) {
-            stompClient.disconnect();
-        }
-        setConnected(false);
-        console.log("Disconnected");
-    };
-
     var callback = function (lista) {
 
         $("#tablaUsers tbody").empty();
@@ -88,19 +67,27 @@ var app = (function () {
             }
         },
 
-        connect: function (game) {
+        connect: function () {
+            let game = $("#topic").val();
             sessionStorage.setItem("currentgame", game);
-            let game_ = {"id": game, "used_words": "", "word": "dog", "winner": ""};
-            return $.ajax({
+            let game_ = {"used_words": [], "word": "dog", "winner": ""};
+            $.ajax({
                 url: "/pictureci/" + game,
                 type: "POST",
                 data: JSON.stringify(game_),
                 contentType: "application/json"
             }).then(() => {
-                app.rapida();
-
+                var socket = new SockJS('/stompendpoint');
+                stompClient = Stomp.over(socket);
+                stompClient.connect({}, function (frame) {
+                    alert('Connected jiji: ' + frame);
+                    let gameid = sessionStorage.getItem("currentgame");
+                    stompClient.subscribe("/topic/winner." + gameid, function (data) {
+                        alert("Winner: " + data.body);
+                    });
+                });
             }).then(() => {
-                subscribe();
+                app.rapida();
             });
         },
 
