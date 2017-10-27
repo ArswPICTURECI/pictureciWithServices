@@ -10,42 +10,17 @@ and open the template in the editor.
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="assets/css/main.css" />
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <script src="/webjars/jquery/jquery.min.js"></script>
-        <script src="js/App.js"></script>
-        <style type="text/css">
-
-            h1{
-                text-align: center;
-            }
-
-            form{
-                margin: 20px 0;
-            }
-            form input, button{
-                padding: 5px;
-            }
-            table{
-                width: 100%;
-                margin-bottom: 20px;
-                border-collapse: collapse;
-            }
-            table, th, td{
-                border: 1px solid #cdcdcd;
-            }
-            table th, table td{
-                padding: 10px;
-                text-align: left;
-            }
-        </style>
+        <script src="/js/App.js"></script>
     </head>
     <body>
         <h1>Inicia Sesion</h1>
-        <form>
-            <input type="text" name="username" id="username" value="" class="labell" placeholder="Enter Your Username" />
-            <button type="button" onclick="app.login($('#username').val())">Iniciar sesion</button>
-        </form>
-        <button type="button" onclick="app.principal()">Salir</button>
+            <form>
+                <input type="text" id="username" value="" placeholder="Enter Your Username" />
+                <button type="button" onclick="app.login($('#username').val())">Iniciar sesion</button>
+            </form>
+            <button type="button" onclick="app.principal()">Salir</button>
     </body>
 </html>

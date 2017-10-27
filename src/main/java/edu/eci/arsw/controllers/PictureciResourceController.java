@@ -34,11 +34,14 @@ public class PictureciResourceController {
     @Autowired
     SimpMessagingTemplate msmt;
 
+    private int currentGame = -1;
+
     @RequestMapping(path = "/creategame/{gameid}", method = RequestMethod.POST)
-    public ResponseEntity<?> postGame(@PathVariable Integer gameid) {
+    public ResponseEntity<?> postGame(@PathVariable Integer gameid, Game game) {
         try {
-            Game game = pes.addGame(gameid);
-            return new ResponseEntity<>(game, HttpStatus.CREATED);
+            pes.addGame(gameid, game);
+            currentGame = gameid;
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (PersistenceException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.CONFLICT);
@@ -57,5 +60,13 @@ public class PictureciResourceController {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @RequestMapping(value = "/currentgame", method = RequestMethod.PUT)
+    public ResponseEntity<?> getcurrentGame() {
+        if (currentGame == -1) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(currentGame, HttpStatus.OK);
     }
 }

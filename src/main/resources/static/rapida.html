@@ -8,14 +8,18 @@ and open the template in the editor.
     <head>
         <title>PicturEci</title>
         <meta charset="UTF-8" />
+        <link rel="stylesheet" href="/assets/css/main.css" type="text/css"/>
         <link rel="stylesheet" href="/assets/css/rapida.css" type="text/css"/>
         <script src="/webjars/jquery/jquery.min.js"></script>
         <script src="/webjars/sockjs-client/sockjs.min.js"></script>
         <script src="/webjars/stomp-websocket/stomp.min.js"></script>
         <script src="/js/TableroApp.js"></script>
+        <script src="/js/App.js"></script>
     </head>
     <body  >          
         <canvas id="myCanvas" width="800" height="600"></canvas>
         <button onclick="app.connect()" >Dibujar </button>
+        <input id="guess_input" type="text" placeholder="Guess here!"/>
+        <button onclick="app.attempt()" >Guess</button>
     </body>
 </html>

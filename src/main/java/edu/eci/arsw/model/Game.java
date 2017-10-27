@@ -18,13 +18,16 @@ public class Game {
     private String word;
     private String winner;
 
-    public Game(String word) {
+    public Game() {
         this.used_words = new HashSet<>();
-        this.word = word;
     }
 
     public String[] getUsed_words() {
         return (String[]) used_words.toArray();
+    }
+    
+    public void setUsed_words(){
+        
     }
 
     public boolean addWord(String word) {

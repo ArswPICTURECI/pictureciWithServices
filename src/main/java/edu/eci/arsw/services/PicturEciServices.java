@@ -40,10 +40,8 @@ public class PicturEciServices {
         pep.addUser(user);
     }
 
-    public Game addGame(int gameid) throws PersistenceException {
-        Game game = new Game("");
+    public void addGame(int gameid, Game game) throws PersistenceException {
         pep.addGame(gameid, game);
-        return game;
     }
 
     public boolean tryWord(Integer gameid, DrawingGuess attempt) throws PersistenceException {

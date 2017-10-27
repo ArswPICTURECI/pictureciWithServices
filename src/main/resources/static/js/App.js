@@ -7,15 +7,17 @@
 
 
 var app = (function () {
+
     var stompClient = null;
     var currentUser;
+    var gameid;
 
-    var connect = function () {
+    var subscribe = function () {
         var socket = new SockJS('/stompendpoint');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/TOPICOXX', function (data) {
+            stompClient.subscribe('/topic/winner.' + gameid, function (data) {
 
 
             });
@@ -41,14 +43,16 @@ var app = (function () {
         }
         );
     };
-    
-    var callbackUS=function (){};
+
+    var setuser = function (user) {
+        currentUser = user;
+    };
 
     return{
         getUserName: function (userName) {
             if (userName !== "") {
                 //$.get("/users/" + userName, callback);
-                $.get("/users/" + userName ,callbackUS);
+                $.get("/users/" + userName);
             } else {
                 alert("EL USUARIO NO PUEDE ESTAR VACIO");
             }
@@ -79,17 +83,46 @@ var app = (function () {
         },
         login: function (user) {
             if (user !== "") {
-                currentUser = $.get("/users/"+user,callbackUS).then(function (){
-                    location.href = "userSesion.html";
-                },function (){
-                    alert("El usuario que intenta agregar no esta Registrado");
+                $.get("/users/" + user, function (data) {
+                    currentUser = data;
+                    location.href = "partida.html";
+                }).fail(function () {
+                    alert("El usuario " + user + " no está registrado");
                 });
-            }else{
+            } else {
                 alert("El usuario no puede estar vacio!!");
             }
-
-
         },
+
+        connect: function (game) {
+            var game_ = {used_words: "", word: "dog", winner: ""};
+            $.ajax({
+                url: "/pictureci/creategame/" + game,
+                type: "POST",
+                data: JSON.stringify(game_),
+                contentType: "application/json"
+            }).then(() => {
+                app.rapida();
+
+            }).then(() => {
+                subscribe();
+            });
+        },
+
+        attempt: function () {
+            $.get("/users/currentuser", (data) => {
+                currentUser = data;
+            }).then(() => {
+                var attemt = {username: currentUser, phrase: $("#guess_input").val()};
+                $.ajax({
+                    url: "/pictureci/" + gameid + "/guess",
+                    type: "POST",
+                    data: JSON.stringify(attempt),
+                    contentType: "application/json"
+                });
+            });
+        },
+
         queryUsers: function () {
             $.get("/users/", callback);
         },
@@ -107,7 +140,6 @@ var app = (function () {
         },
         inicioSesion: function () {
             location.href = "sesion.html";
-
         }
     };
 })();
