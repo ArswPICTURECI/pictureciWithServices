@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,13 +35,11 @@ public class PictureciResourceController {
     @Autowired
     SimpMessagingTemplate msmt;
 
-    private int currentGame = -1;
-
-    @RequestMapping(path = "/creategame/{gameid}", method = RequestMethod.POST)
-    public ResponseEntity<?> postGame(@PathVariable Integer gameid, Game game) {
+    @RequestMapping(value="/{gameid}", method = RequestMethod.POST)
+    public ResponseEntity<?> postGame(@PathVariable Integer gameid, @RequestBody Game game) {
         try {
             pes.addGame(gameid, game);
-            currentGame = gameid;
+            System.out.println(game);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (PersistenceException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
@@ -48,8 +47,8 @@ public class PictureciResourceController {
         }
     }
 
-    @RequestMapping(path = "/{gameid}/guess", method = RequestMethod.POST)
-    public ResponseEntity<?> guessDrawing(@PathVariable Integer gameid, DrawingGuess attempt) {
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<?> guessDrawing(@PathVariable Integer gameid, @RequestBody DrawingGuess attempt) {
         try {
             boolean win = pes.tryWord(gameid, attempt);
             if (win) {
@@ -60,13 +59,5 @@ public class PictureciResourceController {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }
-
-    @RequestMapping(value = "/currentgame", method = RequestMethod.PUT)
-    public ResponseEntity<?> getcurrentGame() {
-        if (currentGame == -1) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(currentGame, HttpStatus.OK);
     }
 }

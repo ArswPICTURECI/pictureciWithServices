@@ -29,8 +29,6 @@ public class UsersResourceController {
 
     @Autowired
     PicturEciServices pes = null;
-
-    private String currentuser;
     
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> getUsers() {
@@ -42,7 +40,6 @@ public class UsersResourceController {
     public ResponseEntity<?> getUser(@PathVariable String username) {
         try {
             User user = pes.getUser(username);
-            currentuser = username;
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (PersistenceException ex) {
             Logger.getLogger(UsersResourceController.class.getName()).log(Level.SEVERE, null, ex);
@@ -59,13 +56,5 @@ public class UsersResourceController {
             Logger.getLogger(UsersResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
         }
-    }
-
-    @RequestMapping(value = "/currentuser", method = RequestMethod.GET)
-    public ResponseEntity<?> getCurrentUser() {
-        if (currentuser == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(currentuser, HttpStatus.OK);
     }
 }

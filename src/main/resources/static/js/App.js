@@ -9,17 +9,16 @@
 var app = (function () {
 
     var stompClient = null;
-    var currentUser;
-    var gameid;
 
     var subscribe = function () {
-        var socket = new SockJS('/stompendpoint');
+        let socket = new SockJS('/stompendpoint');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
+            let gameid = sessionStorage.getItem("currentgame");
             stompClient.subscribe('/topic/winner.' + gameid, function (data) {
-
-
+                alert("Winner: " + data.body);
+                disconnect();
             });
         });
     };
@@ -37,15 +36,11 @@ var app = (function () {
         $("#tablaUsers tbody").empty();
         lista.map(function (ur) {
             $(document).ready(function () {
-                var markup = "<tr><td>" + ur.name + "</td><td>" + ur.rol + "</td><td>" + ur.sala + "</td></tr>";
+                let markup = "<tr><td>" + ur.name + "</td><td>" + ur.rol + "</td><td>" + ur.sala + "</td></tr>";
                 $("#tablaUsers tbody").append(markup);
             });
         }
         );
-    };
-
-    var setuser = function (user) {
-        currentUser = user;
     };
 
     return{
@@ -59,10 +54,9 @@ var app = (function () {
             ;
         },
         addUser: function (userName) {
-            console.log("UserName: " + userName);
             if (userName !== "") {
                 var data = {"name": userName, "rol": "", "sala": 0};
-                currentUser = data;
+                sessionStorage.setItem("currentuser", userName);
             } else {
                 alert("El nombre del usuario no puede estar vacio");
             }
@@ -84,7 +78,7 @@ var app = (function () {
         login: function (user) {
             if (user !== "") {
                 $.get("/users/" + user, function (data) {
-                    currentUser = data;
+                    sessionStorage.setItem("currentuser", user);
                     location.href = "partida.html";
                 }).fail(function () {
                     alert("El usuario " + user + " no está registrado");
@@ -95,9 +89,10 @@ var app = (function () {
         },
 
         connect: function (game) {
-            var game_ = {used_words: "", word: "dog", winner: ""};
-            $.ajax({
-                url: "/pictureci/creategame/" + game,
+            sessionStorage.setItem("currentgame", game);
+            let game_ = {"id": game, "used_words": "", "word": "dog", "winner": ""};
+            return $.ajax({
+                url: "/pictureci/" + game,
                 type: "POST",
                 data: JSON.stringify(game_),
                 contentType: "application/json"
@@ -110,16 +105,14 @@ var app = (function () {
         },
 
         attempt: function () {
-            $.get("/users/currentuser", (data) => {
-                currentUser = data;
-            }).then(() => {
-                var attemt = {username: currentUser, phrase: $("#guess_input").val()};
-                $.ajax({
-                    url: "/pictureci/" + gameid + "/guess",
-                    type: "POST",
-                    data: JSON.stringify(attempt),
-                    contentType: "application/json"
-                });
+            let cgame = sessionStorage.getItem("currentgame");
+            let cuser = sessionStorage.getItem("currentuser");
+            let att = {"username": cuser, "phrase": $("#guess_input").val()};
+            return $.ajax({
+                url: "/pictureci/" + cgame + "/guess",
+                type: "POST",
+                data: JSON.stringify(att),
+                contentType: "application/json"
             });
         },
 

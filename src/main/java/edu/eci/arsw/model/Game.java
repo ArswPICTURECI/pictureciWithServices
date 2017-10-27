@@ -14,20 +14,25 @@ import java.util.Set;
  */
 public class Game {
 
-    private final Set<String> used_words;
+    private final Set<String> used_words = new HashSet<>();
     private String word;
     private String winner;
-
-    public Game() {
-        this.used_words = new HashSet<>();
-    }
+    private int id;
 
     public String[] getUsed_words() {
         return (String[]) used_words.toArray();
     }
-    
-    public void setUsed_words(){
-        
+
+    public void setUsed_words() {
+
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public boolean addWord(String word) {
@@ -49,5 +54,15 @@ public class Game {
 
     public void setWinner(String winner) {
         this.winner = winner;
+    }
+
+    @Override
+    public String toString() {
+        return "{"
+                + "id: " + id
+                + ", used_words: " + used_words.toString()
+                + ", word: " + word
+                + ", winner: " + winner
+                + "}";
     }
 }

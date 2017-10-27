@@ -14,11 +14,6 @@ public class DrawingGuess {
     private String username;
     private String phrase;
 
-    public DrawingGuess(String username, String phrase) {
-        this.username = username;
-        this.phrase = phrase;
-    }
-
     public DrawingGuess() {
 
     }
