@@ -6,15 +6,8 @@
 package edu.eci.arsw.controllers;
 
 import edu.eci.arsw.model.User;
-import edu.eci.arsw.persistence.UserNotFoundException;
-import edu.eci.arsw.persistence.UserPersistenceException;
 import edu.eci.arsw.services.PicturEciServices;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.springframework.boot.Banner.Mode.LOG;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,12 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
- * @author daferrotru
+ * @author rami
  */
 @RestController
 @RequestMapping(value = "/users")
-public class PicturEciAPIController {
-
+public class UsersResourceController {
     @Autowired
     PicturEciServices pes = null;
 
@@ -42,19 +34,15 @@ public class PicturEciAPIController {
 
     @RequestMapping(value = "/{author}", method = RequestMethod.GET)
     public ResponseEntity<?> getUser(@PathVariable String author) {
-        if(author!=""){
+        if(!author.isEmpty()){
             if(pes.getUser(author)!=null){
                 return new ResponseEntity<>(pes.getUser(author), HttpStatus.ACCEPTED);
             }else{
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            
         }else{
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-
-        
-
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -66,7 +54,5 @@ public class PicturEciAPIController {
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
-        
     }
-
 }

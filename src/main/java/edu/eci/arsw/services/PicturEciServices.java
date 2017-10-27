@@ -7,7 +7,6 @@ package edu.eci.arsw.services;
 
 
 import edu.eci.arsw.model.User;
-import edu.eci.arsw.persistence.UserNotFoundException;
 import edu.eci.arsw.persistence.UserPersistenceException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
