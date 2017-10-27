@@ -5,9 +5,19 @@
  */
 package edu.eci.arsw.controllers;
 
+import edu.eci.arsw.model.Game;
+import edu.eci.arsw.model.entities.DrawingGuess;
+import edu.eci.arsw.persistence.PersistenceException;
 import edu.eci.arsw.services.PicturEciServices;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -15,9 +25,32 @@ import org.springframework.web.bind.annotation.RestController;
  * @author daferrotru
  */
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/pictureci")
 public class PictureciResourceController {
 
     @Autowired
     PicturEciServices pes = null;
+
+    @Autowired
+    SimpMessagingTemplate msmt;
+
+    @RequestMapping(path = "/creategame/{topic}", method = RequestMethod.POST)
+    public ResponseEntity<?> postGame(@PathVariable String topic) {
+        pes.addGame(new Game(topic));
+        return new ResponseEntity<>("Game Started!", HttpStatus.CREATED);
+    }
+
+    @RequestMapping(path = "/{gameid}/guess", method = RequestMethod.POST)
+    public ResponseEntity<?> guessDrawing(@PathVariable Integer gameid, DrawingGuess attempt) {
+        try {
+            boolean win = pes.tryWord(gameid, attempt);
+            if (win) {
+
+            }
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (PersistenceException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

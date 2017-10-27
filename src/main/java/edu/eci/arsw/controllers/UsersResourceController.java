@@ -6,7 +6,10 @@
 package edu.eci.arsw.controllers;
 
 import edu.eci.arsw.model.User;
+import edu.eci.arsw.persistence.PersistenceException;
 import edu.eci.arsw.services.PicturEciServices;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/users")
 public class UsersResourceController {
+
     @Autowired
     PicturEciServices pes = null;
 
@@ -32,27 +36,25 @@ public class UsersResourceController {
 
     }
 
-    @RequestMapping(value = "/{author}", method = RequestMethod.GET)
-    public ResponseEntity<?> getUser(@PathVariable String author) {
-        if(!author.isEmpty()){
-            if(pes.getUser(author)!=null){
-                return new ResponseEntity<>(pes.getUser(author), HttpStatus.ACCEPTED);
-            }else{
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        }else{
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
+    public ResponseEntity<?> getUser(@PathVariable String username) {
+        try {
+            User user = pes.getUser(username);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (PersistenceException ex) {
+            Logger.getLogger(UsersResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> postUser(@RequestBody User user) {
-
-            if (pes.getUser(user.getName()) == null) {
-                pes.addUser(user);
-                return new ResponseEntity<>(HttpStatus.CREATED);
-            } else {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            }
+        try {
+            pes.addUser(user);
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
+        } catch (PersistenceException ex) {
+            Logger.getLogger(UsersResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+        }
     }
 }

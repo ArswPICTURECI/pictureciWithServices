@@ -5,10 +5,7 @@
  */
 package edu.eci.arsw.model;
 
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,29 +14,30 @@ import java.util.Set;
  */
 public class Game {
 
-    private List<String> used_words;
-    private Set<String> word_pool;
+    private final Set<String> used_words;
+    private String word;
     private String winner;
 
-    public Game(String[] word_pool) {
-        this.used_words = new LinkedList<>();
-        this.word_pool = new HashSet<>(Arrays.asList(word_pool));
+    public Game(String word) {
+        this.used_words = new HashSet<>();
+        this.word = word;
     }
 
-    public List<String> getUsed_words() {
-        return used_words;
+    public String[] getUsed_words() {
+        return (String[]) used_words.toArray();
     }
 
-    public void setUsed_words(String[] used_words) {
-        this.used_words = Arrays.asList(used_words);
+    public boolean addWord(String word) {
+        used_words.add(word);
+        return word.equalsIgnoreCase(this.word) || word.contains(this.word);
     }
 
-    public Set<String> getWord_pool() {
-        return word_pool;
+    public String getWord() {
+        return word;
     }
 
-    public void setWord_pool(String[] word_pool) {
-        this.word_pool = new HashSet<>(Arrays.asList(word_pool));
+    public void setWord(String word) {
+        this.word = word;
     }
 
     public String getWinner() {

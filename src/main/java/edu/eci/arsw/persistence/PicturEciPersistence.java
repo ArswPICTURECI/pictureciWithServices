@@ -6,8 +6,9 @@
 package edu.eci.arsw.persistence;
 
 
+import edu.eci.arsw.model.Game;
 import edu.eci.arsw.model.User;
-import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -19,19 +20,21 @@ public interface PicturEciPersistence {
     /**
      * Registers the user 
      * @param user
-     * @throws edu.eci.arsw.persistence.UserPersistenceException
+     * @throws edu.eci.arsw.persistence.PersistenceException
      */
-    public void registerUser(User user) throws UserPersistenceException;
+    public void registerUser(User user) throws PersistenceException;
     
     /**
      *
      * @return all registered users
      */
-    public ArrayList<User> getAllUsers();
+    public List<User> getAllUsers();
     
-    public User getUser(String userName);
+    public User getUser(String userName) throws PersistenceException;
     
-    public void addUser(User user) throws UserPersistenceException;
-    
-    
+    public void addUser(User user) throws PersistenceException;
+
+    public void addGame(Game game);
+
+    public Game getGame(Integer gameid) throws PersistenceException;
 }

@@ -9,13 +9,13 @@ package edu.eci.arsw.persistence;
  *
  * @author daferrotru
  */
-public class UserPersistenceException extends Exception{
+public class PersistenceException extends Exception{
 
-    public UserPersistenceException(String message) {
+    public PersistenceException(String message) {
         super(message);
     }
 
-    public UserPersistenceException(String message, Throwable cause) {
+    public PersistenceException(String message, Throwable cause) {
         super(message, cause);
     }
     

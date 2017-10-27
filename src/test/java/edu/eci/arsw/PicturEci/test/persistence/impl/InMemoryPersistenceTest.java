@@ -7,7 +7,7 @@ package edu.eci.arsw.PicturEci.test.persistence.impl;
 
 
 import edu.eci.arsw.model.User;
-import edu.eci.arsw.persistence.UserPersistenceException;
+import edu.eci.arsw.persistence.PersistenceException;
 import edu.eci.arsw.persistence.impl.InMemoryPicturEciPersistence;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 public class InMemoryPersistenceTest {
     
     @Test
-    public void registerNewUser() throws UserPersistenceException{
+    public void registerNewUser() throws PersistenceException{
         InMemoryPicturEciPersistence ipep= new InMemoryPicturEciPersistence();
         User us1=new User("Camilo");
         ipep.registerUser(us1);
@@ -29,7 +29,7 @@ public class InMemoryPersistenceTest {
     }
     
     @Test
-    public void registerUserWithRolAndRoom() throws UserPersistenceException{
+    public void registerUserWithRolAndRoom() throws PersistenceException{
         InMemoryPicturEciPersistence ipep= new InMemoryPicturEciPersistence();
         User us1=new User("Laura","dibuja",1);
         User us2=new User("Andres","dibuja",1);
@@ -40,7 +40,7 @@ public class InMemoryPersistenceTest {
     }
     
     @Test
-    public void registerUsers() throws UserPersistenceException{
+    public void registerUsers() throws PersistenceException{
         InMemoryPicturEciPersistence ipep= new InMemoryPicturEciPersistence();
         User us1=new User("Laura","dibuja",1);
         User us2=new User("Andres","dibuja",1);

@@ -5,23 +5,18 @@
  */
 package edu.eci.arsw.persistence.impl;
 
+import edu.eci.arsw.model.Game;
 import edu.eci.arsw.model.User;
 //import edu.eci.arsw.persistence.DrawingNotFoundException;
 //import edu.eci.arsw.persistence.DrawingPersistenceException;
 //import java.util.HashMap;
-import java.util.HashSet;
-//import java.util.Map;
-import java.util.Map.Entry;
-
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.stereotype.Service;
 import edu.eci.arsw.persistence.PicturEciPersistence;
-import edu.eci.arsw.persistence.UserPersistenceException;
+import edu.eci.arsw.persistence.PersistenceException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  *
@@ -30,46 +25,61 @@ import java.util.Collections;
 @Service
 public class InMemoryPicturEciPersistence implements PicturEciPersistence {
 
-    private final ArrayList<User> users = new ArrayList<>();
+    private final ConcurrentMap<String, User> users = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Integer, Game> games = new ConcurrentHashMap<>();
 
     public InMemoryPicturEciPersistence() {
         User u1 = new User("Daniel", "dibuja", 1);
         User u2 = new User("Camilo", "dibuja", 2);
-        users.add(u1);
-        users.add(u2);
+        users.putIfAbsent("Daniel", u1);
+        users.putIfAbsent("Camilo", u2);
     }
 
     @Override
-    public void registerUser(User user) throws UserPersistenceException {
-        if (users.contains(user)){
-            throw new UserPersistenceException("The given user already exist: "+ user);
-        }else{
-            users.add(user);
-        }
-        
-
-    }
-    
-    @Override
-    public ArrayList<User> getAllUsers() {
-        return users;
-    }
-
-    @Override
-    public User getUser(String userName) {
-        User res=null;
-        for(int i=0; i< users.size();i++){
-            if (users.get(i).getName().equals(userName)){
-                res=users.get(i);
+    public void registerUser(User user) throws PersistenceException {
+        synchronized (users) {
+            if (users.get(user.getName()) == null) {
+                users.put(user.getName(), user);
+            } else {
+                throw new PersistenceException("Username is already taken");
             }
         }
-        return res;
-        
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return new ArrayList<>(users.values());
+    }
+
+    @Override
+    public User getUser(String username) throws PersistenceException {
+        User user = users.get(username);
+        if (user != null) {
+            return user;
+        } else {
+            throw new PersistenceException("Username: " + username + " was not found");
+        }
     }
 
     @Override
     public void addUser(User user) {
-        users.add(user);
+        users.putIfAbsent(user.getName(), user);
+    }
+
+    @Override
+    public void addGame(Game game) {
+        synchronized (games) {
+            games.putIfAbsent(games.size() + 1, game);
+        }
+    }
+
+    @Override
+    public Game getGame(Integer gameid) throws PersistenceException {
+        Game game = games.get(gameid);
+        if(game != null){
+            return game;
+        }
+        throw new PersistenceException("Game doesn't exist");
     }
 
 }
