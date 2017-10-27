@@ -15,7 +15,7 @@ var app = (function () {
         $("#tablaUsers tbody").empty();
         lista.map(function (ur) {
             $(document).ready(function () {
-                let markup = "<tr><td>" + ur.name + "</td><td>" + ur.rol + "</td><td>" + ur.sala + "</td></tr>";
+                var markup = "<tr><td>" + ur.name + "</td><td>" + ur.rol + "</td><td>" + ur.sala + "</td></tr>";
                 $("#tablaUsers tbody").append(markup);
             });
         }
@@ -68,33 +68,34 @@ var app = (function () {
         },
 
         connect: function () {
-            let game = $("#topic").val();
+            var game = $("#topic").val();
             sessionStorage.setItem("currentgame", game);
-            let game_ = {"used_words": [], "word": "dog", "winner": ""};
+            var game_ = {"used_words": [], "word": "dog", "winner": ""};
             $.ajax({
                 url: "/pictureci/" + game,
                 type: "POST",
                 data: JSON.stringify(game_),
                 contentType: "application/json"
-            }).then(() => {
+            }).then(function(){
                 var socket = new SockJS('/stompendpoint');
                 stompClient = Stomp.over(socket);
                 stompClient.connect({}, function (frame) {
                     alert('Connected jiji: ' + frame);
-                    let gameid = sessionStorage.getItem("currentgame");
+                    var gameid = sessionStorage.getItem("currentgame");
                     stompClient.subscribe("/topic/winner." + gameid, function (data) {
                         alert("Winner: " + data.body);
                     });
                 });
-            }).then(() => {
+            },function (){
                 app.rapida();
+                
             });
         },
 
         attempt: function () {
-            let cgame = sessionStorage.getItem("currentgame");
-            let cuser = sessionStorage.getItem("currentuser");
-            let att = {"username": cuser, "phrase": $("#guess_input").val()};
+            var cgame = sessionStorage.getItem("currentgame");
+            var cuser = sessionStorage.getItem("currentuser");
+            var att = {"username": cuser, "phrase": $("#guess_input").val()};
             return $.ajax({
                 url: "/pictureci/" + cgame + "/guess",
                 type: "POST",
