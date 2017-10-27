@@ -67,6 +67,20 @@ var app = (function () {
             }
         },
 
+        subscribe: function () {
+            var socket = new SockJS('/stompendpoint');
+            var gameid = sessionStorage.getItem("currentgame");
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/topic/wupdate.' + gameid, function (eventbody) {
+                    var new_word = eventbody.body;
+                    $("#palabra").html("<h1>" + new_word + "</h1>");
+                });
+            });
+
+        },
+
         connect: function () {
             var game = $("#topic").val();
             sessionStorage.setItem("currentgame", game);
@@ -76,19 +90,8 @@ var app = (function () {
                 type: "POST",
                 data: JSON.stringify(game_),
                 contentType: "application/json"
-            }).then(function(){
-                var socket = new SockJS('/stompendpoint');
-                stompClient = Stomp.over(socket);
-                stompClient.connect({}, function (frame) {
-                    alert('Connected jiji: ' + frame);
-                    var gameid = sessionStorage.getItem("currentgame");
-                    stompClient.subscribe("/topic/winner." + gameid, function (data) {
-                        alert("Winner: " + data.body);
-                    });
-                });
-            },function (){
+            }).then(function () {
                 app.rapida();
-                
             });
         },
 
@@ -108,7 +111,6 @@ var app = (function () {
         },
         partida: function () {
             location.href = "partida.html";
-
         },
         rapida: function () {
             sessionStorage.setItem('sala', $("#topic").val());
