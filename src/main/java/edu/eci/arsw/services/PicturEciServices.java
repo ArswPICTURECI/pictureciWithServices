@@ -49,6 +49,10 @@ public class PicturEciServices {
     }
 
     public boolean tryWord(Integer gameid, DrawingGuess attempt) throws PersistenceException {
-        return pep.getGame(gameid).addWord(attempt.getPhrase());
+        return pep.tryWord(gameid, attempt);
+    }
+
+    public void addPlayer(int gameid, int type) throws PersistenceException {
+        pep.addPlayer(gameid, type);
     }
 }

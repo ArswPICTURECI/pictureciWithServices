@@ -68,6 +68,7 @@ var app = (function () {
         },
 
         subscribe: function () {
+            sessionStorage.setItem('rol', $("#rol").val());
             var socket = new SockJS('/stompendpoint');
             var gameid = sessionStorage.getItem("currentgame");
             stompClient = Stomp.over(socket);
@@ -84,7 +85,7 @@ var app = (function () {
             var game = $("#topic").val();
             sessionStorage.setItem("currentgame", game);
             $.get("/pictureci/" + game, app.rapida).fail(() => {
-                var game_ = {"word": "dog", "winner": ""};
+                var game_ = {"count_dibujan": 0, "count_adivinan": 0, "word": "dog", "winner": ""};
                 $.ajax({
                     url: "/pictureci/" + game,
                     type: "POST",
@@ -122,13 +123,28 @@ var app = (function () {
             location.href = "partida.html";
         },
         rapida: function () {
-            sessionStorage.setItem('sala', $("#topic").val());
             sessionStorage.setItem('rol', $("#rol").val());
-            if (sessionStorage.getItem('rol') === 'Adivinar') {
-                location.href = "rapidaAdivinador.html";
-
+            var fail = (data) => {
+                alert(data.body);
+            };
+            if (sessionStorage.getItem('rol') === "Adivinar") {
+                $.ajax({
+                    url: "/pictureci/" + sessionStorage.getItem("currentgame") + "/adivinan",
+                    type: "PUT",
+                    success: () => {
+                        location.href = "rapidaAdivinador.html";
+                    },
+                    error: fail
+                });
             } else {
-                location.href = "rapidaDibujante.html";
+                $.ajax({
+                    url: "/pictureci/" + sessionStorage.getItem("currentgame") + "/dibujan",
+                    type: "PUT",
+                    success: () => {
+                        location.href = "rapidaDibujante.html";
+                    },
+                    error: fail
+                });
             }
         },
         registro: function () {

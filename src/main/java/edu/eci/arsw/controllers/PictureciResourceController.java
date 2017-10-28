@@ -59,19 +59,41 @@ public class PictureciResourceController {
             }
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (PersistenceException ex) {
-//            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @RequestMapping(value = "/{gameid}", method = RequestMethod.GET)
-    public ResponseEntity<?> checkGame(@PathVariable Integer gameid) {
+    public ResponseEntity<?> getGame(@PathVariable Integer gameid) {
         try {
             Game game = pes.getGame(gameid);
             return new ResponseEntity<>(game, HttpStatus.OK);
         } catch (PersistenceException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/{gameid}/dibujan", method = RequestMethod.PUT)
+    public ResponseEntity<?> putDibujanGame(@PathVariable Integer gameid) {
+        try {
+            pes.addPlayer(gameid, Game.DIBUJAN);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (PersistenceException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/{gameid}/adivinan", method = RequestMethod.PUT)
+    public ResponseEntity<?> putAdivinanGame(@PathVariable Integer gameid) {
+        try {
+            pes.addPlayer(gameid, Game.ADIVINAN);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (PersistenceException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

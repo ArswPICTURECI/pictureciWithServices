@@ -7,6 +7,7 @@ package edu.eci.arsw.persistence.impl;
 
 import edu.eci.arsw.model.Game;
 import edu.eci.arsw.model.User;
+import edu.eci.arsw.model.entities.DrawingGuess;
 //import edu.eci.arsw.persistence.DrawingNotFoundException;
 //import edu.eci.arsw.persistence.DrawingPersistenceException;
 //import java.util.HashMap;
@@ -84,6 +85,22 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
             return game;
         }
         throw new PersistenceException("Game doesn't exist");
+    }
+
+    @Override
+    public boolean tryWord(int gameid, DrawingGuess attempt) throws PersistenceException {
+        synchronized (games) {
+            return games.get(gameid).addWord(attempt.getPhrase());
+        }
+    }
+
+    @Override
+    public void addPlayer(int gameid, int type) throws PersistenceException {
+        synchronized (games) {
+            if (!games.get(gameid).addPlayer(type)) {
+                throw new PersistenceException("Sala llena. Intente cambiar de sala o rol");
+            }
+        }
     }
 
 }
