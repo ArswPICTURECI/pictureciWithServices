@@ -28,13 +28,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/pictureci")
 public class PictureciResourceController {
-    
+
     @Autowired
     PicturEciServices pes = null;
-    
+
     @Autowired
-    SimpMessagingTemplate msmt;
-    
+    SimpMessagingTemplate msmt = null;
+
     @RequestMapping(value = "/{gameid}", method = RequestMethod.POST)
     public ResponseEntity<?> postGame(@PathVariable Integer gameid, @RequestBody Game game) {
         try {
@@ -46,19 +46,32 @@ public class PictureciResourceController {
             return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.CONFLICT);
         }
     }
-    
+
     @RequestMapping(value = "/{gameid}/guess", method = RequestMethod.POST)
     public ResponseEntity<?> guessDrawing(@PathVariable Integer gameid, @RequestBody DrawingGuess attempt) {
         try {
             boolean win = pes.tryWord(gameid, attempt);
+            System.out.println("Received; Username: " + attempt.getUsername() + " - Phrase: " + attempt.getPhrase());
             if (win) {
                 pes.getGame(gameid).setWinner(attempt.getUsername());
+                System.out.print("Game: " + gameid);
                 msmt.convertAndSend("/topic/winner." + gameid, attempt.getUsername());
             }
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (PersistenceException ex) {
-            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/{gameid}", method = RequestMethod.GET)
+    public ResponseEntity<?> checkGame(@PathVariable Integer gameid) {
+        try {
+            Game game = pes.getGame(gameid);
+            return new ResponseEntity<>(game, HttpStatus.OK);
+        } catch (PersistenceException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

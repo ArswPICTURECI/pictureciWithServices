@@ -5,52 +5,38 @@
  */
 package edu.eci.arsw.model;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 /**
  *
  * @author rami
  */
 public class Game {
-
-    private final ConcurrentLinkedQueue<String> used_words = new ConcurrentLinkedQueue<>();
     private String word;
     private String winner;
-
-    public String[] getUsed_words() {
-        return (String[]) used_words.toArray();
-    }
-
-    public void setUsed_words() {
-
-    }
-
+    
     public boolean addWord(String word) {
-        used_words.add(word);
         return word.equalsIgnoreCase(this.word) || word.contains(this.word);
     }
-
+    
     public String getWord() {
         return word;
     }
-
+    
     public void setWord(String word) {
         this.word = word;
     }
-
+    
     public String getWinner() {
         return winner;
     }
-
+    
     public void setWinner(String winner) {
         this.winner = winner;
     }
-
+    
     @Override
     public String toString() {
         return "{"
-                + "used_words: " + used_words.toString()
-                + ", word: " + word
+                + "word: " + word
                 + ", winner: " + winner
                 + "}";
     }

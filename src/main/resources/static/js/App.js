@@ -72,10 +72,9 @@ var app = (function () {
             var gameid = sessionStorage.getItem("currentgame");
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
-                console.log('Connected: ' + frame);
-                stompClient.subscribe('/topic/wupdate.' + gameid, function (eventbody) {
-                    var new_word = eventbody.body;
-                    $("#palabra").html("<h1>" + new_word + "</h1>");
+                console.log('Connected to game ' + gameid + ': ' + frame);
+                stompClient.subscribe('/topic/winner.' + gameid, function (eventbody) {
+                    alert("Winner: " + eventbody.body);
                 });
             });
 
@@ -84,15 +83,25 @@ var app = (function () {
         connect: function () {
             var game = $("#topic").val();
             sessionStorage.setItem("currentgame", game);
-            var game_ = {"used_words": [], "word": "dog", "winner": ""};
-            $.ajax({
-                url: "/pictureci/" + game,
-                type: "POST",
-                data: JSON.stringify(game_),
-                contentType: "application/json"
-            }).then(function () {
-                app.rapida();
+            $.get("/pictureci/" + game, app.rapida).fail(() => {
+                var game_ = {"word": "dog", "winner": ""};
+                $.ajax({
+                    url: "/pictureci/" + game,
+                    type: "POST",
+                    data: JSON.stringify(game_),
+                    contentType: "application/json"
+                }).then(() => {
+                    app.rapida();
+                });
             });
+        },
+
+        disconnect: function () {
+            if (stompClient !== null) {
+                stompClient.disconnect();
+            }
+            setConnected(false);
+            console.log("Disconnected from game: " + sessionStorage.getItem("currentgame"));
         },
 
         attempt: function () {
