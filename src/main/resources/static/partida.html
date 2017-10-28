@@ -13,24 +13,66 @@ and open the template in the editor.
         <script src="/webjars/sockjs-client/sockjs.min.js"></script>
         <script src="/webjars/stomp-websocket/stomp.min.js"></script>
         <script src="/js/App.js"></script>
+        <style type="text/css">
+
+            h1{
+                text-align: center;
+                padding: 5px;
+            }
+
+            form{
+                margin: 20px 0;
+            }
+            form input, button{
+                padding: 5px;
+                text-align: center;
+            }
+
+            button,.estilo,.numeroSala{
+                margin:auto;
+                display:block;
+            }
+
+            /* BUTTON STYLES */
+            button{
+                padding:14px 32px;
+                font-family:helvetica;
+                font-size:14px;
+                font-weight:100;
+                color:#fff;
+                background: #587286;
+                border:0;
+                font-weight:100;
+            }
+            button:hover{
+                background: #3B5C76;
+            }
+
+        </style>
     </head>
     <body>
-        <h1>PicturEci</h1>
+        <form>
+            <h1>PicturEci</h1>
 
 
-        <h1>Que quieres hacer?</h1>
-        <select id="rol" name="estilo">
+            <h1>Que quieres hacer?</h1>
 
-            <option>Dibujar</option>
+            <select class="estilo" id="rol" name="estilo">
 
-            <option>Adivinar</option>
+                <option>Dibujar</option>
 
+                <option>Adivinar</option>
 
-        </select>
+            </select>
+        </form>
+        
         <h1>En que sala?</h1>
-        Room:<input id="topic" type="number"/> 
 
-        <button onclick="app.connect()" >Iniciar Partida</button>
-        <button onclick="app.principal()">Back</button>
+        <input class="numeroSala" id="topic" type="number" placeholder="Ingrese numero de sala"/> <br>
+        
+        <button onclick="app.connect()" >Iniciar Partida</button><br>
+        <button onclick="app.principal()">Cerrar sesion</button>
+
+
     </body>
 </html>

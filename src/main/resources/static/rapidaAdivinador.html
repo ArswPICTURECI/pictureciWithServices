@@ -15,6 +15,39 @@ and open the template in the editor.
         <script src="/webjars/stomp-websocket/stomp.min.js"></script>
         <script src="/js/TableroApp_Adi.js"></script>
         <script src="/js/App.js"></script>
+        <style type="text/css">
+
+            button{
+                padding: 5px;
+                text-align: center;
+            }
+
+            button,.guess{
+                margin:auto;
+                display:block;
+            }
+
+            /* BUTTON STYLES */
+            button{
+                padding:14px 32px;
+                font-family:helvetica;
+                font-size:14px;
+                font-weight:100;
+                color:#fff;
+                background: #587286;
+                border:0;
+                font-weight:100;
+            }
+            button:hover{
+                background: #3B5C76;
+            }
+            .canvas{
+                padding: 0;
+                margin: auto;
+                display: block;
+            }
+
+        </style>
     </head>
     <body onload="app.subscribe()">
         <br>
@@ -22,11 +55,16 @@ and open the template in the editor.
         <br>
         <h1>Tienes que adivinar</h1>
         <br> <br>
-        <canvas id="myCanvas" width="800" height="600"></canvas>      
+        <canvas class="canvas" id="myCanvas" width="800" height="600"></canvas>     
+
         <br><br>
-        <input id="guess_input" type="text" placeholder="Guess here!"/>
+
+        <input class="guess" id="guess_input" type="text" placeholder="Guess the drawing"/>
+
+
         <br>
         <button onclick="app.attempt()" >Guess</button>
-        <!--button onclick="erase()" >Borrar Todo</button-->
+        <br>
+        <button type="button" onclick="app.principal()" >Salir del Juego</button>
     </body>
 </html>

@@ -20,6 +20,7 @@ and open the template in the editor.
 
             h1{
                 text-align: center;
+                padding: 5px;
             }
 
             form{
@@ -42,24 +43,60 @@ and open the template in the editor.
                 padding: 10px;
                 text-align: left;
             }
+            .registro{
+                margin:auto;
+                display:block;
+                text-align: center;
+            }
+            button{
+                margin:auto;
+                display:block;
+            }
+
+            /* BUTTON STYLES */
+            button{
+                padding:14px 32px;
+                font-family:helvetica;
+                font-size:14px;
+                font-weight:100;
+                color:#fff;
+                background: #587286;
+                border:0;
+                font-weight:100;
+            }
+            button:hover{
+                background: #3B5C76;
+            }
+            .registerTable{
+                margin:auto;
+                display:block;
+                text-align: center;
+            }
+            .tabla{
+                margin: auto;
+                text-align: center;
+            }
+            .username{
+                padding: 5px;
+            }
         </style>
     </head>
     <body>      
+        <div class="registro">
+            <h1>Registro de Usuario</h1>
+            <br>
 
-        <h1>Registro de Usuario</h1>
-        <br>
+            <form>
+                <font class="username">Username: </font>
+                <input type="text" name="username" id="username" value="" placeholder="Enter a valid Username" />
+                <button type="button" onclick="app.addUser($('#username').val())">Register</button>
 
-        <form>
-            <font >Username: </font>
-            <input type="text" name="username" id="username" value="" placeholder="Enter a valid Username" />
-            <button type="button" onclick="app.addUser($('#username').val())">Register</button>
+            </form>
 
-        </form>
+            <div id="registerTable" class="registerTable">
 
-        <div id="registerTable">
-            <div id="left" style="float: left" class="col-md-4"> 
                 <br>
-                <table id="tablaUsers" border="1" style="width:50%">
+                <table id="tablaUsers" border="1" style="width:50%" class="tabla">
                     <thead>
                         <tr>
                             <th>UserName</th>
@@ -71,13 +108,12 @@ and open the template in the editor.
                     <tbody>
                     </tbody>
                 </table>
-                
-                <button type="button" onclick="app.queryUsers()">Consultar Usuarios Registrados</button>
+                <br>
+                <button type="button" onclick="app.queryUsers()">Consultar Usuarios Registrados</button><br>
                 <button type="button" onclick="app.principal()">Back To Menu</button>
-
-                
-                
             </div>
         </div>
+
+
     </body>
 </html>

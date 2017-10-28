@@ -14,11 +14,52 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <script src="/webjars/jquery/jquery.min.js"></script>
         <script src="/js/App.js"></script>
+        <style type="text/css">
+
+            h1{
+                text-align: center;
+                padding: 5px;
+            }
+
+            form{
+                margin: 20px 0;
+            }
+            form input, button{
+                padding: 5px;
+                text-align: center;
+            }
+            
+            button{
+                margin:auto;
+                display:block;
+            }
+
+            /* BUTTON STYLES */
+            button{
+                padding:14px 32px;
+                font-family:helvetica;
+                font-size:14px;
+                font-weight:100;
+                color:#fff;
+                background: #587286;
+                border:0;
+                font-weight:100;
+            }
+            button:hover{
+                background: #3B5C76;
+            }
+            .box{
+                margin:auto;
+                display:block;
+            }
+            
+        </style>
     </head>
     <body>
+        
         <h1>Inicia Sesion</h1>
             <form>
-                <input type="text" id="username" value="" placeholder="Enter Your Username" />
+                <input class="box" type="text" id="username" value="" placeholder="Enter Your Username" /><br>
                 <button type="button" onclick="app.login($('#username').val())">Iniciar sesion</button>
             </form>
             <button type="button" onclick="app.principal()">Salir</button>
