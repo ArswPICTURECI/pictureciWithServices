@@ -17,7 +17,7 @@ and open the template in the editor.
         <script src="/js/TableroApp.js"></script>
         <script src="/js/App.js"></script>
     </head>
-    <body  onload="app.subscribe()">
+    <body  onload="app.subscribe(), tableroapp.init('Dibujar')">
         <br>
         <h1>PicturEci</h1>
         <br>
@@ -28,7 +28,7 @@ and open the template in the editor.
 
         <br>
 
-        <button type="button" onclick="erase()" >Borrar Todo</button>
+        <button type="button" onclick="tableroapp.erase()" >Borrar Todo</button>
         <br>
         <button type="button" onclick="app.principal()" >Salir del Juego</button>
     </body>

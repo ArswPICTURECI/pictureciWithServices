@@ -122,6 +122,7 @@ var app = (function () {
         partida: function () {
             location.href = "partida.html";
         },
+        
         rapida: function () {
             sessionStorage.setItem('rol', $("#rol").val());
             var fail = (data) => {
@@ -147,6 +148,7 @@ var app = (function () {
                 });
             }
         },
+        
         registro: function () {
             location.href = "registro.html";
         },
