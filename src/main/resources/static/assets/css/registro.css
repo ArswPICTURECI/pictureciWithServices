@@ -1,0 +1,38 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Oct 29, 2017, 4:52:39 PM
+    Author     : rami
+*/
+table{
+    width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+table, th, td{
+    border: 1px solid #cdcdcd;
+}
+table th, table td{
+    padding: 10px;
+    text-align: left;
+}
+.registro{
+    margin:auto;
+    display:block;
+    text-align: center;
+}
+.registerTable{
+    margin:auto;
+    display:block;
+    text-align: center;
+}
+.tabla{
+    margin: auto;
+    text-align: center;
+}
+.username{
+    padding: 5px;
+}

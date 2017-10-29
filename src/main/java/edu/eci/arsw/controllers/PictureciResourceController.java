@@ -40,7 +40,7 @@ public class PictureciResourceController {
         try {
             pes.addGame(gameid, game);
             System.out.println(game);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(game, HttpStatus.CREATED);
         } catch (PersistenceException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.CONFLICT);

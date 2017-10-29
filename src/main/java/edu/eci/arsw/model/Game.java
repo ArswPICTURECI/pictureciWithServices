@@ -15,7 +15,7 @@ public class Game {
     public static final int ADIVINAN = -2;
 
     private static final int MAX_DIB = 2;
-    private static final int MAX_ADV = 2;
+    private static final int MAX_ADV = 1;
 
     private int count_dibujan;
     private int count_adivinan;

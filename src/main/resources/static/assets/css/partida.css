@@ -4,12 +4,13 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : Oct 27, 2017, 3:37:30 AM
+    Created on : Oct 29, 2017, 4:36:43 PM
     Author     : rami
 */
 
 h1{
     text-align: center;
+    padding: 5px;
 }
 
 form{
@@ -17,16 +18,25 @@ form{
 }
 form input, button{
     padding: 5px;
+    text-align: center;
 }
-table{
-    width: 100%;
-    margin-bottom: 20px;
-    border-collapse: collapse;
+
+button,.estilo,.numeroSala{
+    margin:auto;
+    display:block;
 }
-table, th, td{
-    border: 1px solid #cdcdcd;
+
+/* BUTTON STYLES */
+button{
+    padding:14px 32px;
+    font-family:helvetica;
+    font-size:14px;
+    font-weight:100;
+    color:#fff;
+    background: #587286;
+    border:0;
+    font-weight:100;
 }
-table th, table td{
-    padding: 10px;
-    text-align: left;
+button:hover{
+    background: #3B5C76;
 }

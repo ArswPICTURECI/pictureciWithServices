@@ -54,7 +54,7 @@ var app = (function () {
                     }
             );
         },
-        login: function (user) {
+        login: function (user, password) {
             if (user !== "") {
                 $.get("/users/" + user, function (data) {
                     sessionStorage.setItem("currentuser", user);
@@ -125,7 +125,7 @@ var app = (function () {
         rapida: function () {
             sessionStorage.setItem('rol', $("#rol").val());
             var fail = (data) => {
-                alert(data.body);
+                alert(data.responseText);
             };
             if (sessionStorage.getItem('rol') === "Adivinar") {
                 $.ajax({

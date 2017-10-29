@@ -1,26 +1,33 @@
-h1{
+canvas{
+    border: 1px solid #000000
+}
+
+button{
+    padding: 5px;
     text-align: center;
 }
 
-form{
-    margin: 20px 0;
-}
-form input, button{
-    padding: 5px;
-}
-table{
-    width: 100%;
-    margin-bottom: 20px;
-    border-collapse: collapse;
-}
-table, th, td{
-    border: 1px solid #cdcdcd;
-}
-table th, table td{
-    padding: 10px;
-    text-align: left;
+button,.guess{
+    margin:auto;
+    display:block;
 }
 
-canvas{
-    border: 1px solid #000000
+/* BUTTON STYLES */
+button{
+    padding:14px 32px;
+    font-family:helvetica;
+    font-size:14px;
+    font-weight:100;
+    color:#fff;
+    background: #587286;
+    border:0;
+    font-weight:100;
+}
+button:hover{
+    background: #3B5C76;
+}
+.canvas{
+    padding: 0;
+    margin: auto;
+    display: block;
 }

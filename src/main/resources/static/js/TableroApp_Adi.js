@@ -12,7 +12,7 @@ var context;
 var canvasLimites;
 var flagPaint = false;
 var actualPos;
-var sala=null;
+var sala = null;
 prepareCanvas = function () {
     canvas = document.getElementById("myCanvas");
     ctx = canvas.getContext("2d");
@@ -64,18 +64,23 @@ function connect() {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame + '  ');
-        stompClient.subscribe('/topic/'+sala, function (data) {
-          
+        stompClient.subscribe('/topic/' + sala, function (data) {
+
             theObject = JSON.parse(data.body);
             var ctx = canvas.getContext('2d');
             ctx.beginPath();
             ctx.arc(theObject["x"], theObject["y"], 1, 0, 2 * Math.PI);
             ctx.stroke();
         });
+
+        stompClient.subscribe('/topic/erase.' + sala, function (data) {
+            var ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
     });
 }
 sendPoint = function () {
-    stompClient.send("/topic/"+sala, {}, JSON.stringify({x: x, y: y}));
+    stompClient.send("/topic/" + sala, {}, JSON.stringify({x: x, y: y}));
 };
 erase = function () {
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -108,7 +113,7 @@ nc = function () {
 
 $(document).ready(
         function () {
-            sala=sessionStorage.getItem("sala");
+            sala = sessionStorage.getItem("currentgame");
             connect();
             console.info('connecting to websockets');
             canvas = document.getElementById('myCanvas');
@@ -117,20 +122,20 @@ $(document).ready(
             context.lineWidth = '5';
             context.lineJoin = "round";
             /**canvas.addEventListener('mousedown', hc, false);
-            canvas.addEventListener('mouseup', nc, false);
-            canvas.addEventListener('mousemove', function (evt) {
-                if (flagPaint == false) {
-
-                } else {
-                    var mousePos = getMousePos(canvas, evt);
-                    x = mousePos.x;
-                    y = mousePos.y;
-                    sendPoint();
-
-                    //stompClient.send("/app/newpoint", {}, JSON.stringify({x: x, y: y}));
-                    var mensaje = 'Position' + mousePos.x + mousePos.y;
-                }
-            }, false);*/
+             canvas.addEventListener('mouseup', nc, false);
+             canvas.addEventListener('mousemove', function (evt) {
+             if (flagPaint == false) {
+             
+             } else {
+             var mousePos = getMousePos(canvas, evt);
+             x = mousePos.x;
+             y = mousePos.y;
+             sendPoint();
+             
+             //stompClient.send("/app/newpoint", {}, JSON.stringify({x: x, y: y}));
+             var mensaje = 'Position' + mousePos.x + mousePos.y;
+             }
+             }, false);*/
 
         }
 );

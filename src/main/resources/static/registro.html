@@ -10,76 +10,14 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/assets/css/main.css" />
+        <link rel="stylesheet" href="assets/css/bg.css" />
+        <link rel="stylesheet" href="assets/css/registro.css" />
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="/webjars/jquery/jquery.min.js"></script>
         <!--script src="/webjars/sockjs-client/sockjs.min.js"></script>
         <script src="/webjars/stomp-websocket/stomp.min.js"></script-->
         <script src="/js/App.js"></script>
-        <style type="text/css">
-
-            h1{
-                text-align: center;
-                padding: 5px;
-            }
-
-            form{
-                margin: 20px 0;
-            }
-            form input, button{
-                padding: 5px;
-                text-align: center;
-            }
-            table{
-                width: 100%;
-                margin-bottom: 20px;
-                border-collapse: collapse;
-                text-align: center;
-            }
-            table, th, td{
-                border: 1px solid #cdcdcd;
-            }
-            table th, table td{
-                padding: 10px;
-                text-align: left;
-            }
-            .registro{
-                margin:auto;
-                display:block;
-                text-align: center;
-            }
-            button{
-                margin:auto;
-                display:block;
-            }
-
-            /* BUTTON STYLES */
-            button{
-                padding:14px 32px;
-                font-family:helvetica;
-                font-size:14px;
-                font-weight:100;
-                color:#fff;
-                background: #587286;
-                border:0;
-                font-weight:100;
-            }
-            button:hover{
-                background: #3B5C76;
-            }
-            .registerTable{
-                margin:auto;
-                display:block;
-                text-align: center;
-            }
-            .tabla{
-                margin: auto;
-                text-align: center;
-            }
-            .username{
-                padding: 5px;
-            }
-        </style>
     </head>
     <body>      
         <div class="registro">
@@ -89,8 +27,8 @@ and open the template in the editor.
             <form>
                 <font class="username">Username: </font>
                 <input type="text" name="username" id="username" value="" placeholder="Enter a valid Username" />
-                <button type="button" onclick="app.addUser($('#username').val())">Register</button>
-
+                <input type="password" name="pass" id="password" value="" placeholder="Enter a Password" />
+                <button type="button" onclick="app.addUser($('#username').val(), $('#password').val())">Register</button>
             </form>
 
             <div id="registerTable" class="registerTable">
