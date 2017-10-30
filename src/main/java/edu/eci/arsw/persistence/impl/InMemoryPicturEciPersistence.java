@@ -32,12 +32,12 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
     public InMemoryPicturEciPersistence() {
         User u1 = new User("Daniel", "dibuja", 1);
         User u2 = new User("Camilo", "dibuja", 1);
-        User u3 = new User("Leonardo", "adivina", 1);
-        User u4 = new User("user", "", 0);
+        //User u3 = new User("Leonardo", "adivina", 1);
+        //User u4 = new User("user", "", 0);
         users.putIfAbsent("Daniel", u1);
         users.putIfAbsent("Camilo", u2);
-        users.putIfAbsent("Leonardo", u3);
-        users.putIfAbsent("user", u4);
+        //users.putIfAbsent("Leonardo", u3);
+        //users.putIfAbsent("user", u4);
     }
 
     @Override
