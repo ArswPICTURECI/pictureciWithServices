@@ -25,10 +25,10 @@ and open the template in the editor.
             <br>
 
             <form>
-                <font class="username">Username: </font>
-                <input type="text" name="username" id="username" value="" placeholder="Enter a valid Username" />
-                <input type="password" name="pass" id="password" value="" placeholder="Enter a Password" />
-                <button type="button" onclick="app.addUser($('#username').val(), $('#password').val())">Register</button>
+                <font class="username">Nombre de usuario: </font>
+                <input type="text" name="username" id="username" value="" placeholder="Ingrese un usuario valido" />
+                <input type="password" name="pass" id="password" value="" placeholder="Ingrese contraseña" />
+                <button type="button" onclick="app.addUser($('#username').val(), $('#password').val())">Registrar</button>
             </form>
 
             <div id="registerTable" class="registerTable">
@@ -37,9 +37,9 @@ and open the template in the editor.
                 <table id="tablaUsers" border="1" style="width:50%" class="tabla">
                     <thead>
                         <tr>
-                            <th>UserName</th>
-                            <th>Current Rol</th>
-                            <th>Current Room</th>
+                            <th>Nombre de usuario</th>
+                            <th>Rol actual</th>
+                            <th>Sala actual</th>
 
                         </tr>
                     </thead>
@@ -48,7 +48,7 @@ and open the template in the editor.
                 </table>
                 <br>
                 <button type="button" onclick="app.queryUsers()">Consultar Usuarios Registrados</button><br>
-                <button type="button" onclick="app.principal()">Back To Menu</button>
+                <button type="button" onclick="app.principal()">Regresar al menú</button>
             </div>
         </div>
 
