@@ -85,7 +85,7 @@ var app = (function () {
             var game = $("#topic").val();
             sessionStorage.setItem("currentgame", game);
             $.get("/pictureci/" + game, app.rapida).fail(() => {
-                var game_ = {"count_dibujan": 0, "count_adivinan": 0, "word": "dog", "winner": ""};
+                var game_ = {"count_dibujan": 0, "count_adivinan": 0, "word": "perro", "winner": ""};
                 $.ajax({
                     url: "/pictureci/" + game,
                     type: "POST",

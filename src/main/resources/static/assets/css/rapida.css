@@ -1,7 +1,11 @@
 canvas{
     border: 1px solid #000000
 }
-
+h1{
+    text-align: center;
+    padding: 5px;
+    color: whitesmoke;
+}
 button{
     padding: 5px;
     text-align: center;
