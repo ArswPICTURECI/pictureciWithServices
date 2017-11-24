@@ -14,11 +14,13 @@ public class User {
     private String name = null;
     private String rol = null;
     private int sala;
+    private int puntaje;
 
-    public User(String name, String rol, int sala) {
+    public User(String name, String rol, int sala, int puntaje) {
         this.name = name;
         this.rol = rol;
         this.sala = sala;
+        this.puntaje=puntaje;
     }
     
     public User(String name){
@@ -54,9 +56,19 @@ public class User {
         this.sala = sala;
     }
 
+    public int getPuntaje() {
+        return puntaje;
+    }
+
+    public void setPuntaje(int puntaje) {
+        this.puntaje = puntaje;
+    }
+    
+    
+
     @Override
     public String toString() {
-        return "User{" + "name=" + name + ", rol=" + rol + ", room=" + sala + '}';
+        return "User{" + "name=" + name + ", rol=" + rol + ", room=" + sala + ", score=" + puntaje + '}';
     }
 
 }

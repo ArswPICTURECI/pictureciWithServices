@@ -30,6 +30,7 @@ public interface PicturEciPersistence {
      */
     public List<User> getAllUsers();
 
+    
     public User getUser(String userName) throws PersistenceException;
 
     public void addUser(User user) throws PersistenceException;

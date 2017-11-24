@@ -15,7 +15,7 @@ var app = (function () {
         $("#tablaUsers tbody").empty();
         lista.map(function (ur) {
             $(document).ready(function () {
-                var markup = "<tr><td>" + ur.name + "</td><td>" + ur.rol + "</td><td>" + ur.sala + "</td></tr>";
+                var markup = "<tr><td>" + ur.name + "</td><td>" + ur.rol + "</td><td>" + ur.sala + "</td><td>" + ur.puntaje + "</td></tr>";
                 $("#tablaUsers tbody").append(markup);
             });
         }
@@ -34,7 +34,7 @@ var app = (function () {
         },
         addUser: function (userName) {
             if (userName !== "") {
-                var data = {"name": userName, "rol": "", "sala": 0};
+                var data = {"name": userName, "rol": "", "sala": 0, "puntaje":0};
                 sessionStorage.setItem("currentuser", userName);
             } else {
                 alert("El nombre del usuario no puede estar vacio");

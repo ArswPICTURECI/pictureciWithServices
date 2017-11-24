@@ -30,8 +30,8 @@ public class InMemoryPersistenceTest {
     @Test
     public void registerUserWithRolAndRoom() throws PersistenceException {
         InMemoryPicturEciPersistence ipep = new InMemoryPicturEciPersistence();
-        User us1 = new User("Laura", "dibuja", 1);
-        User us2 = new User("Andres", "dibuja", 1);
+        User us1 = new User("Laura", "dibuja", 1,450);
+        User us2 = new User("Andres", "dibuja", 1,400);
         ipep.registerUser(us1);
         ipep.registerUser(us2);
         assertEquals("dibuja", ipep.getUser("Laura").getRol());
@@ -41,8 +41,8 @@ public class InMemoryPersistenceTest {
     @Test
     public void registerUsers() throws PersistenceException {
         InMemoryPicturEciPersistence ipep = new InMemoryPicturEciPersistence();
-        User us1 = new User("Laura", "dibuja", 1);
-        User us2 = new User("Andres", "dibuja", 1);
+        User us1 = new User("Laura", "dibuja", 1,120);
+        User us2 = new User("Andres", "dibuja", 1,0);
         User us3 = new User("Leonardo");
         ipep.registerUser(us1);
         ipep.registerUser(us2);
