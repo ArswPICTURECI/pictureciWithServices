@@ -14,13 +14,13 @@ public class Game {
     public static final int DIBUJAN = -1;
     public static final int ADIVINAN = -2;
 
-    private static final int MAX_DIB = 2;
-    private static final int MAX_ADV = 1;
+    protected static final int MAX_DIB = 2;
+    protected static final int MAX_ADV = 1;
 
-    private int count_dibujan;
-    private int count_adivinan;
-    private String word;
-    private String winner;
+    protected int count_dibujan;
+    protected int count_adivinan;
+    protected String word;
+    protected String winner;
 
     public int getCount_dibujan() {
         return count_dibujan;
@@ -58,7 +58,7 @@ public class Game {
         this.winner = winner;
     }
 
-    public boolean addPlayer(int type) {
+    public boolean addPlayer(User u, int type) {
         if (type == DIBUJAN) {
             if (count_dibujan == MAX_DIB) {
                 return false;
@@ -75,13 +75,5 @@ public class Game {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public String toString() {
-        return "{"
-                + "word: " + word
-                + ", winner: " + winner
-                + "}";
     }
 }

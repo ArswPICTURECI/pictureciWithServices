@@ -41,11 +41,11 @@ public class PicturEciServices {
     }
 
     public void addGame(int gameid, Game game) throws PersistenceException {
-        pep.addGame(gameid, game);
+        pep.addFinishedGame(gameid, game);
     }
 
     public Game getGame(int gameid) throws PersistenceException {
-        return pep.getGame(gameid);
+        return pep.getFinishedGame(gameid);
     }
 
     public boolean tryWord(Integer gameid, DrawingGuess attempt) throws PersistenceException {
@@ -54,5 +54,9 @@ public class PicturEciServices {
 
     public void addPlayer(int gameid, int type) throws PersistenceException {
         pep.addPlayer(gameid, type);
+    }
+
+    public List<Game> getAllGames() throws PersistenceException {
+        return pep.getFinishedGames();
     }
 }

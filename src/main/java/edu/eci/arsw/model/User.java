@@ -20,16 +20,17 @@ public class User {
         this.name = name;
         this.rol = rol;
         this.sala = sala;
-        this.puntaje=puntaje;
+        this.puntaje = puntaje;
     }
-    
-    public User(String name){
-        this.name=name;
-        this.rol=null;
-        this.sala=0;
+
+    public User(String name) {
+        this.name = name;
+        this.rol = null;
+        this.sala = 0;
     }
-    
-    public User(){
+
+    public User() {
+        
     }
 
     public String getName() {
@@ -63,8 +64,6 @@ public class User {
     public void setPuntaje(int puntaje) {
         this.puntaje = puntaje;
     }
-    
-    
 
     @Override
     public String toString() {

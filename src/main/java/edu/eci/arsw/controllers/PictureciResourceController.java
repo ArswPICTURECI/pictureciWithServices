@@ -35,6 +35,16 @@ public class PictureciResourceController {
     @Autowired
     SimpMessagingTemplate msmt = null;
 
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<?> getAllGames() {
+        try {
+            return new ResponseEntity<>(pes.getAllGames(), HttpStatus.OK);
+        } catch (PersistenceException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
     @RequestMapping(value = "/{gameid}", method = RequestMethod.POST)
     public ResponseEntity<?> postGame(@PathVariable Integer gameid, @RequestBody Game game) {
         try {
