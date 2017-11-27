@@ -6,6 +6,7 @@
 package edu.eci.arsw.cache;
 
 import edu.eci.arsw.model.Game;
+import edu.eci.arsw.model.Player;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,9 @@ public class PictureciInMemoryCache implements PictureciCache {
     private final ConcurrentMap<Integer, Game> gamesState = new ConcurrentHashMap<>();
 
     @Override
-    public void createGame(int gameid, Game game) throws CacheException {
-        gamesState.putIfAbsent(gameid, game);
+    public void createGame(int gameid, String word) throws CacheException {
+        Game new_game = new Game(word);
+        gamesState.putIfAbsent(gameid, new_game);
     }
 
     @Override
@@ -34,4 +36,12 @@ public class PictureciInMemoryCache implements PictureciCache {
         gamesState.remove(gameid);
     }
 
+    @Override
+    public void addPlayer(int gameid, Player player) throws CacheException {
+        if (gamesState.containsKey(gameid)) {
+            gamesState.get(gameid).addPlayer(player);
+        } else {
+            throw new CacheException("NO hay juego");
+        }
+    }
 }

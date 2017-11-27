@@ -4,8 +4,6 @@
  * and open the template in the editor.
  */
 
-
-
 var app = (function () {
 
     var stompClient = null;
@@ -32,22 +30,22 @@ var app = (function () {
             }
             ;
         },
-        addUser: function (userName,pwd) {
-            console.log("user "+ userName + "pwd "+pwd);
+        addUser: function (userName, pwd) {
+            console.log("user " + userName + "pwd " + pwd);
             if (userName !== "") {
-                var data = {"name":userName,"password":pwd};
+                var data = {"name": userName, "password": pwd};
                 console.log(data);
                 sessionStorage.setItem("currentuser", userName);
             } else {
                 alert("El nombre del usuario no puede estar vacio");
             }
             return $.ajax({
-                url: "/users/",
+                url: "/users",
                 type: 'POST',
                 data: JSON.stringify(data),
                 contentType: "application/json"
             }).then(function () {
-                $.get("/users/", callback);
+                $.get("/users", callback);
                 alert("El usuario: " + userName + " se ha creado satisfactoriamente");
             },
                     function () {
@@ -62,7 +60,7 @@ var app = (function () {
                     if (password === password) {
                         sessionStorage.setItem("currentuser", user);
                         location.href = "partida.html";
-                    }else{
+                    } else {
                         alert("CONTRASEÑA INVALIDA")
                     }
                 }).fail(function () {
@@ -88,18 +86,16 @@ var app = (function () {
         },
 
         connect: function () {
-            var game = $("#topic").val();
-            sessionStorage.setItem("currentgame", game);
-            $.get("/pictureci/" + game, app.rapida).fail(() => {
-                var game_ = {"count_dibujan": 0, "count_adivinan": 0, "word": "perro", "winner": ""};
-                $.ajax({
-                    url: "/pictureci/" + game,
-                    type: "POST",
-                    data: JSON.stringify(game_),
-                    contentType: "application/json"
-                }).then(() => {
-                    app.rapida();
-                });
+            var gameid = $("#topic").val();
+            sessionStorage.setItem("currentgame", gameid);
+            var word = "perro";
+            $.ajax({
+                url: "/pictureci/" + gameid,
+                type: "PUT",
+                data: word,
+                contentType: "application/json"
+            }).then(() => {
+                app.rapida();
             });
         },
 

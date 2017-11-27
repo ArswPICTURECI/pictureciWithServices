@@ -91,15 +91,6 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
     }
 
     @Override
-    public void addPlayer(int gameid, int type) throws PersistenceException {
-        synchronized (games) {
-            if (!games.get(gameid).addPlayer(new User(), type)) {
-                throw new PersistenceException("Sala llena. Intente cambiar de sala o rol");
-            }
-        }
-    }
-
-    @Override
     public List<Game> getFinishedGames() throws PersistenceException {
         return new ArrayList<>(games.values());
     }

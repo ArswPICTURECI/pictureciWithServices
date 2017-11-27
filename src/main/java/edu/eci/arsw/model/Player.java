@@ -11,19 +11,19 @@ package edu.eci.arsw.model;
  */
 public class Player {
     private String name = null;
-    private String rol = null;
+    private int rol;
     private int room;
     private int score;
 
-    public Player(String name) {
+    public Player(String name, int rol) {
         this.name=name;
     }
 
-    public String getRol() {
+    public int getRol() {
         return rol;
     }
 
-    public void setRol(String rol) {
+    public void setRol(int rol) {
         this.rol = rol;
     }
 
@@ -47,7 +47,4 @@ public class Player {
     public String toString() {
         return "User{" + "name=" + name + ", rol=" + rol + ", room=" + room + ", score=" + score + '}';
     }
-    
-    
-    
 }

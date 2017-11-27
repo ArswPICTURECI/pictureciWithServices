@@ -34,7 +34,5 @@ public interface PicturEciPersistence {
     
     public Game getFinishedGame(int gameid) throws PersistenceException;
 
-    public void addPlayer(int gameid, int type) throws PersistenceException;
-
     public List<Game> getFinishedGames() throws PersistenceException;
 }

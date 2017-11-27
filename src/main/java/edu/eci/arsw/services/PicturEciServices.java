@@ -8,6 +8,7 @@ package edu.eci.arsw.services;
 import edu.eci.arsw.cache.CacheException;
 import edu.eci.arsw.cache.PictureciCache;
 import edu.eci.arsw.model.Game;
+import edu.eci.arsw.model.Player;
 import edu.eci.arsw.model.User;
 import edu.eci.arsw.model.entities.DrawingGuess;
 import edu.eci.arsw.persistence.PersistenceException;
@@ -29,8 +30,8 @@ public class PicturEciServices {
     @Autowired
     PictureciCache cache = null;
 
-    public void createGame(int gameid, Game game) throws CacheException {
-        cache.createGame(gameid, game);
+    public void createGame(int gameid, String word) throws CacheException {
+        cache.createGame(gameid, word);
     }
 
     public Game getCurrentGame(int gameid) throws CacheException {
@@ -65,8 +66,8 @@ public class PicturEciServices {
         return pep.getFinishedGame(gameid);
     }
 
-    public void addPlayer(int gameid, int type) throws PersistenceException {
-        pep.addPlayer(gameid, type);
+    public void addPlayer(int gameid, Player player) throws CacheException {
+        cache.addPlayer(gameid, player);
     }
 
     public List<Game> getAllGames() throws PersistenceException {

@@ -6,6 +6,7 @@
 package edu.eci.arsw.cache;
 
 import edu.eci.arsw.model.Game;
+import edu.eci.arsw.model.Player;
 
 /**
  *
@@ -13,9 +14,11 @@ import edu.eci.arsw.model.Game;
  */
 public interface PictureciCache {
 
-    public void createGame(int gameid, Game game) throws CacheException;
+    public void createGame(int gameid, String word) throws CacheException;
 
     public Game getGame(int gameid) throws CacheException;
+    
+    public void addPlayer(int gameid, Player player) throws CacheException;
 
     public void deleteGame(int gameid) throws CacheException;
 }

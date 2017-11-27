@@ -11,4 +11,8 @@ package edu.eci.arsw.cache;
  */
 public class CacheException extends Exception {
 
+    public CacheException(String msg) {
+        super(msg);
+    }
+
 }

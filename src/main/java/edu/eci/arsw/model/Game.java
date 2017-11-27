@@ -67,15 +67,15 @@ public class Game {
         this.winner = winner;
     }
 
-    public boolean addPlayer(User u, int type) {
-        if (type == DIBUJAN) {
+    public boolean addPlayer(Player player) {
+        if (player.getRol() == DIBUJAN) {
             if (count_dibujan == MAX_DIB) {
                 return false;
             }
             ++count_dibujan;
             System.out.println("Jugador agregado: Dibujante");
             return true;
-        } else if (type == ADIVINAN) {
+        } else if (player.getRol() == ADIVINAN) {
             if (count_adivinan == MAX_ADV) {
                 return false;
             }

@@ -7,6 +7,7 @@ package edu.eci.arsw.controllers;
 
 import edu.eci.arsw.cache.CacheException;
 import edu.eci.arsw.model.Game;
+import edu.eci.arsw.model.Player;
 import edu.eci.arsw.model.entities.DrawingGuess;
 import edu.eci.arsw.persistence.PersistenceException;
 import edu.eci.arsw.services.PicturEciServices;
@@ -46,12 +47,12 @@ public class PictureciResourceController {
         }
     }
 
-    @RequestMapping(value = "/{gameid}", method = RequestMethod.POST)
-    public ResponseEntity<?> postGame(@PathVariable Integer gameid, @RequestBody Game game) {
+    @RequestMapping(value = "/{gameid}", method = RequestMethod.PUT)
+    public ResponseEntity<?> putGame(@PathVariable Integer gameid, @RequestBody String word) {
         try {
-            pes.createGame(gameid, game);
-            System.out.println(game);
-            return new ResponseEntity<>(game, HttpStatus.CREATED);
+            pes.createGame(gameid, word);
+            System.out.println(word);
+            return new ResponseEntity<>(word, HttpStatus.CREATED);
         } catch (CacheException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.CONFLICT);
@@ -95,9 +96,9 @@ public class PictureciResourceController {
     @RequestMapping(value = "/{gameid}/dibujan", method = RequestMethod.PUT)
     public ResponseEntity<?> putDibujanGame(@PathVariable Integer gameid) {
         try {
-            pes.addPlayer(gameid, Game.DIBUJAN);
+            pes.addPlayer(gameid, new Player("guest", Game.DIBUJAN));
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (PersistenceException ex) {
+        } catch (CacheException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -106,9 +107,9 @@ public class PictureciResourceController {
     @RequestMapping(value = "/{gameid}/adivinan", method = RequestMethod.PUT)
     public ResponseEntity<?> putAdivinanGame(@PathVariable Integer gameid) {
         try {
-            pes.addPlayer(gameid, Game.ADIVINAN);
+            pes.addPlayer(gameid, new Player("guest", Game.ADIVINAN));
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (PersistenceException ex) {
+        } catch (CacheException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
