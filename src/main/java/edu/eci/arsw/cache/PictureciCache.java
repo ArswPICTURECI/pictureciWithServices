@@ -13,7 +13,9 @@ import edu.eci.arsw.model.Game;
  */
 public interface PictureciCache {
 
-    public void createGame();
+    public void createGame(int gameid, Game game) throws CacheException;
 
-    public Game getGame(int gameid);
+    public Game getGame(int gameid) throws CacheException;
+
+    public void deleteGame(int gameid) throws CacheException;
 }

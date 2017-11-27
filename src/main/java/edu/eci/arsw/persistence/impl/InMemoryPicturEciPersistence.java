@@ -92,13 +92,6 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
     }
 
     @Override
-    public boolean tryWord(int gameid, DrawingGuess attempt) throws PersistenceException {
-        synchronized (games) {
-            return games.get(gameid).addWord(attempt.getPhrase());
-        }
-    }
-
-    @Override
     public void addPlayer(int gameid, int type) throws PersistenceException {
         synchronized (games) {
             if (!games.get(gameid).addPlayer(new User(), type)) {

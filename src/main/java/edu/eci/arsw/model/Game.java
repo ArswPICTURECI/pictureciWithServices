@@ -5,6 +5,8 @@
  */
 package edu.eci.arsw.model;
 
+import edu.eci.arsw.model.entities.DrawingGuess;
+
 /**
  *
  * @author rami
@@ -22,6 +24,13 @@ public class Game {
     protected String word;
     protected String winner;
 
+    public Game(String word) {
+        this.count_adivinan = 0;
+        this.count_dibujan = 0;
+        this.word = word;
+        this.winner = "";
+    }
+
     public int getCount_dibujan() {
         return count_dibujan;
     }
@@ -38,8 +47,8 @@ public class Game {
         this.count_adivinan = count_adivinan;
     }
 
-    public boolean addWord(String word) {
-        return word.equalsIgnoreCase(this.word) || word.contains(this.word);
+    public boolean tryWord(DrawingGuess attempt) {
+        return attempt.getPhrase().equalsIgnoreCase(this.word) || attempt.getPhrase().contains(this.word);
     }
 
     public String getWord() {

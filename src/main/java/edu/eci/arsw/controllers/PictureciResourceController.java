@@ -5,6 +5,7 @@
  */
 package edu.eci.arsw.controllers;
 
+import edu.eci.arsw.cache.CacheException;
 import edu.eci.arsw.model.Game;
 import edu.eci.arsw.model.entities.DrawingGuess;
 import edu.eci.arsw.persistence.PersistenceException;
@@ -48,10 +49,10 @@ public class PictureciResourceController {
     @RequestMapping(value = "/{gameid}", method = RequestMethod.POST)
     public ResponseEntity<?> postGame(@PathVariable Integer gameid, @RequestBody Game game) {
         try {
-            pes.addGame(gameid, game);
+            pes.createGame(gameid, game);
             System.out.println(game);
             return new ResponseEntity<>(game, HttpStatus.CREATED);
-        } catch (PersistenceException ex) {
+        } catch (CacheException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.CONFLICT);
         }
@@ -60,26 +61,32 @@ public class PictureciResourceController {
     @RequestMapping(value = "/{gameid}/guess", method = RequestMethod.POST)
     public ResponseEntity<?> guessDrawing(@PathVariable Integer gameid, @RequestBody DrawingGuess attempt) {
         try {
-            boolean win = pes.tryWord(gameid, attempt);
+            Game in_game = pes.getCurrentGame(gameid);
+            boolean win = in_game.tryWord(attempt);
             System.out.println("Received; Username: " + attempt.getUsername() + " - Phrase: " + attempt.getPhrase());
             if (win) {
-                pes.getGame(gameid).setWinner(attempt.getUsername());
+                in_game.setWinner(attempt.getUsername());
+                pes.removeFromCache(gameid);
+                pes.addFinishedGame(gameid, in_game);
                 System.out.print("Game: " + gameid);
                 msmt.convertAndSend("/topic/winner." + gameid, attempt.getUsername());
             }
             return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (PersistenceException ex) {
+        } catch (CacheException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (PersistenceException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
         }
     }
 
     @RequestMapping(value = "/{gameid}", method = RequestMethod.GET)
-    public ResponseEntity<?> getGame(@PathVariable Integer gameid) {
+    public ResponseEntity<?> getGameCache(@PathVariable Integer gameid) {
         try {
-            Game game = pes.getGame(gameid);
+            Game game = pes.getCurrentGame(gameid);
             return new ResponseEntity<>(game, HttpStatus.OK);
-        } catch (PersistenceException ex) {
+        } catch (CacheException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
