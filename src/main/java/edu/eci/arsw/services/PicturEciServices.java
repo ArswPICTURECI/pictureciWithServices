@@ -5,6 +5,8 @@
  */
 package edu.eci.arsw.services;
 
+import edu.eci.arsw.cache.CacheException;
+import edu.eci.arsw.cache.PictureciCache;
 import edu.eci.arsw.model.Game;
 import edu.eci.arsw.model.User;
 import edu.eci.arsw.model.entities.DrawingGuess;
@@ -24,8 +26,23 @@ public class PicturEciServices {
     @Autowired
     PicturEciPersistence pep = null;
 
+    @Autowired
+    PictureciCache cache = null;
+
+    public void createGame(int gameid, Game game) throws CacheException {
+        cache.createGame(gameid, game);
+    }
+
+    public Game getCurrentGame(int gameid) throws CacheException {
+        return cache.getGame(gameid);
+    }
+
     public void registerUser(User user) throws PersistenceException {
         pep.registerUser(user);
+    }
+
+    public void removeFromCache(int gameid) throws CacheException {
+        cache.deleteGame(gameid);
     }
 
     public List<User> getAllUsers() {
@@ -40,19 +57,19 @@ public class PicturEciServices {
         pep.addUser(user);
     }
 
-    public void addGame(int gameid, Game game) throws PersistenceException {
-        pep.addGame(gameid, game);
+    public void addFinishedGame(int gameid, Game game) throws PersistenceException {
+        pep.addFinishedGame(gameid, game);
     }
 
-    public Game getGame(int gameid) throws PersistenceException {
-        return pep.getGame(gameid);
-    }
-
-    public boolean tryWord(Integer gameid, DrawingGuess attempt) throws PersistenceException {
-        return pep.tryWord(gameid, attempt);
+    public Game getFinishedGame(int gameid) throws PersistenceException {
+        return pep.getFinishedGame(gameid);
     }
 
     public void addPlayer(int gameid, int type) throws PersistenceException {
         pep.addPlayer(gameid, type);
+    }
+
+    public List<Game> getAllGames() throws PersistenceException {
+        return pep.getFinishedGames();
     }
 }

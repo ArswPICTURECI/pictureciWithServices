@@ -24,22 +24,17 @@ public interface PicturEciPersistence {
      */
     public void registerUser(User user) throws PersistenceException;
 
-    /**
-     *
-     * @return all registered users
-     */
     public List<User> getAllUsers();
 
-    
     public User getUser(String userName) throws PersistenceException;
 
     public void addUser(User user) throws PersistenceException;
 
-    public void addGame(int gameid, Game game) throws PersistenceException;
-
-    public Game getGame(Integer gameid) throws PersistenceException;
-
-    public boolean tryWord(int gameid, DrawingGuess attempt) throws PersistenceException;
+    public void addFinishedGame(int gameid, Game game) throws PersistenceException;
+    
+    public Game getFinishedGame(int gameid) throws PersistenceException;
 
     public void addPlayer(int gameid, int type) throws PersistenceException;
+
+    public List<Game> getFinishedGames() throws PersistenceException;
 }

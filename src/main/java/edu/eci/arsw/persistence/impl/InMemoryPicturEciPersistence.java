@@ -71,7 +71,7 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
     }
 
     @Override
-    public void addGame(int gameid, Game game) throws PersistenceException {
+    public void addFinishedGame(int gameid, Game game) throws PersistenceException {
         synchronized (games) {
             if (games.get(gameid) == null) {
                 games.putIfAbsent(gameid, game);
@@ -82,7 +82,7 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
     }
 
     @Override
-    public Game getGame(Integer gameid) throws PersistenceException {
+    public Game getFinishedGame(int gameid) throws PersistenceException {
         Game game = games.get(gameid);
         if (game != null) {
             return game;
@@ -91,19 +91,16 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
     }
 
     @Override
-    public boolean tryWord(int gameid, DrawingGuess attempt) throws PersistenceException {
-        synchronized (games) {
-            return games.get(gameid).addWord(attempt.getPhrase());
-        }
-    }
-
-    @Override
     public void addPlayer(int gameid, int type) throws PersistenceException {
         synchronized (games) {
-            if (!games.get(gameid).addPlayer(type)) {
+            if (!games.get(gameid).addPlayer(new User(), type)) {
                 throw new PersistenceException("Sala llena. Intente cambiar de sala o rol");
             }
         }
     }
 
+    @Override
+    public List<Game> getFinishedGames() throws PersistenceException {
+        return new ArrayList<>(games.values());
+    }
 }
