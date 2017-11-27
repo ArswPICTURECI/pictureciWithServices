@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>PicturEci</title>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="/assets/css/bg.css" type="text/css"/>
+        <link rel="stylesheet" href="/assets/css/partida.css" type="text/css"/>
+        <script src="/webjars/jquery/jquery.min.js"></script>
+        <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+        <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+        <script src="/js/App.js"></script>
+    </head>
+    <body>
+        <form>
+            <h1>PicturEci</h1>
+
+
+            <h1>¿Que quieres hacer?</h1>
+
+            <select class="estilo" id="rol" name="estilo">
+
+                <option>Dibujar</option>
+
+                <option>Adivinar</option>
+
+            </select>
+        </form>
+        
+        <h1>¿En que sala?</h1>
+
+        <input class="numeroSala" id="topic" type="number" placeholder="Ingrese numero de sala"/> <br>
+        
+        <button onclick="app.connect()" >Iniciar Partida</button><br>
+        <button onclick="app.backToGameMode()">Regresar</button>
+    </body>
+</html>

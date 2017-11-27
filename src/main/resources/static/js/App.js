@@ -59,7 +59,7 @@ var app = (function () {
                     console.log(user + "y" + password);
                     if (password === password) {
                         sessionStorage.setItem("currentuser", user);
-                        location.href = "partida.html";
+                        location.href = "GameMode.html";
                     } else {
                         alert("CONTRASEÑA INVALIDA")
                     }
@@ -121,9 +121,6 @@ var app = (function () {
         queryUsers: function () {
             $.get("/users/", callback);
         },
-        partida: function () {
-            location.href = "partida.html";
-        },
 
         rapida: function () {
             sessionStorage.setItem('rol', $("#rol").val());
@@ -159,6 +156,18 @@ var app = (function () {
         },
         inicioSesion: function () {
             location.href = "sesion.html";
+        },
+        normalGame: function (){
+            location.href = "partidaNormal.html";
+        },
+        
+        randomGame:function (){
+            location.href = "partidaRandom.html";
+        },
+        
+        backToGameMode: function (){
+            location.href = "GameMode.html";
         }
+        
     };
 })();

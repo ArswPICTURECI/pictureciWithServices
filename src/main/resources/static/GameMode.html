@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>PicturEci</title>
+        <title>Modo de Juego</title>
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="/assets/css/bg.css" type="text/css"/>
         <link rel="stylesheet" href="/assets/css/partida.css" type="text/css"/>
@@ -16,26 +16,20 @@ and open the template in the editor.
         <script src="/js/App.js"></script>
     </head>
     <body>
+        <h1>Seleccione Modo de Juego</h1>
+        <br>
+        <br>
+        <br>
         <form>
-            <h1>PicturEci</h1>
-
-
-            <h1>¿Que quieres hacer?</h1>
-
-            <select class="estilo" id="rol" name="estilo">
-
-                <option>Dibujar</option>
-
-                <option>Adivinar</option>
-
-            </select>
+            <div>
+                <button type="button" onclick="app.randomGame()" style="text-align:center">Modo Random</button>
+                <br>
+                <br>
+                <button type="button" onclick="app.normalGame()" style="text-align:center">Modo Normal</button>
+                <br>
+                <br>
+                <button type="button" onclick="app.principal()" style="text-align:center">Cerrar Sesion</button>
+            </div>
         </form>
-        
-        <h1>¿En que sala?</h1>
-
-        <input class="numeroSala" id="topic" type="number" placeholder="Ingrese numero de sala"/> <br>
-        
-        <button onclick="app.connect()" >Iniciar Partida</button><br>
-        <button onclick="app.principal()">Cerrar sesion</button>
     </body>
 </html>
