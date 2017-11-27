@@ -30,14 +30,12 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
     private final ConcurrentMap<Integer, Game> games = new ConcurrentHashMap<>();
 
     public InMemoryPicturEciPersistence() {
-        User u1 = new User("Daniel", "dibuja", 1, 0);
-        User u2 = new User("Camilo", "dibuja", 1, 0);
-        //User u3 = new User("Leonardo", "adivina", 1);
-        //User u4 = new User("user", "", 0);
+        User u1 = new User("Daniel", "123");
+        User u2 = new User("Camilo", "123");
+
         users.putIfAbsent("Daniel", u1);
         users.putIfAbsent("Camilo", u2);
-        //users.putIfAbsent("Leonardo", u3);
-        //users.putIfAbsent("user", u4);
+
     }
 
     @Override
@@ -67,8 +65,9 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
     }
 
     @Override
-    public void addUser(User user) {
+    public void addUser(User user) throws PersistenceException {
         users.putIfAbsent(user.getName(), user);
+
     }
 
     @Override

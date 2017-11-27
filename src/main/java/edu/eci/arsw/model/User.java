@@ -12,63 +12,32 @@ package edu.eci.arsw.model;
 public class User {
 
     private String name = null;
-    private String rol = null;
-    private int sala;
-    private int puntaje;
+    private String password= null;
 
-    public User(String name, String rol, int sala, int puntaje) {
+    public User(String name, String password) {
         this.name = name;
-        this.rol = rol;
-        this.sala = sala;
-        this.puntaje=puntaje;
-    }
-    
-    public User(String name){
-        this.name=name;
-        this.rol=null;
-        this.sala=0;
-    }
-    
-    public User(){
+        this.password=password;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getRol() {
-        return rol;
-    }
-
-    public int getSala() {
-        return sala;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setRol(String rol) {
-        this.rol = rol;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSala(int sala) {
-        this.sala = sala;
-    }
-
-    public int getPuntaje() {
-        return puntaje;
-    }
-
-    public void setPuntaje(int puntaje) {
-        this.puntaje = puntaje;
+    public void setPassword(String password) {
+        this.password = password;
     }
     
-    
-
     @Override
     public String toString() {
-        return "User{" + "name=" + name + ", rol=" + rol + ", room=" + sala + ", score=" + puntaje + '}';
+        return "User{" + "name=" + name + ", password=" + password + '}';
     }
 
 }

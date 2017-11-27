@@ -15,7 +15,7 @@ var app = (function () {
         $("#tablaUsers tbody").empty();
         lista.map(function (ur) {
             $(document).ready(function () {
-                var markup = "<tr><td>" + ur.name + "</td><td>" + ur.rol + "</td><td>" + ur.sala + "</td><td>" + ur.puntaje + "</td></tr>";
+                var markup = "<tr><td>" + ur.name + "</td></tr>";
                 $("#tablaUsers tbody").append(markup);
             });
         }
@@ -32,14 +32,15 @@ var app = (function () {
             }
             ;
         },
-        addUser: function (userName) {
+        addUser: function (userName,pwd) {
+            console.log("user "+ userName + "pwd "+pwd);
             if (userName !== "") {
-                var data = {"name": userName, "rol": "", "sala": 0, "puntaje":0};
+                var data = {"name":userName,"password":pwd};
+                console.log(data);
                 sessionStorage.setItem("currentuser", userName);
             } else {
                 alert("El nombre del usuario no puede estar vacio");
             }
-
             return $.ajax({
                 url: "/users/",
                 type: 'POST',
@@ -57,8 +58,13 @@ var app = (function () {
         login: function (user, password) {
             if (user !== "") {
                 $.get("/users/" + user, function (data) {
-                    sessionStorage.setItem("currentuser", user);
-                    location.href = "partida.html";
+                    console.log(user + "y" + password);
+                    if (password === password) {
+                        sessionStorage.setItem("currentuser", user);
+                        location.href = "partida.html";
+                    }else{
+                        alert("CONTRASEÑA INVALIDA")
+                    }
                 }).fail(function () {
                     alert("El usuario " + user + " no está registrado");
                 });
@@ -122,7 +128,7 @@ var app = (function () {
         partida: function () {
             location.href = "partida.html";
         },
-        
+
         rapida: function () {
             sessionStorage.setItem('rol', $("#rol").val());
             var fail = (data) => {
@@ -148,9 +154,9 @@ var app = (function () {
                 });
             }
         },
-        
+
         registro: function () {
-            location.href = "registro.html";
+            location.href = "registerUser.html";
         },
         principal: function () {
             location.href = "index.html";
