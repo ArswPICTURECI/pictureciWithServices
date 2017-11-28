@@ -104,11 +104,6 @@ var app = (function () {
             );
         },
 
-        addPlayer: function (p) {
-            
-
-        },
-
         login: function (user, password) {
             if (user !== "" && password !== "") {
                 $.get("/users/" + user, function (data) {
