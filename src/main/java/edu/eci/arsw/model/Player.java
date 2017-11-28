@@ -18,6 +18,21 @@ public class Player {
     public Player(String name, int rol) {
         this.name=name;
     }
+    
+    public Player(String name){
+        this.name=name;
+        this.rol=0;
+        this.room=0;
+        this.score=0;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public int getRol() {
         return rol;

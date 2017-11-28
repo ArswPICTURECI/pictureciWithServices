@@ -6,19 +6,41 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>PicturEci</title>
+        <title>Juego Normal</title>
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="/assets/css/bg.css" type="text/css"/>
         <link rel="stylesheet" href="/assets/css/partida.css" type="text/css"/>
+        <link rel="stylesheet" href="/assets/css/registro.css" type="text/css"/>
         <script src="/webjars/jquery/jquery.min.js"></script>
         <script src="/webjars/sockjs-client/sockjs.min.js"></script>
         <script src="/webjars/stomp-websocket/stomp.min.js"></script>
         <script src="/js/App.js"></script>
+
     </head>
     <body>
         <form>
-            <h1>PicturEci</h1>
+            <h1>Juego Normal</h1>
 
+            <h1>A continuación jugarás con algun amigo que esté conectado</h1>
+
+            <div id="queryPlayers" class="queryPlayers">
+
+                <br>
+                <table id="tabla" border="1" style="width:50%" class="tabla">
+                    <thead>
+                        <tr>
+                            <th>Nombre de Jugador</th>
+                            <th>Sala Actual </th>
+                            <th>Rol Actual </th>
+                            <th>Puntuaje Actual</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <br>
+                <button type="button" onclick="app.queryPlayers()">Consultar Jugadores Registrados</button>
+            </div>
 
             <h1>¿Que quieres hacer?</h1>
 
@@ -30,12 +52,12 @@ and open the template in the editor.
 
             </select>
         </form>
-        
+
         <h1>¿En que sala?</h1>
 
         <input class="numeroSala" id="topic" type="number" placeholder="Ingrese numero de sala"/> <br>
-        
-        <button onclick="app.connect()" >Iniciar Partida</button><br>
+
+        <button onclick="app.connectToNormalGame()" >Iniciar Partida</button><br>
         <button onclick="app.backToGameMode()">Regresar</button>
     </body>
 </html>

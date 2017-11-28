@@ -5,6 +5,7 @@
  */
 package edu.eci.arsw.controllers;
 
+import edu.eci.arsw.model.Player;
 import edu.eci.arsw.model.User;
 import edu.eci.arsw.persistence.PersistenceException;
 import edu.eci.arsw.services.PicturEciServices;
@@ -24,23 +25,23 @@ import org.springframework.web.bind.annotation.RestController;
  * @author daferrotru
  */
 @RestController
-@RequestMapping(value = "/users")
-public class UsersResourceController {
-
+@RequestMapping(value = "/players")
+public class PlayerResourceController {
+    
     @Autowired
     PicturEciServices pes = null;
     
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?> getUsers() {
-        return new ResponseEntity<>(pes.getAllUsers(), HttpStatus.ACCEPTED);
+    public ResponseEntity<?> getPlayers() {
+        return new ResponseEntity<>(pes.getAllPLayers(), HttpStatus.ACCEPTED);
 
     }
 
-    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
-    public ResponseEntity<?> getUser(@PathVariable String username) {
+    @RequestMapping(value = "/{player}", method = RequestMethod.GET)
+    public ResponseEntity<?> getPlayer(@PathVariable String player) {
         try {
-            User user = pes.getUser(username);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            Player p = pes.getPlayer(player);
+            return new ResponseEntity<>(p, HttpStatus.OK);
         } catch (PersistenceException ex) {
             Logger.getLogger(UsersResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
@@ -48,13 +49,14 @@ public class UsersResourceController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> postUser(@RequestBody User user) {
+    public ResponseEntity<?> postPlayer(@RequestBody Player player) {
         try {
-            pes.addUser(user);
-            return new ResponseEntity<>(user, HttpStatus.CREATED);
+            pes.addPlayer(player);
+            return new ResponseEntity<>(player, HttpStatus.CREATED);
         } catch (PersistenceException ex) {
             Logger.getLogger(UsersResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
         }
     }
+    
 }

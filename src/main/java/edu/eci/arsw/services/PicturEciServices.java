@@ -73,4 +73,17 @@ public class PicturEciServices {
     public List<Game> getAllGames() throws PersistenceException {
         return pep.getFinishedGames();
     }
+    
+    //PLAYERS
+    public List<Player> getAllPLayers() {
+        return pep.getAllPLayers();
+    }
+
+    public Player getPlayer(String player) throws PersistenceException {
+        return pep.getPlayer(player);
+    }
+
+    public void addPlayer(Player player) throws PersistenceException {
+        pep.addPlayer(player);
+    }
 }

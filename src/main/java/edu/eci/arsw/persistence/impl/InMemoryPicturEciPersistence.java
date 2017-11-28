@@ -6,6 +6,7 @@
 package edu.eci.arsw.persistence.impl;
 
 import edu.eci.arsw.model.Game;
+import edu.eci.arsw.model.Player;
 import edu.eci.arsw.model.User;
 import edu.eci.arsw.model.entities.DrawingGuess;
 //import edu.eci.arsw.persistence.DrawingNotFoundException;
@@ -28,6 +29,7 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
 
     private final ConcurrentMap<String, User> users = new ConcurrentHashMap<>();
     private final ConcurrentMap<Integer, Game> games = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, Player> players = new ConcurrentHashMap<>();
 
     public InMemoryPicturEciPersistence() {
         User u1 = new User("Daniel", "123");
@@ -35,6 +37,11 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
 
         users.putIfAbsent("Daniel", u1);
         users.putIfAbsent("Camilo", u2);
+        
+        Player p1= new Player("Daniel");
+        Player p2= new Player("Camilo");
+        players.putIfAbsent("Daniel", p1);
+        players.putIfAbsent("Camilo", p2);
 
     }
 
@@ -93,5 +100,26 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
     @Override
     public List<Game> getFinishedGames() throws PersistenceException {
         return new ArrayList<>(games.values());
+    }
+
+    //PLAYERS
+    @Override
+    public List<Player> getAllPLayers() {
+        return new ArrayList<>(players.values());
+    }
+
+    @Override
+    public Player getPlayer(String player) throws PersistenceException {
+        Player p = players.get(player);
+        if (p != null) {
+            return p;
+        } else {
+            throw new PersistenceException("Player: " + player + " was not found");
+        }
+    }
+
+    @Override
+    public void addPlayer(Player player) throws PersistenceException {
+        players.putIfAbsent(player.getName(), player);
     }
 }

@@ -6,11 +6,25 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Juego Random</title>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="/assets/css/bg.css" type="text/css"/>
+        <link rel="stylesheet" href="/assets/css/partida.css" type="text/css"/>
+        <script src="/webjars/jquery/jquery.min.js"></script>
+        <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+        <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+        <script src="/js/App.js"></script>
     </head>
     <body>
-        <div>In DEVELOPMENT</div>
+        <form>
+            <h1>Juego Random</h1>
+        </form>
+        <h1>A continuación Jugarás con un rol aleatorio en la sala que quieras jugar</h1>
+        <h1>Selecciona Sala</h1>
+
+        <input class="numeroSala" id="topic" type="number" placeholder="Ingrese numero de sala"/> <br>
+        
+        <button onclick="app.connectToRandomGame()" >Iniciar Partida</button><br>
+        <button onclick="app.backToGameMode()">Regresar</button>
     </body>
 </html>

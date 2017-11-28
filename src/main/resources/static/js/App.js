@@ -20,6 +20,28 @@ var app = (function () {
         );
     };
 
+    function getRolString(num) {
+        if (num === -1) {
+            return "Dibuja";
+        } else if (num === -2) {
+            return "Adivina";
+        }else{
+            return "N/A";
+        }
+    }
+
+    callbackPlayers = function (lista) {
+        $("#tabla tbody").empty();
+        lista.map(function (ur) {
+            $(document).ready(function () {
+                var markup = "<tr><td>" + ur.name + "</td><td>" + ur.room + "</td><td>" + getRolString(ur.rol) + "</td><td>" + ur.score + "</td></tr>";
+                $("#tabla tbody").append(markup);
+            });
+        }
+        );
+
+    };
+
     return{
         getUserName: function (userName) {
             if (userName !== "") {
@@ -31,10 +53,9 @@ var app = (function () {
             ;
         },
         addUser: function (userName, pwd) {
-            console.log("user " + userName + "pwd " + pwd);
+
             if (userName !== "") {
                 var data = {"name": userName, "password": pwd};
-                console.log(data);
                 sessionStorage.setItem("currentuser", userName);
             } else {
                 alert("El nombre del usuario no puede estar vacio");
@@ -53,8 +74,13 @@ var app = (function () {
                     }
             );
         },
+
+        addPlayer: function () {
+
+        },
+
         login: function (user, password) {
-            if (user !== "") {
+            if (user !== "" && password !== "") {
                 $.get("/users/" + user, function (data) {
                     console.log(user + "y" + password);
                     if (password === password) {
@@ -66,6 +92,8 @@ var app = (function () {
                 }).fail(function () {
                     alert("El usuario " + user + " no está registrado");
                 });
+            } else if (user !== "" && password === "") {
+                alert("Debe Digitar una contraseña");
             } else {
                 alert("El usuario no puede estar vacio!!");
             }
@@ -85,7 +113,7 @@ var app = (function () {
 
         },
 
-        connect: function () {
+        connectToNormalGame: function () {
             var gameid = $("#topic").val();
             sessionStorage.setItem("currentgame", gameid);
             var word = "perro";
@@ -96,6 +124,20 @@ var app = (function () {
                 contentType: "application/json"
             }).then(() => {
                 app.rapida();
+            });
+        },
+
+        connectToRandomGame: function () {
+            var gameid = $("#topic").val();
+            sessionStorage.setItem("currentgame", gameid);
+            var word = "perro";
+            $.ajax({
+                url: "/pictureci/" + gameid,
+                type: "PUT",
+                data: word,
+                contentType: "application/json"
+            }).then(() => {
+                app.random();
             });
         },
 
@@ -120,6 +162,9 @@ var app = (function () {
         },
         queryUsers: function () {
             $.get("/users/", callback);
+        },
+        queryPlayers: function () {
+            $.get("/players/", callbackPlayers);
         },
 
         rapida: function () {
@@ -148,6 +193,12 @@ var app = (function () {
             }
         },
 
+        random: function () {
+
+            //PENDIENTE
+
+        },
+
         registro: function () {
             location.href = "registerUser.html";
         },
@@ -157,17 +208,17 @@ var app = (function () {
         inicioSesion: function () {
             location.href = "sesion.html";
         },
-        normalGame: function (){
+        normalGame: function () {
             location.href = "partidaNormal.html";
         },
-        
-        randomGame:function (){
+
+        randomGame: function () {
             location.href = "partidaRandom.html";
         },
-        
-        backToGameMode: function (){
+
+        backToGameMode: function () {
             location.href = "GameMode.html";
         }
-        
+
     };
 })();
