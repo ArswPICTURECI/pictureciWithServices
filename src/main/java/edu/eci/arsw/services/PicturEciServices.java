@@ -86,4 +86,12 @@ public class PicturEciServices {
     public void addPlayer(Player player) throws PersistenceException {
         pep.addPlayer(player);
     }
+    
+    //NORMAL MODE
+    
+    public Game getNormalModeRoom(int gameid) throws PersistenceException {
+        return pep.getNormalModeRoom(gameid);
+    }
+    
+    
 }

@@ -5,6 +5,8 @@
  */
 
 var app = (function () {
+    
+    //sessionStorage.currentplayerName="";
 
     var stompClient = null;
 
@@ -28,7 +30,33 @@ var app = (function () {
         }else{
             return "N/A";
         }
-    }
+    };
+    
+    function addplayerToGame(playerInfo,gameid,tipoJugador){
+        //console.log(playerInfo + "dsa" + gameid + "dsa "+ tipoJugador);
+        return $.ajax({
+                url: "/pictureci/normalMode/" + gameid + "/"+tipoJugador+"/"+playerInfo,
+                type: 'POST',
+                data: JSON.stringify(playerInfo),
+                contentType: "application/json"
+            }).then(function () {
+                $.get("/users", callback);
+                alert("El Jugador: " + playerInfo.name + " se ha creado satisfactoriamente");
+            },
+                    function () {
+                        alert("Error al registrar el nuevo Jugador");
+                    }
+            );
+    };
+    
+    /**
+    function getPlayer(player){
+        if (userName !== "") {
+            return $.get("/players/" + player);
+        } else {
+            return alert("NO EXISTE EL JUGADOR");
+        };
+    }*/
 
     callbackPlayers = function (lista) {
         $("#tabla tbody").empty();
@@ -45,18 +73,19 @@ var app = (function () {
     return{
         getUserName: function (userName) {
             if (userName !== "") {
-                //$.get("/users/" + userName, callback);
                 $.get("/users/" + userName);
             } else {
                 alert("EL USUARIO NO PUEDE ESTAR VACIO");
             }
             ;
         },
+        
         addUser: function (userName, pwd) {
 
             if (userName !== "") {
                 var data = {"name": userName, "password": pwd};
                 sessionStorage.setItem("currentuser", userName);
+                
             } else {
                 alert("El nombre del usuario no puede estar vacio");
             }
@@ -75,17 +104,19 @@ var app = (function () {
             );
         },
 
-        addPlayer: function () {
+        addPlayer: function (p) {
+            
 
         },
 
         login: function (user, password) {
             if (user !== "" && password !== "") {
                 $.get("/users/" + user, function (data) {
-                    console.log(user + "y" + password);
                     if (password === password) {
                         sessionStorage.setItem("currentuser", user);
+                        sessionStorage.currentplayerName=user;
                         location.href = "GameMode.html";
+                        
                     } else {
                         alert("CONTRASEÑA INVALIDA")
                     }
@@ -118,7 +149,7 @@ var app = (function () {
             sessionStorage.setItem("currentgame", gameid);
             var word = "perro";
             $.ajax({
-                url: "/pictureci/" + gameid,
+                url: "/pictureci/normalMode/" + gameid,
                 type: "PUT",
                 data: word,
                 contentType: "application/json"
@@ -127,6 +158,7 @@ var app = (function () {
             });
         },
 
+        //TOCA MODIFICARLO. FALTA
         connectToRandomGame: function () {
             var gameid = $("#topic").val();
             sessionStorage.setItem("currentgame", gameid);
@@ -154,7 +186,7 @@ var app = (function () {
             var cuser = sessionStorage.getItem("currentuser");
             var att = {"username": cuser, "phrase": $("#guess_input").val()};
             return $.ajax({
-                url: "/pictureci/" + cgame + "/guess",
+                url: "/pictureci/normalMode/" + cgame + "/guess",
                 type: "POST",
                 data: JSON.stringify(att),
                 contentType: "application/json"
@@ -174,18 +206,23 @@ var app = (function () {
             };
             if (sessionStorage.getItem('rol') === "Adivinar") {
                 $.ajax({
-                    url: "/pictureci/" + sessionStorage.getItem("currentgame") + "/adivinan",
-                    type: "PUT",
+                    url: "/pictureci/normalMode/" + sessionStorage.getItem("currentgame") + "/adivinan",
+                    type: "POST",
                     success: () => {
+                        var data= {"name":sessionStorage.currentplayerName,"rol":"Adivina","room":sessionStorage.getItem("currentgame"),"score":0};
+                        addplayerToGame(data,sessionStorage.getItem("currentgame"),"adivinan");
                         location.href = "rapidaAdivinador.html";
                     },
                     error: fail
                 });
             } else {
                 $.ajax({
-                    url: "/pictureci/" + sessionStorage.getItem("currentgame") + "/dibujan",
-                    type: "PUT",
+                    url: "/pictureci/normalMode/" + sessionStorage.getItem("currentgame") + "/dibujan",
+                    type: "POST",
                     success: () => {
+                        alert("Nombre de jugador "+sessionStorage.currentplayerName+" rol: dibuja y sala: "+ sessionStorage.getItem("currentgame"));
+                        var data= {"name":sessionStorage.currentplayerName,"rol":"Dibuja","room":sessionStorage.getItem("currentgame"),"score":0};
+                        addplayerToGame(data,sessionStorage.getItem("currentgame"),"dibujan");
                         location.href = "rapidaDibujante.html";
                     },
                     error: fail

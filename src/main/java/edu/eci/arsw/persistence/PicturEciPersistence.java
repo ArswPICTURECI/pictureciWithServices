@@ -43,4 +43,8 @@ public interface PicturEciPersistence {
     public Player getPlayer(String name) throws PersistenceException ;
 
     public void addPlayer(Player player) throws PersistenceException; 
+    
+    //NORMAL GAME
+    public Game getNormalModeRoom(int gameid) throws PersistenceException;
+    
 }

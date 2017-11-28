@@ -122,4 +122,14 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
     public void addPlayer(Player player) throws PersistenceException {
         players.putIfAbsent(player.getName(), player);
     }
+
+    //GAME ON NORMAL MODE
+    @Override
+    public Game getNormalModeRoom(int gameid) throws PersistenceException {
+        Game game = games.get(gameid);
+        if (game != null) {
+            return game;
+        } else {
+            throw new PersistenceException("Room: " + gameid + " was not found");        }
+    }
 }

@@ -37,8 +37,8 @@ public class PictureciResourceController {
     @Autowired
     SimpMessagingTemplate msmt = null;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?> getAllGames() {
+    @RequestMapping(value= "/normalMode",method = RequestMethod.GET)
+    public ResponseEntity<?> getAllGamesInNormalMode() {
         try {
             return new ResponseEntity<>(pes.getAllGames(), HttpStatus.OK);
         } catch (PersistenceException ex) {
@@ -46,9 +46,19 @@ public class PictureciResourceController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+    
+    @RequestMapping(value="/normalMode/{gameid}" , method = RequestMethod.GET)
+    public ResponseEntity<?> getNormalGameRoom(@PathVariable Integer gameid) {
+        try {
+            return new ResponseEntity<>(pes.getNormalModeRoom(gameid), HttpStatus.OK);
+        } catch (PersistenceException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
-    @RequestMapping(value = "/{gameid}", method = RequestMethod.PUT)
-    public ResponseEntity<?> putGame(@PathVariable Integer gameid, @RequestBody String word) {
+    @RequestMapping(value = "/normalMode/{gameid}", method = RequestMethod.PUT)
+    public ResponseEntity<?> putGameNormalMode(@PathVariable Integer gameid, @RequestBody String word) {
         try {
             pes.createGame(gameid, word);
             System.out.println(word);
@@ -59,8 +69,8 @@ public class PictureciResourceController {
         }
     }
 
-    @RequestMapping(value = "/{gameid}/guess", method = RequestMethod.POST)
-    public ResponseEntity<?> guessDrawing(@PathVariable Integer gameid, @RequestBody DrawingGuess attempt) {
+    @RequestMapping(value = "/normalMode/{gameid}/guess", method = RequestMethod.POST)
+    public ResponseEntity<?> guessDrawingNormalmode(@PathVariable Integer gameid, @RequestBody DrawingGuess attempt) {
         try {
             Game in_game = pes.getCurrentGame(gameid);
             boolean win = in_game.tryWord(attempt);
@@ -93,9 +103,10 @@ public class PictureciResourceController {
         }
     }
 
-    @RequestMapping(value = "/{gameid}/dibujan", method = RequestMethod.PUT)
-    public ResponseEntity<?> putDibujanGame(@PathVariable Integer gameid) {
+    @RequestMapping(value = "/normalMode/{gameid}/dibujan", method = RequestMethod.POST)
+    public ResponseEntity<?> postDibujanGameNormalMode(@PathVariable Integer gameid) {
         try {
+            //pes.addPlayer(gameid, new Player("guest", Game.DIBUJAN));
             pes.addPlayer(gameid, new Player("guest", Game.DIBUJAN));
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (CacheException ex) {
@@ -104,8 +115,8 @@ public class PictureciResourceController {
         }
     }
 
-    @RequestMapping(value = "/{gameid}/adivinan", method = RequestMethod.PUT)
-    public ResponseEntity<?> putAdivinanGame(@PathVariable Integer gameid) {
+    @RequestMapping(value = "/normalMode/{gameid}/adivinan", method = RequestMethod.POST)
+    public ResponseEntity<?> postAdivinanGameNormalMode(@PathVariable Integer gameid) {
         try {
             pes.addPlayer(gameid, new Player("guest", Game.ADIVINAN));
             return new ResponseEntity<>(HttpStatus.OK);
