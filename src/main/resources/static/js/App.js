@@ -50,7 +50,8 @@ var app = (function () {
     function addplayerToGame(playerInfo,gameid,tipoJugador){
         return $.ajax({
 
-                url: "/pictureci/normalMode/" + gameid + "/"+tipoJugador+"/"+playerInfo.name,
+                //url: "/pictureci/normalMode/" + gameid + "/"+tipoJugador+"/"+playerInfo.name,
+                url: "/pictureci/normalMode/" + gameid + "/"+tipoJugador,
                 type: 'POST',
                 data: JSON.stringify(playerInfo),
                 contentType: "application/json"
