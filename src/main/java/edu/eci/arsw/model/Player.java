@@ -25,6 +25,8 @@ public class Player {
         this.room=0;
         this.score=0;
     }
+    
+    public Player(){}
 
     public String getName() {
         return name;

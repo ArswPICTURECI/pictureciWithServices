@@ -5,8 +5,6 @@
  */
 
 var app = (function () {
-    
-    //sessionStorage.currentplayerName="";
 
     var stompClient = null;
 
@@ -32,16 +30,38 @@ var app = (function () {
         }
     };
     
-    function addplayerToGame(playerInfo,gameid,tipoJugador){
-        //console.log(playerInfo + "dsa" + gameid + "dsa "+ tipoJugador);
+    function createPlayer(name){
+        console.log(name);
+        var p={"name":name,"rol":0,"room":0,"score":0};
         return $.ajax({
-                url: "/pictureci/normalMode/" + gameid + "/"+tipoJugador+"/"+playerInfo,
+                url: "/players",
+                type: "POST",
+                data: JSON.stringify(p),
+                contentType: "application/json",
+                success:function (){
+                    location.href = "GameMode.html";
+                },
+                error:function (){
+                    alert("El Jugador no se ha podido crear satisfactoriamente");
+                }
+        });        
+    }
+    
+    function addplayerToGame(playerInfo,gameid,tipoJugador){
+        return $.ajax({
+
+                url: "/pictureci/normalMode/" + gameid + "/"+tipoJugador+"/"+playerInfo.name,
                 type: 'POST',
                 data: JSON.stringify(playerInfo),
                 contentType: "application/json"
             }).then(function () {
                 $.get("/users", callback);
-                alert("El Jugador: " + playerInfo.name + " se ha creado satisfactoriamente");
+                alert("El Jugador: " + playerInfo.name + " se ha creado satisfactoriamente a la sala"+gameid);
+                if(tipoJugador==="adivinan"){
+                    location.href = "rapidaAdivinador.html";
+                }else if(tipoJugador==="dibujan"){
+                    location.href = "rapidaDibujante.html";
+                }
             },
                     function () {
                         alert("Error al registrar el nuevo Jugador");
@@ -110,7 +130,8 @@ var app = (function () {
                     if (password === password) {
                         sessionStorage.setItem("currentuser", user);
                         sessionStorage.currentplayerName=user;
-                        location.href = "GameMode.html";
+                        createPlayer(sessionStorage.currentplayerName);
+                        //location.href = "GameMode.html";
                         
                     } else {
                         alert("CONTRASEÑA INVALIDA")
@@ -206,7 +227,6 @@ var app = (function () {
                     success: () => {
                         var data= {"name":sessionStorage.currentplayerName,"rol":"Adivina","room":sessionStorage.getItem("currentgame"),"score":0};
                         addplayerToGame(data,sessionStorage.getItem("currentgame"),"adivinan");
-                        location.href = "rapidaAdivinador.html";
                     },
                     error: fail
                 });
@@ -215,10 +235,8 @@ var app = (function () {
                     url: "/pictureci/normalMode/" + sessionStorage.getItem("currentgame") + "/dibujan",
                     type: "POST",
                     success: () => {
-                        alert("Nombre de jugador "+sessionStorage.currentplayerName+" rol: dibuja y sala: "+ sessionStorage.getItem("currentgame"));
                         var data= {"name":sessionStorage.currentplayerName,"rol":"Dibuja","room":sessionStorage.getItem("currentgame"),"score":0};
                         addplayerToGame(data,sessionStorage.getItem("currentgame"),"dibujan");
-                        location.href = "rapidaDibujante.html";
                     },
                     error: fail
                 });

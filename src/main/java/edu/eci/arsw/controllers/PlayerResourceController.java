@@ -55,7 +55,7 @@ public class PlayerResourceController {
             return new ResponseEntity<>(player, HttpStatus.CREATED);
         } catch (PersistenceException ex) {
             Logger.getLogger(UsersResourceController.class.getName()).log(Level.SEVERE, null, ex);
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
         }
     }
     
