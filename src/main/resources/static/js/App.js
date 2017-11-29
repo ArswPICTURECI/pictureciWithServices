@@ -49,25 +49,23 @@ var app = (function () {
     
     function addplayerToGame(playerInfo,gameid,tipoJugador){
         return $.ajax({
-
                 //url: "/pictureci/normalMode/" + gameid + "/"+tipoJugador+"/"+playerInfo.name,
                 url: "/pictureci/normalMode/" + gameid + "/"+tipoJugador,
                 type: 'POST',
                 data: JSON.stringify(playerInfo),
-                contentType: "application/json"
-            }).then(function () {
-                $.get("/users", callback);
-                alert("El Jugador: " + playerInfo.name + " se ha creado satisfactoriamente a la sala"+gameid);
-                if(tipoJugador==="adivinan"){
-                    location.href = "rapidaAdivinador.html";
-                }else if(tipoJugador==="dibujan"){
-                    location.href = "rapidaDibujante.html";
-                }
-            },
-                    function () {
-                        alert("Error al registrar el nuevo Jugador");
+                contentType: "application/json",
+                success: function (){
+                    alert("El Jugador: " + playerInfo.name + " se ha creado satisfactoriamente a la sala"+gameid);
+                    if(tipoJugador==="adivinan"){
+                        location.href = "rapidaAdivinador.html";
+                    }else if(tipoJugador==="dibujan"){
+                        location.href = "rapidaDibujante.html";
                     }
-            );
+                },
+                error: function (){
+                    alert("Error al registrar el nuevo Jugador");
+                }
+            });
     };
     
     /**
@@ -222,6 +220,7 @@ var app = (function () {
                 alert(data.responseText);
             };
             if (sessionStorage.getItem('rol') === "Adivinar") {
+                /**
                 $.ajax({
                     url: "/pictureci/normalMode/" + sessionStorage.getItem("currentgame") + "/adivinan",
                     type: "POST",
@@ -230,8 +229,11 @@ var app = (function () {
                         addplayerToGame(data,sessionStorage.getItem("currentgame"),"adivinan");
                     },
                     error: fail
-                });
+                });**/
+                var data= {"name":sessionStorage.currentplayerName,"rol":"Adivina","room":sessionStorage.getItem("currentgame"),"score":0};
+                addplayerToGame(data,sessionStorage.getItem("currentgame"),"adivinan");
             } else {
+                /**
                 $.ajax({
                     url: "/pictureci/normalMode/" + sessionStorage.getItem("currentgame") + "/dibujan",
                     type: "POST",
@@ -240,7 +242,9 @@ var app = (function () {
                         addplayerToGame(data,sessionStorage.getItem("currentgame"),"dibujan");
                     },
                     error: fail
-                });
+                });*/
+                var data= {"name":sessionStorage.currentplayerName,"rol":"Dibuja","room":sessionStorage.getItem("currentgame"),"score":0};
+                addplayerToGame(data,sessionStorage.getItem("currentgame"),"dibujan");
             }
         },
 

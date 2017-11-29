@@ -57,6 +57,7 @@ public class PictureciResourceController {
         }
     }
 
+    /**
     @RequestMapping(value = "/normalMode/{gameid}", method = RequestMethod.PUT)
     public ResponseEntity<?> putGameNormalMode(@PathVariable Integer gameid, @RequestBody String word) {
         try {
@@ -67,7 +68,7 @@ public class PictureciResourceController {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.CONFLICT);
         }
-    }
+    }*/
 
     @RequestMapping(value = "/normalMode/{gameid}/guess", method = RequestMethod.POST)
     public ResponseEntity<?> guessDrawingNormalmode(@PathVariable Integer gameid, @RequestBody DrawingGuess attempt) {
