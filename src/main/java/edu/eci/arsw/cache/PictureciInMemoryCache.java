@@ -8,6 +8,9 @@ package edu.eci.arsw.cache;
 import edu.eci.arsw.model.Game;
 import edu.eci.arsw.model.Player;
 import edu.eci.arsw.model.entities.GameException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
@@ -55,5 +58,20 @@ public class PictureciInMemoryCache implements PictureciCache {
         } else {
             throw new CacheException("NO hay juego");
         }
+    }
+
+    @Override
+    public List<Game> getAllGames() throws CacheException {
+        return new ArrayList<>(gamesState.values());
+    }
+
+    @Override
+    public List<Player> getAllPlayers() throws CacheException {
+        List<Game> games = getAllGames();
+        LinkedList<Player> players = new LinkedList<>();
+        games.stream().forEach((g) -> {
+            players.addAll(g.getPlayers());
+        });
+        return players;
     }
 }

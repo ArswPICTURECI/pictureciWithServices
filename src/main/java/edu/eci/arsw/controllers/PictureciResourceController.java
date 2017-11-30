@@ -40,7 +40,7 @@ public class PictureciResourceController {
     public ResponseEntity<?> getAllGamesInNormalMode() {
         try {
             return new ResponseEntity<>(pes.getAllGames(), HttpStatus.OK);
-        } catch (PersistenceException ex) {
+        } catch (CacheException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }

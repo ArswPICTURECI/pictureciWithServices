@@ -29,18 +29,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/players")
 public class PlayerResourceController {
-    
+
     @Autowired
     PicturEciServices pes = null;
-    
+
     @Autowired
     SimpMessagingTemplate msmt = null;
-    
+
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> getPlayers() {
-        return new ResponseEntity<>(pes.getAllPLayers(), HttpStatus.ACCEPTED);
+        try {
+            return new ResponseEntity<>(pes.getAllPLayers(), HttpStatus.ACCEPTED);
+        } catch (CacheException ex) {
+            Logger.getLogger(PlayerResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
     }
-    
+
     @RequestMapping(value = "/normalMode/dibujan-{user}", method = RequestMethod.POST)
     public ResponseEntity<?> postDibujanGameNormalMode(@PathVariable String user, @RequestBody Integer gameid) {
         try {
@@ -49,6 +55,7 @@ public class PlayerResourceController {
             boolean ready = pes.gameReady(gameid);
             System.out.println("Jugador Agregado Sala (" + gameid + ") + : " + user + " Rol: Dibuja");
             if (ready) {
+                Thread.sleep(200);
                 System.out.println("Game: " + gameid + " is ready");
                 msmt.convertAndSend("/topic/ready." + gameid, Game.DIBUJAN);
             }
@@ -56,9 +63,12 @@ public class PlayerResourceController {
         } catch (CacheException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(PlayerResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
     @RequestMapping(value = "/normalMode/adivinan-{user}", method = RequestMethod.POST)
     public ResponseEntity<?> postAdivinanGameNormalMode(@PathVariable String user, @RequestBody Integer gameid) {
         try {
@@ -66,6 +76,7 @@ public class PlayerResourceController {
             boolean ready = pes.gameReady(gameid);
             System.out.println("Jugador Agregado Sala (" + gameid + ") + : " + user + " Rol: Adivina");
             if (ready) {
+                Thread.sleep(200);
                 System.out.println("Game: " + gameid + " is ready");
                 msmt.convertAndSend("/topic/ready." + gameid, Game.ADIVINAN);
             }
@@ -73,9 +84,13 @@ public class PlayerResourceController {
         } catch (CacheException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(PlayerResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
     }
-    
+
     @RequestMapping(value = "/{gameid}/{user}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deletePlayerFromRoom(@PathVariable Integer gameid, @PathVariable String user) {
         try {
@@ -88,7 +103,7 @@ public class PlayerResourceController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    
+
     @RequestMapping(value = "/{gameid}", method = RequestMethod.GET)
     public ResponseEntity<?> getPlayersGame(@PathVariable Integer gameid) {
         return new ResponseEntity<>(pes.getPlayersFrom(gameid), HttpStatus.OK);

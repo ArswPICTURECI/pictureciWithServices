@@ -73,13 +73,13 @@ public class PicturEciServices {
         cache.addPlayer(gameid, player);
     }
 
-    public List<Game> getAllGames() throws PersistenceException {
-        return pep.getFinishedGames();
+    public List<Game> getAllGames() throws CacheException {
+        return cache.getAllGames();
     }
 
     //PLAYERS
-    public List<Player> getAllPLayers() {
-        return new ArrayList<>();
+    public List<Player> getAllPLayers() throws CacheException {
+        return cache.getAllPlayers();
     }
 
     public boolean gameReady(int gameid) throws CacheException {

@@ -50,28 +50,14 @@ var app = (function () {
                 url: "/players/normalMode/adivinan-" + user,
                 type: "POST",
                 data: gameid,
-                contentType: "application/json",
-                success: function (result) {
-                    sessionStorage.setItem("ready", result);
-//                    app.waiting();
-                },
-                error: function (request) {
-                    alert(request.responseText);
-                }
+                contentType: "application/json"
             });
         } else {
             return $.ajax({
                 url: "/players/normalMode/dibujan-" + user,
                 type: "POST",
                 data: gameid,
-                contentType: "application/json",
-                success: function (result) {
-                    sessionStorage.setItem("ready", result);
-//                    app.waiting();
-                },
-                error: function (request) {
-                    alert(request.responseText);
-                }
+                contentType: "application/json"
             });
         }
     };
@@ -148,11 +134,10 @@ var app = (function () {
             }
         },
         connectToNormalGame: function () {
-            sessionStorage.setItem("ready", false);
             putGame().then(function () {
-                connectPlayer();
-            }).then(function () {
                 app.subscribeToRoom();
+            }).then(function () {
+                connectPlayer();
             });
         },
         disconnectFromRoomToRoom: function () {
@@ -186,30 +171,15 @@ var app = (function () {
             console.info('Connecting to WS...');
             var socket = new SockJS('/stompendpoint');
             var gameid = sessionStorage.getItem("currentgame");
-
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
                 console.log('Connected to room ' + gameid + ': ' + frame);
                 stompClient.subscribe('/topic/ready.' + gameid, function () {
-                    sessionStorage.setItem("ready", true);
                     app.makeGame();
                 });
-            });
-//            stompClient.connect({}, function (frame) {
-//                console.log('Connected to room ' + gameid + ': ' + frame);
 //                stompClient.subscribe('/topic/disconnect.' + gameid, function () {
-//                    sessionStorage.setItem("ready", false);
-//                    app.checkReady();
 //                });
-//            });
-            $("#start_gm").prop("disabled", true);
-        },
-        checkReady: function () {
-            if (sessionStorage.getItem("ready") === true) {
-                //Meter timer
-//                app.makeGame();
-                $("#start_gm").prop("disabled", false);
-            }
+            });
         },
         connectToRandomGame: function () {
             var gameid = $("#topic").val();
@@ -254,9 +224,11 @@ var app = (function () {
         },
         queryPlayers: function () {
             var game = $("#topic").val();
-            if (game !== "") {
-                $.get("/players/" + game, callbackPlayers);
-            }
+//            if(game!==""){
+//                $.get("/players/",callbackPlayers);
+//            }else{
+            $.get("/players/" + game, callbackPlayers);
+//            }
         },
         registro: function () {
             location.href = "registerUser.html";
@@ -275,9 +247,6 @@ var app = (function () {
         },
         backToGameMode: function () {
             location.href = "GameMode.html";
-        },
-//        waiting: function () {
-//            location.href = "waiting.html";
-//        }
+        }
     };
 })();
