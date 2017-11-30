@@ -72,15 +72,6 @@ var app = (function () {
         }
     };
 
-    /**
-     function getPlayer(player){
-     if (userName !== "") {
-     return $.get("/players/" + player);
-     } else {
-     return alert("NO EXISTE EL JUGADOR");
-     };
-     }*/
-
     callbackPlayers = function (lista) {
         $("#tabla tbody").empty();
         lista.map(function (ur) {
@@ -151,6 +142,8 @@ var app = (function () {
             });
         },
         cancelQueue: function () {
+            document.getElementById("messageCancel").innerHTML="";
+            document.getElementById("cancelqueuebtn").innerHTML = "";
             return $.ajax({
                 url: "/players/" + sessionStorage.getItem("currentgame") + "/" + sessionStorage.getItem("currentuser"),
                 type: 'DELETE',
@@ -181,6 +174,8 @@ var app = (function () {
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
                 console.log('Connected to room ' + gameid + ': ' + frame);
+                document.getElementById("messageCancel").innerHTML="Esperando a que se conecten los demas usuarios... ";
+                document.getElementById("cancelqueuebtn").innerHTML = "<button type='button' onclick='app.cancelQueue()'>Cancelar Suscripcion al juego</button><br>";
                 stompClient.subscribe('/topic/ready.' + gameid, function () {
                     app.makeGame();
                 });
@@ -225,11 +220,7 @@ var app = (function () {
         },
         queryPlayers: function () {
             var game = $("#topic").val();
-//            if(game!==""){
-//                $.get("/players/",callbackPlayers);
-//            }else{
             $.get("/players/" + game, callbackPlayers);
-//            }
         },
         registro: function () {
             location.href = "registerUser.html";
