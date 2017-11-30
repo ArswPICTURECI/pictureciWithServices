@@ -47,9 +47,9 @@ var app = (function () {
         var gameid = sessionStorage.getItem("currentgame");
         if (rol === "Adivinar") {
             return $.ajax({
-                url: "/pictureci/normalMode/" + gameid + "/adivinan-" + user,
+                url: "/players/normalMode/adivinan-" + user,
                 type: "POST",
-                data: user,
+                data: gameid,
                 contentType: "application/json",
                 success: function (result) {
                     sessionStorage.setItem("ready", result);
@@ -61,9 +61,9 @@ var app = (function () {
             });
         } else {
             return $.ajax({
-                url: "/pictureci/normalMode/" + gameid + "/dibujan-" + user,
+                url: "/players/normalMode/dibujan-" + user,
                 type: "POST",
-                data: user,
+                data: gameid,
                 contentType: "application/json",
                 success: function (result) {
                     sessionStorage.setItem("ready", result);
@@ -227,7 +227,10 @@ var app = (function () {
             $.get("/users/", callback);
         },
         queryPlayers: function () {
-            $.get("/players/", callbackPlayers);
+            var game = $("#topic").val();
+            if (game !== "") {
+                $.get("/players/" + game, callbackPlayers);
+            }
         },
         random: function () {
             //PENDIENTE

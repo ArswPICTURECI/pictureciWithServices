@@ -102,39 +102,4 @@ public class PictureciResourceController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-    @RequestMapping(value = "/normalMode/{gameid}/dibujan-{user}", method = RequestMethod.POST)
-    public ResponseEntity<?> postDibujanGameNormalMode(@PathVariable Integer gameid, @PathVariable String user) {
-        try {
-            //pes.addPlayer(gameid, new Player("guest", Game.DIBUJAN));
-            pes.addPlayer(gameid, new Player(user, gameid, Game.DIBUJAN));
-            boolean ready = pes.gameReady(gameid);
-            System.out.println("Jugador Agregado Sala (" + gameid + ") + : " + user + " Rol: Dibuja");
-            if (ready) {
-                System.out.println("Game: " + gameid + " is ready");
-                msmt.convertAndSend("/topic/ready." + gameid, Game.DIBUJAN);
-            }
-            return new ResponseEntity<>(ready, HttpStatus.OK);
-        } catch (CacheException ex) {
-            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @RequestMapping(value = "/normalMode/{gameid}/adivinan-{user}", method = RequestMethod.POST)
-    public ResponseEntity<?> postAdivinanGameNormalMode(@PathVariable Integer gameid, @PathVariable String user) {
-        try {
-            pes.addPlayer(gameid, new Player(user, gameid, Game.ADIVINAN));
-            boolean ready = pes.gameReady(gameid);
-            System.out.println("Jugador Agregado Sala (" + gameid + ") + : " + user + " Rol: Adivina");
-            if (ready) {
-                System.out.println("Game: " + gameid + " is ready");
-                msmt.convertAndSend("/topic/ready." + gameid, Game.ADIVINAN);
-            }
-            return new ResponseEntity<>(ready, HttpStatus.OK);
-        } catch (CacheException ex) {
-            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
 }

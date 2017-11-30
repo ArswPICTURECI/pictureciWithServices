@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import edu.eci.arsw.persistence.PicturEciPersistence;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -81,5 +83,14 @@ public class PicturEciServices {
 
     public boolean gameReady(int gameid) throws CacheException {
         return cache.getGame(gameid).ready();
+    }
+
+    public List<Player> getPlayersFrom(int gameid) {
+        try {
+            return cache.getGame(gameid).getPlayers();
+        } catch (CacheException ex) {
+            Logger.getLogger(PicturEciServices.class.getName()).log(Level.SEVERE, null, ex);
+            return new ArrayList<>();
+        }
     }
 }

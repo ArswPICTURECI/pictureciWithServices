@@ -5,10 +5,18 @@
  */
 package edu.eci.arsw.controllers;
 
+import edu.eci.arsw.cache.CacheException;
+import edu.eci.arsw.model.Game;
+import edu.eci.arsw.model.Player;
 import edu.eci.arsw.services.PicturEciServices;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,13 +28,55 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/players")
 public class PlayerResourceController {
-    
+
     @Autowired
     PicturEciServices pes = null;
-    
+
+    @Autowired
+    SimpMessagingTemplate msmt = null;
+
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> getPlayers() {
         return new ResponseEntity<>(pes.getAllPLayers(), HttpStatus.ACCEPTED);
+    }
 
+    @RequestMapping(value = "/normalMode/dibujan-{user}", method = RequestMethod.POST)
+    public ResponseEntity<?> postDibujanGameNormalMode(@PathVariable String user, @RequestBody Integer gameid) {
+        try {
+            //pes.addPlayer(gameid, new Player("guest", Game.DIBUJAN));
+            pes.addPlayer(gameid, new Player(user, gameid, Game.DIBUJAN));
+            boolean ready = pes.gameReady(gameid);
+            System.out.println("Jugador Agregado Sala (" + gameid + ") + : " + user + " Rol: Dibuja");
+            if (ready) {
+                System.out.println("Game: " + gameid + " is ready");
+                msmt.convertAndSend("/topic/ready." + gameid, Game.DIBUJAN);
+            }
+            return new ResponseEntity<>(ready, HttpStatus.OK);
+        } catch (CacheException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/normalMode/adivinan-{user}", method = RequestMethod.POST)
+    public ResponseEntity<?> postAdivinanGameNormalMode(@PathVariable String user, @RequestBody Integer gameid) {
+        try {
+            pes.addPlayer(gameid, new Player(user, gameid, Game.ADIVINAN));
+            boolean ready = pes.gameReady(gameid);
+            System.out.println("Jugador Agregado Sala (" + gameid + ") + : " + user + " Rol: Adivina");
+            if (ready) {
+                System.out.println("Game: " + gameid + " is ready");
+                msmt.convertAndSend("/topic/ready." + gameid, Game.ADIVINAN);
+            }
+            return new ResponseEntity<>(ready, HttpStatus.OK);
+        } catch (CacheException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/{gameid}", method = RequestMethod.GET)
+    public ResponseEntity<?> getPlayersGame(@PathVariable Integer gameid) {
+        return new ResponseEntity<>(pes.getPlayersFrom(gameid), HttpStatus.OK);
     }
 }

@@ -31,7 +31,11 @@ public class PictureciInMemoryCache implements PictureciCache {
 
     @Override
     public Game getGame(int gameid) throws CacheException {
-        return gamesState.get(gameid);
+        if (gamesState.containsKey(gameid)) {
+            return gamesState.get(gameid);
+        } else {
+            throw new CacheException("El juego no existe");
+        }
     }
 
     @Override

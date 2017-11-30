@@ -7,7 +7,10 @@ package edu.eci.arsw.model;
 
 import edu.eci.arsw.model.entities.DrawingGuess;
 import edu.eci.arsw.model.entities.GameException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -33,6 +36,14 @@ public class Game {
         this.count_dibujan = 0;
         this.word = word;
         this.winner = "";
+    }
+
+    public void setPlayers() {
+
+    }
+
+    public List<Player> getPlayers() {
+        return players.stream().collect(Collectors.toList());
     }
 
     public int getCount_dibujan() {
