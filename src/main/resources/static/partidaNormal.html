@@ -57,7 +57,8 @@ and open the template in the editor.
 
         <input class="numeroSala" id="topic" type="number" placeholder="Ingrese numero de sala"/> <br>
 
-        <button onclick="app.connectToNormalGame()" >Iniciar Partida</button><br>
-        <button onclick="app.backToGameMode()">Regresar</button>
+        <button id="iniciarpartidabtn" onclick="app.connectToNormalGame()" >Iniciar Partida</button><br>
+        <button id="regresarbtn" onclick="app.backToGameMode()">Regresar</button>
+        <button id="cancelqueuebtn" onclick="app.cancelQueue()" disabled>Cancelar</button>
     </body>
 </html>

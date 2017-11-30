@@ -26,4 +26,6 @@ public interface PictureciCache {
     public List<Game> getAllGames() throws CacheException;
     
     public List<Player> getAllPlayers() throws CacheException;
+
+    public void deletePlayer(int gameid, String player) throws CacheException;
 }

@@ -50,14 +50,24 @@ var app = (function () {
                 url: "/players/normalMode/adivinan-" + user,
                 type: "POST",
                 data: gameid,
-                contentType: "application/json"
+                contentType: "application/json",
+                success: function () {
+                    $("#iniciarpartidabtn").prop("disabled", true);
+                    $("#regresarbtn").prop("disabled", true);
+                    $("#cancelqueuebtn").prop("disabled", false);
+                }
             });
         } else {
             return $.ajax({
                 url: "/players/normalMode/dibujan-" + user,
                 type: "POST",
                 data: gameid,
-                contentType: "application/json"
+                contentType: "application/json",
+                success: function () {
+                    $("#iniciarpartidabtn").prop("disabled", true);
+                    $("#regresarbtn").prop("disabled", true);
+                    $("#cancelqueuebtn").prop("disabled", false);
+                }
             });
         }
     };
@@ -140,18 +150,15 @@ var app = (function () {
                 connectPlayer();
             });
         },
-        disconnectFromRoomToRoom: function () {
+        cancelQueue: function () {
             return $.ajax({
                 url: "/players/" + sessionStorage.getItem("currentgame") + "/" + sessionStorage.getItem("currentuser"),
                 type: 'DELETE',
-                success: app.normalGame()
-            });
-        },
-        disconnectFromRoomToMode: function () {
-            return $.ajax({
-                url: "/players/" + sessionStorage.getItem("currentgame") + "/" + sessionStorage.getItem("currentuser"),
-                type: 'DELETE',
-                success: app.backToGameMode()
+                success: function () {
+                    $("#iniciarpartidabtn").prop("disabled", false);
+                    $("#regresarbtn").prop("disabled", false);
+                    $("#cancelqueuebtn").prop("disabled", true);
+                }
             });
         },
         subscribeToWinner: function () {
@@ -177,21 +184,15 @@ var app = (function () {
                 stompClient.subscribe('/topic/ready.' + gameid, function () {
                     app.makeGame();
                 });
-//                stompClient.subscribe('/topic/disconnect.' + gameid, function () {
-//                });
+                stompClient.subscribe('/topic/disconnect.' + gameid, function () {
+                });
             });
         },
         connectToRandomGame: function () {
-            var gameid = $("#topic").val();
-            sessionStorage.setItem("currentgame", gameid);
-            var word = "perro";
-            $.ajax({
-                url: "/pictureci/" + gameid,
-                type: "PUT",
-                data: word,
-                contentType: "application/json"
+            putGame().then(function () {
+                app.subscribeToRoom();
             }).then(function () {
-                app.random();
+                connectPlayer();
             });
         },
         makeGame: function () {

@@ -98,7 +98,7 @@ public class Game {
     }
 
     public void deletePlayer(String user) throws GameException {
-        if (players.contains(user)) {
+        if (players.get(user) != null) {
             int rol = players.get(user).getRol();
             if (rol == ADIVINAN) {
                 --count_adivinan;

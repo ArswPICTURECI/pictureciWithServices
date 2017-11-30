@@ -8,7 +8,6 @@ package edu.eci.arsw.controllers;
 import edu.eci.arsw.cache.CacheException;
 import edu.eci.arsw.model.Game;
 import edu.eci.arsw.model.Player;
-import edu.eci.arsw.model.entities.GameException;
 import edu.eci.arsw.services.PicturEciServices;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -95,10 +94,10 @@ public class PlayerResourceController {
     public ResponseEntity<?> deletePlayerFromRoom(@PathVariable Integer gameid, @PathVariable String user) {
         try {
             pes.deletePlayerFrom(gameid, user);
-            System.out.println("Desconectado el usuario: " + user + " - del juego: " + gameid);
+            System.out.println("Desconectado el jugador: " + user + " - del juego: " + gameid);
             msmt.convertAndSend("/topic/disconnect." + gameid, gameid);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
-        } catch (CacheException | GameException ex) {
+        } catch (CacheException ex) {
             Logger.getLogger(PlayerResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }

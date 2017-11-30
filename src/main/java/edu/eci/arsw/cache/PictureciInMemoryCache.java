@@ -23,15 +23,15 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class PictureciInMemoryCache implements PictureciCache {
-
+    
     private final ConcurrentMap<Integer, Game> gamesState = new ConcurrentHashMap<>();
-
+    
     @Override
     public void createGame(int gameid, String word) throws CacheException {
         Game new_game = new Game(word);
         gamesState.putIfAbsent(gameid, new_game);
     }
-
+    
     @Override
     public Game getGame(int gameid) throws CacheException {
         if (gamesState.containsKey(gameid)) {
@@ -40,12 +40,12 @@ public class PictureciInMemoryCache implements PictureciCache {
             throw new CacheException("El juego no existe");
         }
     }
-
+    
     @Override
     public void deleteGame(int gameid) throws CacheException {
         gamesState.remove(gameid);
     }
-
+    
     @Override
     public void addPlayer(int gameid, Player player) throws CacheException {
         if (gamesState.containsKey(gameid)) {
@@ -59,12 +59,12 @@ public class PictureciInMemoryCache implements PictureciCache {
             throw new CacheException("NO hay juego");
         }
     }
-
+    
     @Override
     public List<Game> getAllGames() throws CacheException {
         return new ArrayList<>(gamesState.values());
     }
-
+    
     @Override
     public List<Player> getAllPlayers() throws CacheException {
         List<Game> games = getAllGames();
@@ -73,5 +73,18 @@ public class PictureciInMemoryCache implements PictureciCache {
             players.addAll(g.getPlayers());
         });
         return players;
+    }
+    
+    @Override
+    public void deletePlayer(int gameid, String player) throws CacheException {
+        if (gamesState.containsKey(gameid)) {
+            try {
+                gamesState.get(gameid).deletePlayer(player);
+            } catch (GameException ex) {
+                throw new CacheException("Partida: " + gameid + " - " + ex.getMessage());
+            }
+        } else {
+            throw new CacheException("El juego " + gameid + " no existe");
+        }
     }
 }
