@@ -5,12 +5,11 @@
  */
 package edu.eci.arsw.model;
 
+import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import edu.eci.arsw.model.entities.DrawingGuess;
 import edu.eci.arsw.model.entities.GameException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -29,7 +28,7 @@ public class Game {
     protected String word;
     protected String winner;
 
-    private final ConcurrentLinkedQueue<Player> players = new ConcurrentLinkedQueue<>();
+    private final ConcurrentHashMap<String, Player> players = new ConcurrentHashMap<>();
 
     public Game(String word) {
         this.count_adivinan = 0;
@@ -43,7 +42,7 @@ public class Game {
     }
 
     public List<Player> getPlayers() {
-        return players.stream().collect(Collectors.toList());
+        return new ArrayList<>(players.values());
     }
 
     public int getCount_dibujan() {
@@ -88,13 +87,27 @@ public class Game {
                 throw new GameException("Rol Dibujan lleno");
             }
             ++count_dibujan;
-            players.add(player);
+            players.putIfAbsent(player.getName(), player);
         } else if (player.getRol() == ADIVINAN) {
             if (count_adivinan == MAX_ADV) {
                 throw new GameException("Rol Adivinan lleno");
             }
             ++count_adivinan;
-            players.add(player);
+            players.putIfAbsent(player.getName(), player);
+        }
+    }
+
+    public void deletePlayer(String user) throws GameException {
+        if (players.contains(user)) {
+            int rol = players.get(user).getRol();
+            if (rol == ADIVINAN) {
+                --count_adivinan;
+            } else if (rol == DIBUJAN) {
+                --count_dibujan;
+            }
+            players.remove(user);
+        } else {
+            throw new GameException("Jugador " + user + " no se encuentra en la partida");
         }
     }
 

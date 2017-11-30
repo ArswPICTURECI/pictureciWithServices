@@ -47,7 +47,7 @@ public class InMemoryPersistenceTest {
         ipep.registerUser(us1);
         ipep.registerUser(us2);
         ipep.registerUser(us3);
-        assertEquals(ipep.getAllUsers().size(), 5);
+        assertEquals(ipep.getAllUsers().size(), 6);
 
     }
 }

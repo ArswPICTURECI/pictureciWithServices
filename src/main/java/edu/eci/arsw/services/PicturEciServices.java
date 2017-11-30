@@ -10,6 +10,7 @@ import edu.eci.arsw.cache.PictureciCache;
 import edu.eci.arsw.model.Game;
 import edu.eci.arsw.model.Player;
 import edu.eci.arsw.model.User;
+import edu.eci.arsw.model.entities.GameException;
 import edu.eci.arsw.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,5 +93,9 @@ public class PicturEciServices {
             Logger.getLogger(PicturEciServices.class.getName()).log(Level.SEVERE, null, ex);
             return new ArrayList<>();
         }
+    }
+
+    public void deletePlayerFrom(int gameid, String player) throws CacheException, GameException {
+        cache.getGame(gameid).deletePlayer(player);
     }
 }

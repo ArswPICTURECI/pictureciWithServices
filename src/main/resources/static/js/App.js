@@ -53,7 +53,7 @@ var app = (function () {
                 contentType: "application/json",
                 success: function (result) {
                     sessionStorage.setItem("ready", result);
-                    app.waiting();
+//                    app.waiting();
                 },
                 error: function (request) {
                     alert(request.responseText);
@@ -67,7 +67,7 @@ var app = (function () {
                 contentType: "application/json",
                 success: function (result) {
                     sessionStorage.setItem("ready", result);
-                    app.waiting();
+//                    app.waiting();
                 },
                 error: function (request) {
                     alert(request.responseText);
@@ -148,8 +148,25 @@ var app = (function () {
             }
         },
         connectToNormalGame: function () {
+            sessionStorage.setItem("ready", false);
             putGame().then(function () {
                 connectPlayer();
+            }).then(function () {
+                app.subscribeToRoom();
+            });
+        },
+        disconnectFromRoomToRoom: function () {
+            return $.ajax({
+                url: "/players/" + sessionStorage.getItem("currentgame") + "/" + sessionStorage.getItem("currentuser"),
+                type: 'DELETE',
+                success: app.normalGame()
+            });
+        },
+        disconnectFromRoomToMode: function () {
+            return $.ajax({
+                url: "/players/" + sessionStorage.getItem("currentgame") + "/" + sessionStorage.getItem("currentuser"),
+                type: 'DELETE',
+                success: app.backToGameMode()
             });
         },
         subscribeToWinner: function () {
@@ -175,16 +192,25 @@ var app = (function () {
                 console.log('Connected to room ' + gameid + ': ' + frame);
                 stompClient.subscribe('/topic/ready.' + gameid, function () {
                     sessionStorage.setItem("ready", true);
-                    app.checkReady();
+                    app.makeGame();
                 });
             });
+//            stompClient.connect({}, function (frame) {
+//                console.log('Connected to room ' + gameid + ': ' + frame);
+//                stompClient.subscribe('/topic/disconnect.' + gameid, function () {
+//                    sessionStorage.setItem("ready", false);
+//                    app.checkReady();
+//                });
+//            });
+            $("#start_gm").prop("disabled", true);
         },
         checkReady: function () {
-            if (sessionStorage.getItem("ready")) {
-                $("#start_gm").prop("disabled", !sessionStorage.getItem("ready"));
+            if (sessionStorage.getItem("ready") === true) {
+                //Meter timer
+//                app.makeGame();
+                $("#start_gm").prop("disabled", false);
             }
         },
-        //TOCA MODIFICARLO. FALTA
         connectToRandomGame: function () {
             var gameid = $("#topic").val();
             sessionStorage.setItem("currentgame", gameid);
@@ -232,9 +258,6 @@ var app = (function () {
                 $.get("/players/" + game, callbackPlayers);
             }
         },
-        random: function () {
-            //PENDIENTE
-        },
         registro: function () {
             location.href = "registerUser.html";
         },
@@ -253,8 +276,8 @@ var app = (function () {
         backToGameMode: function () {
             location.href = "GameMode.html";
         },
-        waiting: function () {
-            location.href = "waiting.html";
-        }
+//        waiting: function () {
+//            location.href = "waiting.html";
+//        }
     };
 })();

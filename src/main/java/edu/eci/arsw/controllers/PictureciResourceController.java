@@ -7,7 +7,6 @@ package edu.eci.arsw.controllers;
 
 import edu.eci.arsw.cache.CacheException;
 import edu.eci.arsw.model.Game;
-import edu.eci.arsw.model.Player;
 import edu.eci.arsw.model.entities.DrawingGuess;
 import edu.eci.arsw.persistence.PersistenceException;
 import edu.eci.arsw.services.PicturEciServices;
@@ -58,17 +57,6 @@ public class PictureciResourceController {
         }
     }
 
-    /*
-     * @RequestMapping(value = "/normalMode/{gameid}", method =
-     * RequestMethod.PUT) public ResponseEntity<?>
-     * putGameNormalMode(@PathVariable Integer gameid, @RequestBody String word)
-     * { try { pes.createGame(gameid, word); System.out.println(word); return
-     * new ResponseEntity<>(word, HttpStatus.CREATED); } catch (CacheException
-     * ex) {
-     * Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE,
-     * null, ex); return new ResponseEntity<>("Error: " + ex.getMessage(),
-     * HttpStatus.CONFLICT); } }
-     */
     @RequestMapping(value = "/normalMode/{gameid}/guess", method = RequestMethod.POST)
     public ResponseEntity<?> guessDrawingNormalmode(@PathVariable Integer gameid, @RequestBody DrawingGuess attempt) {
         try {
