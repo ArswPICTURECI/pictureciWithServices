@@ -5,9 +5,6 @@
  */
 
 var app = (function () {
-
-    var stompClient = null;
-
     var callback = function (lista) {
 
         $("#tablaUsers tbody").empty();
@@ -54,7 +51,8 @@ var app = (function () {
                 type: "POST",
                 data: user,
                 contentType: "application/json",
-                success: function () {
+                success: function (result) {
+                    sessionStorage.setItem("ready", result);
                     app.waiting();
                 },
                 error: function (request) {
@@ -67,7 +65,8 @@ var app = (function () {
                 type: "POST",
                 data: user,
                 contentType: "application/json",
-                success: function () {
+                success: function (result) {
+                    sessionStorage.setItem("ready", result);
                     app.waiting();
                 },
                 error: function (request) {
@@ -75,35 +74,6 @@ var app = (function () {
                 }
             });
         }
-    };
-
-    subscribeToWinner = function () {
-        console.info('Connecting to WS...');
-        var socket = new SockJS('/stompendpoint');
-        var gameid = sessionStorage.getItem("currentgame");
-
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function (frame) {
-            console.log('Connected to game ' + gameid + ': ' + frame);
-            stompClient.subscribe('/topic/winner.' + gameid, function (eventbody) {
-                alert("Winner: " + eventbody.body);
-            });
-        });
-    };
-
-    subscribeToRoom = function () {
-        console.info('Connecting to WS...');
-        var socket = new SockJS('/stompendpoint');
-        var gameid = sessionStorage.getItem("currentgame");
-
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function (frame) {
-            console.log('Connected to room ' + gameid + ': ' + frame);
-            stompClient.subscribe('/topic/ready.' + gameid, function (data) {
-                alert("wtf");
-                app.makeGame(data);
-            });
-        });
     };
 
     /**
@@ -180,9 +150,39 @@ var app = (function () {
         connectToNormalGame: function () {
             putGame().then(function () {
                 connectPlayer();
-            }).then(function () {
-                subscribeToRoom();
             });
+        },
+        subscribeToWinner: function () {
+            console.info('Connecting to WS...');
+            var socket = new SockJS('/stompendpoint');
+            var gameid = sessionStorage.getItem("currentgame");
+
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log('Connected to game ' + gameid + ': ' + frame);
+                stompClient.subscribe('/topic/winner.' + gameid, function (eventbody) {
+                    alert("Winner: " + eventbody.body);
+                });
+            });
+        },
+        subscribeToRoom: function () {
+            console.info('Connecting to WS...');
+            var socket = new SockJS('/stompendpoint');
+            var gameid = sessionStorage.getItem("currentgame");
+
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log('Connected to room ' + gameid + ': ' + frame);
+                stompClient.subscribe('/topic/ready.' + gameid, function () {
+                    sessionStorage.setItem("ready", true);
+                    app.checkReady();
+                });
+            });
+        },
+        checkReady: function () {
+            if (sessionStorage.getItem("ready")) {
+                $("#start_gm").prop("disabled", !sessionStorage.getItem("ready"));
+            }
         },
         //TOCA MODIFICARLO. FALTA
         connectToRandomGame: function () {
@@ -198,8 +198,8 @@ var app = (function () {
                 app.random();
             });
         },
-        makeGame: function (type) {
-            if (getRolString(type) === "Adivinar") {
+        makeGame: function () {
+            if (sessionStorage.getItem("rol") === "Adivinar") {
                 location.href = "rapidaAdivinador.html";
             } else {
                 location.href = "rapidaDibujante.html";
@@ -228,39 +228,6 @@ var app = (function () {
         },
         queryPlayers: function () {
             $.get("/players/", callbackPlayers);
-        },
-        rapida: function () {
-            sessionStorage.setItem('rol', $("#rol").val());
-            var fail = function (data) {
-                alert(data.responseText);
-            };
-            if (sessionStorage.getItem('rol') === "Adivinar") {
-
-//                 $.ajax({
-//                 url: "/pictureci/normalMode/" + sessionStorage.getItem("currentgame") + "/adivinan",
-//                 type: "POST",
-//                 success: () => {
-//                 var data= {"name":sessionStorage.currentplayerName,"rol":"Adivina","room":sessionStorage.getItem("currentgame"),"score":0};
-//                 addplayerToGame(data,sessionStorage.getItem("currentgame"),"adivinan");
-//                 },
-//                 error: fail
-//                 });
-//                var data = {"name": sessionStorage.currentplayerName, "rol": "Adivina", "room": sessionStorage.getItem("currentgame"), "score": 0};
-//                addplayerToGame(data, sessionStorage.getItem("currentgame"), "adivinan");
-            } else {
-                /**
-                 $.ajax({
-                 url: "/pictureci/normalMode/" + sessionStorage.getItem("currentgame") + "/dibujan",
-                 type: "POST",
-                 success: () => {
-                 var data= {"name":sessionStorage.currentplayerName,"rol":"Dibuja","room":sessionStorage.getItem("currentgame"),"score":0};
-                 addplayerToGame(data,sessionStorage.getItem("currentgame"),"dibujan");
-                 },
-                 error: fail
-                 });*/
-                var data = {"name": sessionStorage.currentplayerName, "rol": "Dibuja", "room": sessionStorage.getItem("currentgame"), "score": 0};
-                addplayerToGame(data, sessionStorage.getItem("currentgame"), "dibujan");
-            }
         },
         random: function () {
             //PENDIENTE

@@ -108,12 +108,13 @@ public class PictureciResourceController {
         try {
             //pes.addPlayer(gameid, new Player("guest", Game.DIBUJAN));
             pes.addPlayer(gameid, new Player(user, gameid, Game.DIBUJAN));
+            boolean ready = pes.gameReady(gameid);
             System.out.println("Jugador Agregado Sala (" + gameid + ") + : " + user + " Rol: Dibuja");
-            if (pes.gameReady(gameid)) {
+            if (ready) {
                 System.out.println("Game: " + gameid + " is ready");
                 msmt.convertAndSend("/topic/ready." + gameid, Game.DIBUJAN);
             }
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(ready, HttpStatus.OK);
         } catch (CacheException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
@@ -124,12 +125,13 @@ public class PictureciResourceController {
     public ResponseEntity<?> postAdivinanGameNormalMode(@PathVariable Integer gameid, @PathVariable String user) {
         try {
             pes.addPlayer(gameid, new Player(user, gameid, Game.ADIVINAN));
+            boolean ready = pes.gameReady(gameid);
             System.out.println("Jugador Agregado Sala (" + gameid + ") + : " + user + " Rol: Adivina");
-            if (pes.gameReady(gameid)) {
+            if (ready) {
                 System.out.println("Game: " + gameid + " is ready");
                 msmt.convertAndSend("/topic/ready." + gameid, Game.ADIVINAN);
             }
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(ready, HttpStatus.OK);
         } catch (CacheException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
