@@ -37,7 +37,7 @@ public class PictureciResourceController {
     @Autowired
     SimpMessagingTemplate msmt = null;
 
-    @RequestMapping(value= "/normalMode",method = RequestMethod.GET)
+    @RequestMapping(value = "/normalMode", method = RequestMethod.GET)
     public ResponseEntity<?> getAllGamesInNormalMode() {
         try {
             return new ResponseEntity<>(pes.getAllGames(), HttpStatus.OK);
@@ -46,30 +46,29 @@ public class PictureciResourceController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
-    
-    @RequestMapping(value="/normalMode/{gameid}" , method = RequestMethod.GET)
-    public ResponseEntity<?> getNormalGameRoom(@PathVariable Integer gameid) {
-        try {
-            return new ResponseEntity<>(pes.getNormalModeRoom(gameid), HttpStatus.OK);
-        } catch (PersistenceException ex) {
-            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 
-    /**
     @RequestMapping(value = "/normalMode/{gameid}", method = RequestMethod.PUT)
-    public ResponseEntity<?> putGameNormalMode(@PathVariable Integer gameid, @RequestBody String word) {
-        try {
+    public ResponseEntity<?> createOrUpdateGame(@PathVariable Integer gameid, @RequestBody String word){
+        try{
             pes.createGame(gameid, word);
-            System.out.println(word);
-            return new ResponseEntity<>(word, HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (CacheException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
-            return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-    }*/
-
+    }
+    
+    /*
+     * @RequestMapping(value = "/normalMode/{gameid}", method =
+     * RequestMethod.PUT) public ResponseEntity<?>
+     * putGameNormalMode(@PathVariable Integer gameid, @RequestBody String word)
+     * { try { pes.createGame(gameid, word); System.out.println(word); return
+     * new ResponseEntity<>(word, HttpStatus.CREATED); } catch (CacheException
+     * ex) {
+     * Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE,
+     * null, ex); return new ResponseEntity<>("Error: " + ex.getMessage(),
+     * HttpStatus.CONFLICT); } }
+     */
     @RequestMapping(value = "/normalMode/{gameid}/guess", method = RequestMethod.POST)
     public ResponseEntity<?> guessDrawingNormalmode(@PathVariable Integer gameid, @RequestBody DrawingGuess attempt) {
         try {
@@ -78,8 +77,8 @@ public class PictureciResourceController {
             System.out.println("Received; Username: " + attempt.getUsername() + " - Phrase: " + attempt.getPhrase());
             if (win) {
                 in_game.setWinner(attempt.getUsername());
-                pes.removeFromCache(gameid);
                 pes.addFinishedGame(gameid, in_game);
+                pes.removeFromCache(gameid);
                 System.out.print("Game: " + gameid);
                 msmt.convertAndSend("/topic/winner." + gameid, attempt.getUsername());
             }
@@ -89,7 +88,7 @@ public class PictureciResourceController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (PersistenceException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_GATEWAY);
         }
     }
 
@@ -104,11 +103,15 @@ public class PictureciResourceController {
         }
     }
 
-    @RequestMapping(value = "/normalMode/{gameid}/dibujan", method = RequestMethod.POST)
-    public ResponseEntity<?> postDibujanGameNormalMode(@PathVariable Integer gameid) {
+    @RequestMapping(value = "/normalMode/{gameid}/dibujan-{user}", method = RequestMethod.POST)
+    public ResponseEntity<?> postDibujanGameNormalMode(@PathVariable Integer gameid, @PathVariable String user) {
         try {
             //pes.addPlayer(gameid, new Player("guest", Game.DIBUJAN));
-            pes.addPlayer(gameid, new Player("guest", Game.DIBUJAN));
+            pes.addPlayer(gameid, new Player(user, gameid, Game.DIBUJAN));
+            if (pes.gameReady(gameid)) {
+                System.out.println("Game: " + gameid + " is ready");
+                msmt.convertAndSend("/topic/ready." + gameid, Game.DIBUJAN);
+            }
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (CacheException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
@@ -116,10 +119,14 @@ public class PictureciResourceController {
         }
     }
 
-    @RequestMapping(value = "/normalMode/{gameid}/adivinan", method = RequestMethod.POST)
-    public ResponseEntity<?> postAdivinanGameNormalMode(@PathVariable Integer gameid) {
+    @RequestMapping(value = "/normalMode/{gameid}/adivinan-{user}", method = RequestMethod.POST)
+    public ResponseEntity<?> postAdivinanGameNormalMode(@PathVariable Integer gameid, @PathVariable String user) {
         try {
-            pes.addPlayer(gameid, new Player("guest", Game.ADIVINAN));
+            pes.addPlayer(gameid, new Player(user, gameid, Game.ADIVINAN));
+            if (pes.gameReady(gameid)) {
+                System.out.println("Game: " + gameid + " is ready");
+                msmt.convertAndSend("/topic/ready." + gameid, Game.ADIVINAN);
+            }
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (CacheException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);

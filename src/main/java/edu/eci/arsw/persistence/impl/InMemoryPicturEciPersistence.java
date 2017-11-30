@@ -29,22 +29,20 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
 
     private final ConcurrentMap<String, User> users = new ConcurrentHashMap<>();
     private final ConcurrentMap<Integer, Game> games = new ConcurrentHashMap<>();
-    private final ConcurrentMap<String, Player> players = new ConcurrentHashMap<>();
 
     public InMemoryPicturEciPersistence() {
         User u1 = new User("Daniel", "123");
         User u2 = new User("Camilo", "123");
+        User u3 = new User("Ana", "123");
 
         users.putIfAbsent("Daniel", u1);
         users.putIfAbsent("Camilo", u2);
-        
-        /**
-        Player p1= new Player("Daniel");
-        Player p2= new Player("Camilo");
-        players.putIfAbsent("Daniel", p1);
-        players.putIfAbsent("Camilo", p2);
-        */
+        users.putIfAbsent("Ana", u3);
 
+        /**
+         * Player p1= new Player("Daniel"); Player p2= new Player("Camilo");
+         * players.putIfAbsent("Daniel", p1); players.putIfAbsent("Camilo", p2);
+         */
     }
 
     @Override
@@ -102,36 +100,5 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
     @Override
     public List<Game> getFinishedGames() throws PersistenceException {
         return new ArrayList<>(games.values());
-    }
-
-    //PLAYERS
-    @Override
-    public List<Player> getAllPLayers() {
-        return new ArrayList<>(players.values());
-    }
-
-    @Override
-    public Player getPlayer(String player) throws PersistenceException {
-        Player p = players.get(player);
-        if (p != null) {
-            return p;
-        } else {
-            throw new PersistenceException("Player: " + player + " was not found");
-        }
-    }
-
-    @Override
-    public void addPlayer(Player player) throws PersistenceException {
-        players.putIfAbsent(player.getName(), player);
-    }
-
-    //GAME ON NORMAL MODE
-    @Override
-    public Game getNormalModeRoom(int gameid) throws PersistenceException {
-        Game game = games.get(gameid);
-        if (game != null) {
-            return game;
-        } else {
-            throw new PersistenceException("Room: " + gameid + " was not found");        }
     }
 }

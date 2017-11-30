@@ -10,11 +10,11 @@ import edu.eci.arsw.cache.PictureciCache;
 import edu.eci.arsw.model.Game;
 import edu.eci.arsw.model.Player;
 import edu.eci.arsw.model.User;
-import edu.eci.arsw.model.entities.DrawingGuess;
 import edu.eci.arsw.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import edu.eci.arsw.persistence.PicturEciPersistence;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -73,25 +73,13 @@ public class PicturEciServices {
     public List<Game> getAllGames() throws PersistenceException {
         return pep.getFinishedGames();
     }
-    
+
     //PLAYERS
     public List<Player> getAllPLayers() {
-        return pep.getAllPLayers();
+        return new ArrayList<>();
     }
 
-    public Player getPlayer(String player) throws PersistenceException {
-        return pep.getPlayer(player);
+    public boolean gameReady(int gameid) throws CacheException {
+        return cache.getGame(gameid).ready();
     }
-
-    public void addPlayer(Player player) throws PersistenceException {
-        pep.addPlayer(player);
-    }
-    
-    //NORMAL MODE
-    
-    public Game getNormalModeRoom(int gameid) throws PersistenceException {
-        return pep.getNormalModeRoom(gameid);
-    }
-    
-    
 }

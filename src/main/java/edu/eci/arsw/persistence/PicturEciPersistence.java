@@ -6,9 +6,7 @@
 package edu.eci.arsw.persistence;
 
 import edu.eci.arsw.model.Game;
-import edu.eci.arsw.model.Player;
 import edu.eci.arsw.model.User;
-import edu.eci.arsw.model.entities.DrawingGuess;
 import java.util.List;
 
 /**
@@ -36,15 +34,4 @@ public interface PicturEciPersistence {
     public Game getFinishedGame(int gameid) throws PersistenceException;
 
     public List<Game> getFinishedGames() throws PersistenceException;
-    
-    //PLAYERS
-    public List<Player> getAllPLayers();
-
-    public Player getPlayer(String name) throws PersistenceException ;
-
-    public void addPlayer(Player player) throws PersistenceException; 
-    
-    //NORMAL GAME
-    public Game getNormalModeRoom(int gameid) throws PersistenceException;
-    
 }

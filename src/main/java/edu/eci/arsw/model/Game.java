@@ -6,6 +6,8 @@
 package edu.eci.arsw.model;
 
 import edu.eci.arsw.model.entities.DrawingGuess;
+import edu.eci.arsw.model.entities.GameException;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  *
@@ -23,6 +25,8 @@ public class Game {
     protected int count_adivinan;
     protected String word;
     protected String winner;
+
+    private final ConcurrentLinkedQueue<Player> players = new ConcurrentLinkedQueue<>();
 
     public Game(String word) {
         this.count_adivinan = 0;
@@ -67,22 +71,25 @@ public class Game {
         this.winner = winner;
     }
 
-    public boolean addPlayer(Player player) {
+    public void addPlayer(Player player) throws GameException {
         if (player.getRol() == DIBUJAN) {
             if (count_dibujan == MAX_DIB) {
-                return false;
+                throw new GameException("Rol Dibujan lleno");
             }
             ++count_dibujan;
+            players.add(player);
             System.out.println("Jugador agregado: Dibujante");
-            return true;
         } else if (player.getRol() == ADIVINAN) {
             if (count_adivinan == MAX_ADV) {
-                return false;
+                throw new GameException("Rol Adivinan lleno");
             }
             ++count_adivinan;
+            players.add(player);
             System.out.println("Jugador agregado: Adivina");
-            return true;
         }
-        return false;
+    }
+
+    public boolean ready() {
+        return players.size() == (MAX_DIB + MAX_ADV);
     }
 }

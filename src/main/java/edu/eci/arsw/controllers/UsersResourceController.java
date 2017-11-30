@@ -29,7 +29,7 @@ public class UsersResourceController {
 
     @Autowired
     PicturEciServices pes = null;
-    
+
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> getUsers() {
         return new ResponseEntity<>(pes.getAllUsers(), HttpStatus.ACCEPTED);
@@ -40,6 +40,7 @@ public class UsersResourceController {
     public ResponseEntity<?> getUser(@PathVariable String username) {
         try {
             User user = pes.getUser(username);
+            System.out.println("GET: " + user.getName());
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (PersistenceException ex) {
             Logger.getLogger(UsersResourceController.class.getName()).log(Level.SEVERE, null, ex);
