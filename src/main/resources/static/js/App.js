@@ -31,6 +31,81 @@ var app = (function () {
     }
     ;
 
+    putGame = function () {
+        var gameid = $("#topic").val();
+        sessionStorage.setItem("currentgame", gameid);
+        var word = "perro";
+        return $.ajax({
+            url: "/pictureci/normalMode/" + gameid,
+            type: "PUT",
+            data: word,
+            contentType: "application/json"
+        });
+    };
+
+    connectPlayer = function () {
+        sessionStorage.setItem("rol", $("#rol").val());
+        var rol = $("#rol").val();
+        var user = sessionStorage.getItem("currentuser");
+        var gameid = sessionStorage.getItem("currentgame");
+        if (rol === "Adivinar") {
+            return $.ajax({
+                url: "/pictureci/normalMode/" + gameid + "/adivinan-" + user,
+                type: "POST",
+                data: user,
+                contentType: "application/json",
+                success: function () {
+                    app.waiting();
+                },
+                error: function (request) {
+                    alert(request.responseText);
+                }
+            });
+        } else {
+            return $.ajax({
+                url: "/pictureci/normalMode/" + gameid + "/dibujan-" + user,
+                type: "POST",
+                data: user,
+                contentType: "application/json",
+                success: function () {
+                    app.waiting();
+                },
+                error: function (request) {
+                    alert(request.responseText);
+                }
+            });
+        }
+    };
+
+    subscribeToWinner = function () {
+        console.info('Connecting to WS...');
+        var socket = new SockJS('/stompendpoint');
+        var gameid = sessionStorage.getItem("currentgame");
+
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            console.log('Connected to game ' + gameid + ': ' + frame);
+            stompClient.subscribe('/topic/winner.' + gameid, function (eventbody) {
+                alert("Winner: " + eventbody.body);
+            });
+        });
+    };
+
+    subscribeToRoom = function () {
+        console.info('Connecting to WS...');
+        var socket = new SockJS('/stompendpoint');
+        var gameid = sessionStorage.getItem("currentgame");
+
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            console.log('Connected to room ' + gameid + ': ' + frame);
+            stompClient.subscribe('/topic/ready.' + gameid, function (data) {
+                alert("wtf");
+                app.makeGame(data);
+            });
+        });
+    };
+
     /**
      function getPlayer(player){
      if (userName !== "") {
@@ -91,7 +166,7 @@ var app = (function () {
                         app.backToGameMode();
 
                     } else {
-                        alert("CONTRASEÑA INVALIDA")
+                        alert("CONTRASEÑA INVALIDA");
                     }
                 }).fail(function () {
                     alert("El usuario " + user + " no está registrado");
@@ -102,62 +177,11 @@ var app = (function () {
                 alert("El usuario no puede estar vacio!!");
             }
         },
-        subscribe: function () {
-            console.info('Connecting to WS...');
-            sessionStorage.setItem("rol", $("#rol").val());
-            sessionStorage.setItem("currentgame", $("#topic").val());
-            var socket = new SockJS('/stompendpoint');
-            var gameid = $("#topic").val();
-            stompClient = Stomp.over(socket);
-            stompClient.connect({}, function (frame) {
-                console.log('Connected to game ' + gameid + ': ' + frame);
-                stompClient.subscribe('/topic/winner.' + gameid, function (eventbody) {
-                    alert("Winner: " + eventbody.body);
-                });
-            });
-            stompClient.connect({}, function (frame) {
-                console.log('Connected to game ' + gameid + ': ' + frame);
-                stompClient.subscribe('/topic/ready.' + gameid, function (data) {
-                    alert("wtf");
-                    app.makeGame(data);
-                });
-            });
-        },
         connectToNormalGame: function () {
-            app.subscribe();
-            var gameid = $("#topic").val();
-            var word = "perro";
-            $.ajax({
-                url: "/pictureci/normalMode/" + gameid,
-                type: "PUT",
-                data: word,
-                contentType: "application/json"
+            putGame().then(function () {
+                connectPlayer();
             }).then(function () {
-                var user = sessionStorage.getItem("currentuser");
-                gameid = sessionStorage.getItem("currentgame");
-                if (sessionStorage.getItem("rol") === "Adivinar") {
-                    $.ajax({
-                        url: "/pictureci/normalMode/" + gameid + "/adivinan-" + user,
-                        type: "POST",
-                        success: function () {
-                            app.waiting();
-                        },
-                        error: function (request) {
-                            alert(request.responseText);
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        url: "/pictureci/normalMode/" + gameid + "/dibujan-" + user,
-                        type: "POST",
-                        success: function () {
-                            app.waiting();
-                        },
-                        error: function (request) {
-                            alert(request.responseText);
-                        }
-                    });
-                }
+                subscribeToRoom();
             });
         },
         //TOCA MODIFICARLO. FALTA
@@ -178,7 +202,7 @@ var app = (function () {
             if (getRolString(type) === "Adivinar") {
                 location.href = "rapidaAdivinador.html";
             } else {
-                location.href = "rapidaDibujante.html"
+                location.href = "rapidaDibujante.html";
             }
         },
         disconnect: function () {

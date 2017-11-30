@@ -78,14 +78,12 @@ public class Game {
             }
             ++count_dibujan;
             players.add(player);
-            System.out.println("Jugador agregado: Dibujante");
         } else if (player.getRol() == ADIVINAN) {
             if (count_adivinan == MAX_ADV) {
                 throw new GameException("Rol Adivinan lleno");
             }
             ++count_adivinan;
             players.add(player);
-            System.out.println("Jugador agregado: Adivina");
         }
     }
 

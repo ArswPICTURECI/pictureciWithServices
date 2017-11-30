@@ -48,8 +48,8 @@ public class PictureciResourceController {
     }
 
     @RequestMapping(value = "/normalMode/{gameid}", method = RequestMethod.PUT)
-    public ResponseEntity<?> createOrUpdateGame(@PathVariable Integer gameid, @RequestBody String word){
-        try{
+    public ResponseEntity<?> createOrUpdateGame(@PathVariable Integer gameid, @RequestBody String word) {
+        try {
             pes.createGame(gameid, word);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (CacheException ex) {
@@ -57,7 +57,7 @@ public class PictureciResourceController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
-    
+
     /*
      * @RequestMapping(value = "/normalMode/{gameid}", method =
      * RequestMethod.PUT) public ResponseEntity<?>
@@ -79,7 +79,7 @@ public class PictureciResourceController {
                 in_game.setWinner(attempt.getUsername());
                 pes.addFinishedGame(gameid, in_game);
                 pes.removeFromCache(gameid);
-                System.out.print("Game: " + gameid);
+                System.out.print("Game Finished: " + gameid);
                 msmt.convertAndSend("/topic/winner." + gameid, attempt.getUsername());
             }
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -108,6 +108,7 @@ public class PictureciResourceController {
         try {
             //pes.addPlayer(gameid, new Player("guest", Game.DIBUJAN));
             pes.addPlayer(gameid, new Player(user, gameid, Game.DIBUJAN));
+            System.out.println("Jugador Agregado Sala (" + gameid + ") + : " + user + " Rol: Dibuja");
             if (pes.gameReady(gameid)) {
                 System.out.println("Game: " + gameid + " is ready");
                 msmt.convertAndSend("/topic/ready." + gameid, Game.DIBUJAN);
@@ -123,6 +124,7 @@ public class PictureciResourceController {
     public ResponseEntity<?> postAdivinanGameNormalMode(@PathVariable Integer gameid, @PathVariable String user) {
         try {
             pes.addPlayer(gameid, new Player(user, gameid, Game.ADIVINAN));
+            System.out.println("Jugador Agregado Sala (" + gameid + ") + : " + user + " Rol: Adivina");
             if (pes.gameReady(gameid)) {
                 System.out.println("Game: " + gameid + " is ready");
                 msmt.convertAndSend("/topic/ready." + gameid, Game.ADIVINAN);
