@@ -90,4 +90,14 @@ public class PictureciResourceController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @RequestMapping(value = "/random", method = RequestMethod.GET)
+    public ResponseEntity<?> getRandomRoom() {
+        try {
+            return new ResponseEntity<>(pes.currentRandomRoom(), HttpStatus.OK);
+        } catch (CacheException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

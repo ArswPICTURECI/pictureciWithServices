@@ -7,6 +7,7 @@ package edu.eci.arsw.cache;
 
 import edu.eci.arsw.model.Game;
 import edu.eci.arsw.model.Player;
+import edu.eci.arsw.model.RandomGame;
 import edu.eci.arsw.model.entities.GameException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -23,15 +24,16 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class PictureciInMemoryCache implements PictureciCache {
-    
+
     private final ConcurrentMap<Integer, Game> gamesState = new ConcurrentHashMap<>();
-    
+    private int lastRandomRoom = 1;
+
     @Override
     public void createGame(int gameid, String word) throws CacheException {
         Game new_game = new Game(word);
         gamesState.putIfAbsent(gameid, new_game);
     }
-    
+
     @Override
     public Game getGame(int gameid) throws CacheException {
         if (gamesState.containsKey(gameid)) {
@@ -40,12 +42,12 @@ public class PictureciInMemoryCache implements PictureciCache {
             throw new CacheException("El juego no existe");
         }
     }
-    
+
     @Override
     public void deleteGame(int gameid) throws CacheException {
         gamesState.remove(gameid);
     }
-    
+
     @Override
     public void addPlayer(int gameid, Player player) throws CacheException {
         if (gamesState.containsKey(gameid)) {
@@ -59,12 +61,12 @@ public class PictureciInMemoryCache implements PictureciCache {
             throw new CacheException("NO hay juego");
         }
     }
-    
+
     @Override
     public List<Game> getAllGames() throws CacheException {
         return new ArrayList<>(gamesState.values());
     }
-    
+
     @Override
     public List<Player> getAllPlayers() throws CacheException {
         List<Game> games = getAllGames();
@@ -74,7 +76,7 @@ public class PictureciInMemoryCache implements PictureciCache {
         });
         return players;
     }
-    
+
     @Override
     public void deletePlayer(int gameid, String player) throws CacheException {
         if (gamesState.containsKey(gameid)) {
@@ -86,5 +88,39 @@ public class PictureciInMemoryCache implements PictureciCache {
         } else {
             throw new CacheException("El juego " + gameid + " no existe");
         }
+    }
+
+    @Override
+    public boolean joinRandomGame(String user) throws CacheException {
+        while (true) {
+            Game randomgame = gamesState.get((-1) * lastRandomRoom);
+            if (randomgame == null) {
+                try {
+                    randomgame = new RandomGame("perro");
+                    randomgame.addPlayer(new Player(user, (-1) * lastRandomRoom, RandomGame.RANDOM_ROL));
+                    gamesState.putIfAbsent((-1) * lastRandomRoom, randomgame);
+                    break;
+                } catch (GameException ex) {
+                    throw new CacheException(ex.getMessage());
+                }
+            } else {
+                if (randomgame.ready()) {
+                    ++lastRandomRoom;
+                } else {
+                    try {
+                        randomgame.addPlayer(new Player(user, (-1) * lastRandomRoom, RandomGame.RANDOM_ROL));
+                        break;
+                    } catch (GameException ex) {
+                        throw new CacheException(ex.getMessage());
+                    }
+                }
+            }
+        }
+        return gamesState.get((-1) * lastRandomRoom).ready();
+    }
+
+    @Override
+    public int currentRandomRoom() {
+        return lastRandomRoom;
     }
 }

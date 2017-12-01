@@ -97,4 +97,12 @@ public class PicturEciServices {
     public void deletePlayerFrom(int gameid, String player) throws CacheException {
         cache.deletePlayer(gameid, player);
     }
+
+    public boolean joinRandomGame(String user) throws CacheException {
+        return cache.joinRandomGame(user);
+    }
+
+    public int currentRandomRoom() throws CacheException {
+        return cache.currentRandomRoom();
+    }
 }

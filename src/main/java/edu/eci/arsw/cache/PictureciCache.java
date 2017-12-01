@@ -28,4 +28,8 @@ public interface PictureciCache {
     public List<Player> getAllPlayers() throws CacheException;
 
     public void deletePlayer(int gameid, String player) throws CacheException;
+    
+    public boolean joinRandomGame(String user) throws CacheException;
+    
+    public int currentRandomRoom();
 }

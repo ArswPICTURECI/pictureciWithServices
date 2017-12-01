@@ -5,10 +5,9 @@
  */
 package edu.eci.arsw.persistence.impl;
 
+import edu.eci.arsw.model.FinishedGame;
 import edu.eci.arsw.model.Game;
-import edu.eci.arsw.model.Player;
 import edu.eci.arsw.model.User;
-import edu.eci.arsw.model.entities.DrawingGuess;
 //import edu.eci.arsw.persistence.DrawingNotFoundException;
 //import edu.eci.arsw.persistence.DrawingPersistenceException;
 //import java.util.HashMap;
@@ -18,7 +17,9 @@ import edu.eci.arsw.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -28,7 +29,7 @@ import java.util.concurrent.ConcurrentMap;
 public class InMemoryPicturEciPersistence implements PicturEciPersistence {
 
     private final ConcurrentMap<String, User> users = new ConcurrentHashMap<>();
-    private final ConcurrentMap<Integer, Game> games = new ConcurrentHashMap<>();
+    private final ConcurrentLinkedDeque<Game> finishedGames = new ConcurrentLinkedDeque<>();
 
     public InMemoryPicturEciPersistence() {
         User u1 = new User("Daniel", "123");
@@ -74,26 +75,16 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
 
     @Override
     public void addFinishedGame(int gameid, Game game) throws PersistenceException {
-        synchronized (games) {
-            if (games.get(gameid) == null) {
-                games.putIfAbsent(gameid, game);
-            } else {
-                throw new PersistenceException("Game " + gameid + " already exists");
-            }
-        }
+        finishedGames.add(new FinishedGame(game, gameid));
     }
 
     @Override
     public Game getFinishedGame(int gameid) throws PersistenceException {
-        Game game = games.get(gameid);
-        if (game != null) {
-            return game;
-        }
-        throw new PersistenceException("Game doesn't exist");
+        throw new UnsupportedOperationException("Por implementar");
     }
 
     @Override
     public List<Game> getFinishedGames() throws PersistenceException {
-        return new ArrayList<>(games.values());
+        return finishedGames.stream().collect(Collectors.toList());
     }
 }

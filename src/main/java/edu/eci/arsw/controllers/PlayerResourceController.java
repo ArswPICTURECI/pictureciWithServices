@@ -90,6 +90,26 @@ public class PlayerResourceController {
         }
     }
 
+    @RequestMapping(value = "/randomGame/{user}", method = RequestMethod.PUT)
+    public ResponseEntity<?> putPlayerInRandom(@PathVariable String user, @RequestBody Integer subscription) {
+        try {
+            boolean ready = pes.joinRandomGame(user);
+            System.out.println("Usuario :" + user + " agregado a sala aleatoria");
+            if (ready) {
+                Thread.sleep(200);
+                System.out.println("Game: " + subscription + " is ready");
+                msmt.convertAndSend("/topic/rndready." + subscription, Game.ADIVINAN);
+            }
+            return new ResponseEntity<>(ready, HttpStatus.OK);
+        } catch (CacheException ex) {
+            Logger.getLogger(PlayerResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(PlayerResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @RequestMapping(value = "/{gameid}/{user}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deletePlayerFromRoom(@PathVariable Integer gameid, @PathVariable String user) {
         try {

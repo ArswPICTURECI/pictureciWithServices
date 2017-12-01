@@ -28,13 +28,21 @@ public class Game {
     protected String word;
     protected String winner;
 
-    private final ConcurrentHashMap<String, Player> players = new ConcurrentHashMap<>();
+    protected ConcurrentHashMap<String, Player> players = new ConcurrentHashMap<>();
 
     public Game(String word) {
         this.count_adivinan = 0;
         this.count_dibujan = 0;
         this.word = word;
         this.winner = "";
+    }
+
+    protected Game(Game game) {
+        this.count_adivinan = game.getCount_adivinan();
+        this.count_dibujan = game.getCount_dibujan();
+        this.word = game.word;
+        this.winner = game.winner;
+        this.players = game.players;
     }
 
     public void setPlayers() {
