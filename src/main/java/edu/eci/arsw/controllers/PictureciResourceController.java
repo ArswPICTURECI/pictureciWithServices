@@ -90,6 +90,8 @@ public class PictureciResourceController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    
+    //Random Game
 
     @RequestMapping(value = "/random", method = RequestMethod.GET)
     public ResponseEntity<?> getRandomRoom() {

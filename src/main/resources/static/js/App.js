@@ -28,9 +28,14 @@ var app = (function () {
     }
     ;
 
+    function setRamdomRol() {
+        return Math.random() * (-1 * -2) + -2;
+
+    }
+
     putGame = function () {
         var gameid = $("#topic").val();
-        sessionStorage.setItem("currentgame", gameid);
+        //sessionStorage.setItem("currentgame", gameid);
         var word = "perro";
         return $.ajax({
             url: "/pictureci/normalMode/" + gameid,
@@ -40,23 +45,14 @@ var app = (function () {
         });
     };
 
-    subscribeRandom = function () {
-        $.get("/pictureci/random", function (data) {
-            sessionStorage.setItem("currentrandomid", data);
-            var gameid = data;
-            console.info('Connecting to WS...');
-            var socket = new SockJS('/stompendpoint');
-            stompClient = Stomp.over(socket);
-            stompClient.connect({}, function (frame) {
-                console.log('Connected to room ' + gameid + ': ' + frame);
-//                document.getElementById("messageCancel").innerHTML = "Esperando a que se conecten los demas usuarios... ";
-//                document.getElementById("cancelqueuebtn").innerHTML = "<button type='button' onclick='app.cancelQueue()'>Cancelar Suscripcion al juego</button><br>";
-                stompClient.subscribe('/topic/rndready.' + gameid, function () {
-                    app.makeGame();
-                });
-                stompClient.subscribe('/topic/disconnect.' + gameid, function () {
-                });
-            });
+    putRandomGame = function () {
+        var gameid = $("#topic").val();
+        var word = "perro";
+        return $.ajax({
+            url: "/pictureci/random/" + gameid,
+            type: "PUT",
+            data: word,
+            contentType: "application/json"
         });
     };
 
@@ -175,13 +171,6 @@ var app = (function () {
                 alert("El usuario no puede estar vacio!!");
             }
         },
-        connectToNormalGame: function () {
-            putGame().then(function () {
-                app.subscribeToRoom();
-            }).then(function () {
-                connectPlayer();
-            });
-        },
         cancelQueue: function () {
             document.getElementById("messageCancel").innerHTML = "";
             document.getElementById("cancelqueuebtn").innerHTML = "";
@@ -205,6 +194,9 @@ var app = (function () {
                 console.log('Connected to game ' + gameid + ': ' + frame);
                 stompClient.subscribe('/topic/winner.' + gameid, function (eventbody) {
                     alert("Winner: " + eventbody.body);
+                    //Correccion para salir despues de que alguien gana
+                    //No estoy seguro si la alerta se le muestra a todos los usuarios
+                    location.href = "GameMode.html";
                 });
             });
         },
@@ -224,8 +216,41 @@ var app = (function () {
                 });
             });
         },
+
+        subscribeRandom : function () {
+            $.get("/pictureci/random", function (data) {
+                sessionStorage.setItem("currentrandomid", data);
+                var gameid = data;
+                console.info('Connecting to WS...');
+                var socket = new SockJS('/stompendpoint');
+                stompClient = Stomp.over(socket);
+                stompClient.connect({}, function (frame) {
+                    console.log('Connected to room ' + gameid + ': ' + frame);
+                    document.getElementById("messageCancel").innerHTML = "Esperando a que se conecten los demas usuarios... ";
+                    document.getElementById("cancelqueuebtn").innerHTML = "<button type='button' onclick='app.cancelQueue()'>Cancelar Suscripcion al juego</button><br>";
+                    stompClient.subscribe('/topic/rndready.' + gameid, function () {
+                        app.makeGame();
+                    });
+                    stompClient.subscribe('/topic/disconnect.' + gameid, function () {
+                    });
+                });
+            });
+        },
+        connectToNormalGame: function () {
+            putGame().then(function () {
+                app.subscribeToRoom();
+            }).then(function () {
+                connectPlayer();
+            });
+        },
         connectToRandomGame: function () {
-            subscribeRandom().then(function () {
+            /**
+             subscribeRandom().then(function () {
+             connectPlayerRandom();
+             });*/
+            putRandomGame().then(function () {
+                app.subscribeRandom();
+            }).then(function () {
                 connectPlayerRandom();
             });
         },
