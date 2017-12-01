@@ -17,7 +17,7 @@ and open the template in the editor.
         <script src="/js/TableroApp.js"></script>
         <script src="/js/App.js"></script>
     </head>
-    <body  onload="app.subscribeToWinner(), tableroapp.init('Dibujar')">
+    <body  onload="app.subscribeToWinner(), tableroapp.init('Dibujar'),app.tempo()">
         <br>
         <h1>Partida Rapida Pictureci</h1>
         <br>
@@ -26,7 +26,10 @@ and open the template in the editor.
         <!--Aca se actualiza lo que se deberia dibujar-->
         <h1 id="whatToDraw">Dibuja un perro</h1>
         <br>
-
+        <br> <br><br>
+        <h1>Te quedan</h1> 
+        <h1 id="numero">180</h1> 
+        <h1>Segundos</h1> 
         <canvas class="canvas" id="myCanvas" width="800" height="600"></canvas>        
 
         <br>

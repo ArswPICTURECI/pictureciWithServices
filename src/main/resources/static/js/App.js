@@ -283,6 +283,17 @@ var app = (function () {
                 contentType: "application/json"
             });
         },
+        tempo: function () {
+            var numero = parseInt($("#Restante").text()),
+                    tiempo = setInterval(function () {
+                        numero = numero - 1;
+                        $("#Restante").text(numero);
+                        if (numero == 0) {
+                            $("#numero").text("LA PARTIDA HA FINALIZADO");
+                            clearInterval(tiempo);
+                        }
+                    }, 1000);
+        },
         queryUsers: function () {
             $.get("/users/", callback);
         },
