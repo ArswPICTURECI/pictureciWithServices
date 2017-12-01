@@ -32,11 +32,12 @@ public class RandomGame extends Game {
             player.setRol(ADIVINAN);
             ++count_adivinan;
             players.putIfAbsent(player.getName(), player);
+            System.out.println(player);
         } else if (count_adivinan == MAX_ADV && count_dibujan < MAX_DIB) {
             player.setRol(DIBUJAN);
             ++count_dibujan;
             players.putIfAbsent(player.getName(), player);
-
+            System.out.println(player);
         } else if (count_adivinan < MAX_ADV && count_dibujan < MAX_DIB) {
             if (random_rol.nextBoolean()) {
                 player.setRol(ADIVINAN);
@@ -46,6 +47,7 @@ public class RandomGame extends Game {
                 ++count_dibujan;
             }
             players.putIfAbsent(player.getName(), player);
+            System.out.println(player);
         } else {
             throw new GameException("Invalid state");
         }

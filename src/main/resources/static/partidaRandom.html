@@ -19,12 +19,13 @@ and open the template in the editor.
         <form>
             <h1>Juego Random</h1>
         </form>
-        <h1>A continuación Jugarás con un rol aleatorio en la sala que quieras jugar</h1>
-        <h1>Selecciona Sala</h1>
-
-        <input class="numeroSala" id="topic" type="number" placeholder="Ingrese numero de sala"/> <br>
+        <h1>A continuación Jugarás con un rol aleatorio</h1>
         
-        <button onclick="app.connectToRandomGame()" >Iniciar Partida</button><br>
-        <button onclick="app.backToGameMode()">Regresar</button>
+        <button id="iniciarrandombtn" onclick="app.connectToRandomGame()" >Iniciar Partida</button><br>
+        
+        <h1 id="messageCancelrandom"></h1>
+        <div id="cancelqueuerandombtn"></div>
+        
+        <button id="regresarrandombtn" onclick="app.backToGameMode()">Regresar</button>
     </body>
 </html>

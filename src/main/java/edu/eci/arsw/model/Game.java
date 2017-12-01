@@ -20,7 +20,7 @@ public class Game {
     public static final int DIBUJAN = -1;
     public static final int ADIVINAN = -2;
 
-    protected static final int MAX_DIB = 2;
+    protected static final int MAX_DIB = 1;
     protected static final int MAX_ADV = 1;
 
     protected int count_dibujan;

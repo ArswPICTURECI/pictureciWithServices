@@ -28,11 +28,6 @@ var app = (function () {
     }
     ;
 
-    function setRamdomRol() {
-        return Math.random() * (-1 * -2) + -2;
-
-    }
-
     putGame = function () {
         var gameid = $("#topic").val();
         //sessionStorage.setItem("currentgame", gameid);
@@ -45,24 +40,33 @@ var app = (function () {
         });
     };
 
-    putRandomGame = function () {
-        var gameid = $("#topic").val();
-        var word = "perro";
-        return $.ajax({
-            url: "/pictureci/random/" + gameid,
-            type: "PUT",
-            data: word,
-            contentType: "application/json"
-        });
-    };
+//    putRandomGame = function () {
+//        var gameid = $("#topic").val();
+//        var word = "perro";
+//        return $.ajax({
+//            url: "/pictureci/random/" + gameid,
+//            type: "PUT",
+//            data: word,
+//            contentType: "application/json"
+//        });
+//    };
 
     connectPlayerRandom = function () {
         var user = sessionStorage.getItem("currentuser");
-        $.ajax({
-            url: "/players/normalMode/adivinan-" + user,
-            type: "POST",
+        return $.ajax({
+            url: "/players/randomGame/" + user,
+            type: "PUT",
             data: sessionStorage.getItem("currentrandomid"),
-            contentType: "application/json"
+            contentType: "application/json",
+            success: function () {
+                $("#iniciarrandombtn").prop("disabled", true);
+                $("#regresarrandombtn").prop("disabled", true);
+            },
+            error: function () {
+                alert("why");
+                document.getElementById('messageCancelrandom').style.visibility = 'hidden';
+                document.getElementById("cancelqueuerandombtn").style.visibility = 'hidden';
+            }
         });
     };
 
@@ -108,6 +112,27 @@ var app = (function () {
             });
         }
     };
+
+    subscribeRandom = function () {
+        return $.get("/pictureci/random", function (data) {
+            sessionStorage.setItem("currentrandomid", data);
+            var gameid = data;
+            console.info('Connecting to WS...');
+            var socket = new SockJS('/stompendpoint');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log('Connected to room ' + gameid + ': ' + frame);
+                document.getElementById("messageCancelrandom").innerHTML = "Esperando a que se conecten los demas usuarios... ";
+                document.getElementById("cancelqueuerandombtn").innerHTML = "<button type='button' onclick='app.cancelQueue()'>Cancelar Suscripcion al juego</button><br>";
+                stompClient.subscribe('/topic/rndready.' + gameid, function () {
+                    app.makeGame();
+                });
+                stompClient.subscribe('/topic/disconnect.' + gameid, function () {
+                });
+            });
+        });
+    };
+
 
     callbackPlayers = function (lista) {
         $("#tabla tbody").empty();
@@ -216,26 +241,6 @@ var app = (function () {
                 });
             });
         },
-
-        subscribeRandom : function () {
-            $.get("/pictureci/random", function (data) {
-                sessionStorage.setItem("currentrandomid", data);
-                var gameid = data;
-                console.info('Connecting to WS...');
-                var socket = new SockJS('/stompendpoint');
-                stompClient = Stomp.over(socket);
-                stompClient.connect({}, function (frame) {
-                    console.log('Connected to room ' + gameid + ': ' + frame);
-                    document.getElementById("messageCancel").innerHTML = "Esperando a que se conecten los demas usuarios... ";
-                    document.getElementById("cancelqueuebtn").innerHTML = "<button type='button' onclick='app.cancelQueue()'>Cancelar Suscripcion al juego</button><br>";
-                    stompClient.subscribe('/topic/rndready.' + gameid, function () {
-                        app.makeGame();
-                    });
-                    stompClient.subscribe('/topic/disconnect.' + gameid, function () {
-                    });
-                });
-            });
-        },
         connectToNormalGame: function () {
             putGame().then(function () {
                 app.subscribeToRoom();
@@ -244,15 +249,14 @@ var app = (function () {
             });
         },
         connectToRandomGame: function () {
-            /**
-             subscribeRandom().then(function () {
-             connectPlayerRandom();
-             });*/
-            putRandomGame().then(function () {
-                app.subscribeRandom();
-            }).then(function () {
+            subscribeRandom().then(function () {
                 connectPlayerRandom();
             });
+//            putRandomGame().then(function () {
+//                app.subscribeRandom();
+//            }).then(function () {
+//                connectPlayerRandom();
+//            });
         },
         makeGame: function () {
             if (sessionStorage.getItem("rol") === "Adivinar") {
