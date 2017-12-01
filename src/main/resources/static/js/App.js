@@ -30,7 +30,7 @@ var app = (function () {
 
     putGame = function () {
         var gameid = $("#topic").val();
-        //sessionStorage.setItem("currentgame", gameid);
+        sessionStorage.setItem("currentgame", gameid);
         var word = "perro";
         return $.ajax({
             url: "/pictureci/normalMode/" + gameid,
