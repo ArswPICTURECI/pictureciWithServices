@@ -38,11 +38,6 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
         users.putIfAbsent("Daniel", u1);
         users.putIfAbsent("Camilo", u2);
         users.putIfAbsent("Ana", u3);
-
-        /**
-         * Player p1= new Player("Daniel"); Player p2= new Player("Camilo");
-         * players.putIfAbsent("Daniel", p1); players.putIfAbsent("Camilo", p2);
-         */
     }
 
     @Override

@@ -54,7 +54,13 @@ var app = (function () {
                 success: function () {
                     $("#iniciarpartidabtn").prop("disabled", true);
                     $("#regresarbtn").prop("disabled", true);
-                    $("#cancelqueuebtn").prop("disabled", false);
+                    //$("#cancelqueuebtn").prop("disabled", false);
+                },
+                error: function (){
+                    alert("Los jugadores con Rol Adivinan estan llenos");
+                    document.getElementById('messageCancel').style.visibility = 'hidden';
+                    document.getElementById("cancelqueuebtn").style.visibility = 'hidden';
+
                 }
             });
         } else {
@@ -66,7 +72,12 @@ var app = (function () {
                 success: function () {
                     $("#iniciarpartidabtn").prop("disabled", true);
                     $("#regresarbtn").prop("disabled", true);
-                    $("#cancelqueuebtn").prop("disabled", false);
+                    //$("#cancelqueuebtn").prop("disabled", false);
+                },
+                error: function (){
+                    alert("Los jugadores con Rol Dibujan estan llenos");
+                    document.getElementById('messageCancel').style.visibility = 'hidden';
+                    document.getElementById("cancelqueuebtn").style.visibility = 'hidden';
                 }
             });
         }
@@ -176,7 +187,7 @@ var app = (function () {
                 console.log('Connected to room ' + gameid + ': ' + frame);
                 document.getElementById("messageCancel").innerHTML="Esperando a que se conecten los demas usuarios... ";
                 document.getElementById("cancelqueuebtn").innerHTML = "<button type='button' onclick='app.cancelQueue()'>Cancelar Suscripcion al juego</button><br>";
-                stompClient.subscribe('/topic/ready.' + gameid, function () {
+                stompClient.subscribe('/topic/ready.' + gameid, function () {    
                     app.makeGame();
                 });
                 stompClient.subscribe('/topic/disconnect.' + gameid, function () {
