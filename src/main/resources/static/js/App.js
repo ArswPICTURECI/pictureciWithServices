@@ -40,6 +40,36 @@ var app = (function () {
         });
     };
 
+    subscribeRandom = function () {
+        $.get("/pictureci/random", function (data) {
+            sessionStorage.setItem("currentrandomid", data);
+            var gameid = data;
+            console.info('Connecting to WS...');
+            var socket = new SockJS('/stompendpoint');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log('Connected to room ' + gameid + ': ' + frame);
+//                document.getElementById("messageCancel").innerHTML = "Esperando a que se conecten los demas usuarios... ";
+//                document.getElementById("cancelqueuebtn").innerHTML = "<button type='button' onclick='app.cancelQueue()'>Cancelar Suscripcion al juego</button><br>";
+                stompClient.subscribe('/topic/rndready.' + gameid, function () {
+                    app.makeGame();
+                });
+                stompClient.subscribe('/topic/disconnect.' + gameid, function () {
+                });
+            });
+        });
+    };
+
+    connectPlayerRandom = function () {
+        var user = sessionStorage.getItem("currentuser");
+        $.ajax({
+            url: "/players/normalMode/adivinan-" + user,
+            type: "POST",
+            data: sessionStorage.getItem("currentrandomid"),
+            contentType: "application/json"
+        });
+    };
+
     connectPlayer = function () {
         sessionStorage.setItem("rol", $("#rol").val());
         var rol = $("#rol").val();
@@ -56,7 +86,7 @@ var app = (function () {
                     $("#regresarbtn").prop("disabled", true);
                     //$("#cancelqueuebtn").prop("disabled", false);
                 },
-                error: function (){
+                error: function () {
                     alert("Los jugadores con Rol Adivinan estan llenos");
                     document.getElementById('messageCancel').style.visibility = 'hidden';
                     document.getElementById("cancelqueuebtn").style.visibility = 'hidden';
@@ -74,7 +104,7 @@ var app = (function () {
                     $("#regresarbtn").prop("disabled", true);
                     //$("#cancelqueuebtn").prop("disabled", false);
                 },
-                error: function (){
+                error: function () {
                     alert("Los jugadores con Rol Dibujan estan llenos");
                     document.getElementById('messageCancel').style.visibility = 'hidden';
                     document.getElementById("cancelqueuebtn").style.visibility = 'hidden';
@@ -153,7 +183,7 @@ var app = (function () {
             });
         },
         cancelQueue: function () {
-            document.getElementById("messageCancel").innerHTML="";
+            document.getElementById("messageCancel").innerHTML = "";
             document.getElementById("cancelqueuebtn").innerHTML = "";
             return $.ajax({
                 url: "/players/" + sessionStorage.getItem("currentgame") + "/" + sessionStorage.getItem("currentuser"),
@@ -185,9 +215,9 @@ var app = (function () {
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
                 console.log('Connected to room ' + gameid + ': ' + frame);
-                document.getElementById("messageCancel").innerHTML="Esperando a que se conecten los demas usuarios... ";
+                document.getElementById("messageCancel").innerHTML = "Esperando a que se conecten los demas usuarios... ";
                 document.getElementById("cancelqueuebtn").innerHTML = "<button type='button' onclick='app.cancelQueue()'>Cancelar Suscripcion al juego</button><br>";
-                stompClient.subscribe('/topic/ready.' + gameid, function () {    
+                stompClient.subscribe('/topic/ready.' + gameid, function () {
                     app.makeGame();
                 });
                 stompClient.subscribe('/topic/disconnect.' + gameid, function () {
@@ -195,10 +225,8 @@ var app = (function () {
             });
         },
         connectToRandomGame: function () {
-            putGame().then(function () {
-                app.subscribeToRoom();
-            }).then(function () {
-                connectPlayer();
+            subscribeRandom().then(function () {
+                connectPlayerRandom();
             });
         },
         makeGame: function () {
@@ -230,8 +258,7 @@ var app = (function () {
             $.get("/users/", callback);
         },
         queryPlayers: function () {
-            var game = $("#topic").val();
-            $.get("/players/" + game, callbackPlayers);
+            $.get("/players/" + $("#topic").val(), callbackPlayers);
         },
         registro: function () {
             location.href = "registerUser.html";

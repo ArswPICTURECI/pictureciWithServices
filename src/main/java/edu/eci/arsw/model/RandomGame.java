@@ -16,7 +16,7 @@ public class RandomGame extends Game {
 
     public static final int RANDOM_ROL = -3;
 
-    private Random random_rol;
+    private final Random random_rol;
 
     public RandomGame(String word) {
         super(word);
