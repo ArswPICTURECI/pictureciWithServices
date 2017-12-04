@@ -321,6 +321,9 @@ var app = (function () {
                         if (numero === 0) {
                             $("#Restante").text("LA PARTIDA HA FINALIZADO");
                             clearInterval(tiempo);
+                            alert("El tiempo ha finalizado.");
+                            location.href = "GameMode.html";
+                            app.disconnect();
                         }
                     }, 1000);
         },
