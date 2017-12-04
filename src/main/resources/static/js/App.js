@@ -63,9 +63,8 @@ var app = (function () {
                 $("#regresarrandombtn").prop("disabled", true);
             },
             error: function () {
-                alert("why");
-                document.getElementById('messageCancelrandom').style.visibility = 'hidden';
-                document.getElementById("cancelqueuerandombtn").style.visibility = 'hidden';
+                document.getElementById('messageCancel').style.visibility = 'hidden';
+                document.getElementById("cancelqueuebtn").style.visibility = 'hidden';
             }
         });
     };
@@ -122,8 +121,8 @@ var app = (function () {
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
                 console.log('Connected to room ' + gameid + ': ' + frame);
-                document.getElementById("messageCancelrandom").innerHTML = "Esperando a que se conecten los demas usuarios... ";
-                document.getElementById("cancelqueuerandombtn").innerHTML = "<button type='button' onclick='app.cancelQueue()'>Cancelar Suscripcion al juego</button><br>";
+                document.getElementById("messageCancel").innerHTML = "Esperando a que se conecten los demas usuarios... ";
+                document.getElementById("cancelqueuebtn").innerHTML = "<button type='button' onclick='app.cancelQueueRandom()'>Cancelar Suscripcion al juego</button><br>";
                 stompClient.subscribe('/topic/rndready.' + gameid, function () {
                     app.makeGame();
                 });
@@ -201,6 +200,19 @@ var app = (function () {
             document.getElementById("cancelqueuebtn").innerHTML = "";
             return $.ajax({
                 url: "/players/" + sessionStorage.getItem("currentgame") + "/" + sessionStorage.getItem("currentuser"),
+                type: 'DELETE',
+                success: function () {
+                    $("#iniciarpartidabtn").prop("disabled", false);
+                    $("#regresarbtn").prop("disabled", false);
+                    $("#cancelqueuebtn").prop("disabled", true);
+                }
+            });
+        },
+        cancelQueueRandom: function () {
+            document.getElementById("messageCancel").innerHTML = "";
+            document.getElementById("cancelqueuebtn").innerHTML = "";
+            return $.ajax({
+                url: "/players/" + sessionStorage.getItem("currentrandomid") + "/" + sessionStorage.getItem("currentuser"),
                 type: 'DELETE',
                 success: function () {
                     $("#iniciarpartidabtn").prop("disabled", false);

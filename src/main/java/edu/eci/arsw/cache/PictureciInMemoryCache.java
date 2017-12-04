@@ -85,6 +85,12 @@ public class PictureciInMemoryCache implements PictureciCache {
             } catch (GameException ex) {
                 throw new CacheException("Partida: " + gameid + " - " + ex.getMessage());
             }
+        } else if (gamesState.containsKey((-1) * gameid)) {
+            try {
+                gamesState.get((-1) * gameid).deletePlayer(player);
+            } catch (GameException ex) {
+                throw new CacheException("Partida Aleatoria: " + gameid + " - " + ex.getMessage());
+            }
         } else {
             throw new CacheException("El juego " + gameid + " no existe");
         }
