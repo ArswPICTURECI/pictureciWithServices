@@ -47,6 +47,7 @@ public class UsersResourceController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+    
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> postUser(@RequestBody User user) {
