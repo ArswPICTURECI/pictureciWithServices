@@ -10,6 +10,7 @@ import edu.eci.arsw.cache.PictureciCache;
 import edu.eci.arsw.model.Game;
 import edu.eci.arsw.model.Player;
 import edu.eci.arsw.model.User;
+import edu.eci.arsw.model.entities.DrawingGuess;
 import edu.eci.arsw.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,8 +37,8 @@ public class PicturEciServices {
         cache.createGame(gameid, word);
     }
 
-    public Game getCurrentGame(int gameid) throws CacheException {
-        return cache.getGame(gameid);
+    public Game getCurrentGame(int gameid, int mode) throws CacheException {
+        return cache.getGame(gameid, mode);
     }
 
     public void registerUser(User user) throws PersistenceException {
@@ -81,13 +82,13 @@ public class PicturEciServices {
         return cache.getAllPlayers();
     }
 
-    public boolean gameReady(int gameid) throws CacheException {
-        return cache.getGame(gameid).ready();
+    public boolean gameReady(int gameid, int mode) throws CacheException {
+        return cache.checkIfReady(gameid, mode);
     }
 
-    public List<Player> getPlayersFrom(int gameid) {
+    public List<Player> getPlayersFrom(int gameid, int mode) {
         try {
-            return cache.getGame(gameid).getPlayers();
+            return cache.getGame(gameid, mode).getPlayers();
         } catch (CacheException ex) {
             Logger.getLogger(PicturEciServices.class.getName()).log(Level.SEVERE, null, ex);
             return new ArrayList<>();
@@ -98,11 +99,15 @@ public class PicturEciServices {
         cache.deletePlayer(gameid, player);
     }
 
-    public boolean joinRandomGame(String user) throws CacheException {
+    public int joinRandomGame(String user) throws CacheException {
         return cache.joinRandomGame(user);
     }
 
     public int currentRandomRoom() throws CacheException {
         return cache.currentRandomRoom();
+    }
+
+    public boolean tryWord(int gameid, int mode, DrawingGuess attempt) throws CacheException {
+        return cache.tryWord(gameid, mode, attempt);
     }
 }

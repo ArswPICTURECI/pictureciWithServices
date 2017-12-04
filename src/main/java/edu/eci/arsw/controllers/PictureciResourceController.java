@@ -60,14 +60,14 @@ public class PictureciResourceController {
     @RequestMapping(value = "/normalMode/{gameid}/guess", method = RequestMethod.POST)
     public ResponseEntity<?> guessDrawingNormalmode(@PathVariable Integer gameid, @RequestBody DrawingGuess attempt) {
         try {
-            Game in_game = pes.getCurrentGame(gameid);
-            boolean win = in_game.tryWord(attempt);
+            boolean win = pes.tryWord(gameid, Game.NORMAL, attempt);
             System.out.println("Received; Username: " + attempt.getUsername() + " - Phrase: " + attempt.getPhrase());
             if (win) {
-                in_game.setWinner(attempt.getUsername());
-                pes.addFinishedGame(gameid, in_game);
+                Game current = pes.getCurrentGame(gameid, Game.NORMAL);
+                current.setWinner(attempt.getUsername());
+                pes.addFinishedGame(gameid, current);
                 pes.removeFromCache(gameid);
-                System.out.print("Game Finished: " + gameid);
+                System.out.print("Normal Game Finished: " + gameid);
                 msmt.convertAndSend("/topic/winner." + gameid, attempt.getUsername());
             }
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -80,19 +80,41 @@ public class PictureciResourceController {
         }
     }
 
-    @RequestMapping(value = "/{gameid}", method = RequestMethod.GET)
-    public ResponseEntity<?> getGameCache(@PathVariable Integer gameid) {
+    @RequestMapping(value = "/randomMode/{gameid}/guess", method = RequestMethod.POST)
+    public ResponseEntity<?> guessDrawingRandommode(@PathVariable Integer gameid, @RequestBody DrawingGuess attempt) {
         try {
-            Game game = pes.getCurrentGame(gameid);
+            boolean win = pes.tryWord(gameid, Game.RANDOM, attempt);
+            System.out.println("Received; Username: " + attempt.getUsername() + " - Phrase: " + attempt.getPhrase());
+            if (win) {
+                Game in_game = pes.getCurrentGame(gameid, Game.RANDOM);
+                in_game.setWinner(attempt.getUsername());
+                pes.addFinishedGame(gameid, in_game);
+                pes.removeFromCache(gameid);
+                System.out.print("Random Game Finished: " + gameid);
+                msmt.convertAndSend("/topic/winner-" + gameid, attempt.getUsername());
+            }
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (CacheException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (PersistenceException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_GATEWAY);
+        }
+    }
+
+    @RequestMapping(value = "/normal/{gameid}", method = RequestMethod.GET)
+    public ResponseEntity<?> getNormalGameCache(@PathVariable Integer gameid) {
+        try {
+            Game game = pes.getCurrentGame(gameid, Game.NORMAL);
             return new ResponseEntity<>(game, HttpStatus.OK);
         } catch (CacheException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    
-    //Random Game
 
+    //Random Game
     @RequestMapping(value = "/random", method = RequestMethod.GET)
     public ResponseEntity<?> getRandomRoom() {
         try {

@@ -8,6 +8,7 @@ package edu.eci.arsw.cache;
 import edu.eci.arsw.model.Game;
 import edu.eci.arsw.model.Player;
 import edu.eci.arsw.model.RandomGame;
+import edu.eci.arsw.model.entities.DrawingGuess;
 import edu.eci.arsw.model.entities.GameException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -35,11 +36,22 @@ public class PictureciInMemoryCache implements PictureciCache {
     }
 
     @Override
-    public Game getGame(int gameid) throws CacheException {
-        if (gamesState.containsKey(gameid)) {
-            return gamesState.get(gameid);
-        } else {
-            throw new CacheException("El juego no existe");
+    public Game getGame(int gameid, int mode) throws CacheException {
+        switch (mode) {
+            case Game.NORMAL:
+                if (gamesState.containsKey(gameid)) {
+                    return gamesState.get(gameid);
+                } else {
+                    throw new CacheException("El juego no existe");
+                }
+            case Game.RANDOM:
+                if (gamesState.containsKey((-1) * gameid)) {
+                    return gamesState.get((-1) * gameid);
+                } else {
+                    throw new CacheException("El juego no existe");
+                }
+            default:
+                throw new CacheException("Invalid State");
         }
     }
 
@@ -97,7 +109,7 @@ public class PictureciInMemoryCache implements PictureciCache {
     }
 
     @Override
-    public boolean joinRandomGame(String user) throws CacheException {
+    public int joinRandomGame(String user) throws CacheException {
         while (true) {
             Game randomgame = gamesState.get((-1) * lastRandomRoom);
             if (randomgame == null) {
@@ -122,11 +134,51 @@ public class PictureciInMemoryCache implements PictureciCache {
                 }
             }
         }
-        return gamesState.get((-1) * lastRandomRoom).ready();
+        return gamesState.get((-1) * lastRandomRoom).getPlayerRol(user);
     }
 
     @Override
     public int currentRandomRoom() {
         return lastRandomRoom;
+    }
+
+    @Override
+    public boolean checkIfReady(int gameid, int mode) throws CacheException {
+        switch (mode) {
+            case Game.NORMAL:
+                if (gamesState.containsKey(gameid)) {
+                    return gamesState.get(gameid).ready();
+                } else {
+                    throw new CacheException("El juego " + gameid + " no existe");
+                }
+            case Game.RANDOM:
+                if (gamesState.containsKey((-1) * gameid)) {
+                    return gamesState.get((-1) * gameid).ready();
+                } else {
+                    throw new CacheException("El juego aleatorio" + gameid + " no existe");
+                }
+            default:
+                throw new CacheException("Invalid State game: " + gameid);
+        }
+    }
+
+    @Override
+    public boolean tryWord(int gameid, int mode, DrawingGuess attempt) throws CacheException {
+        switch (mode) {
+            case Game.RANDOM:
+                if (gamesState.containsKey((-1) * gameid)) {
+                    return gamesState.get((-1) * gameid).tryWord(attempt);
+                } else {
+                    throw new CacheException("El Juego aleagorio: " + gameid + " no existe");
+                }
+            case Game.NORMAL:
+                if (gamesState.containsKey(gameid)) {
+                    return gamesState.get(gameid).tryWord(attempt);
+                } else {
+                    throw new CacheException("El Juego: " + gameid + " no existe");
+                }
+            default:
+                throw new CacheException("Invalid State");
+        }
     }
 }

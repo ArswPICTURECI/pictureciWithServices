@@ -20,6 +20,9 @@ public class Game {
     public static final int DIBUJAN = -1;
     public static final int ADIVINAN = -2;
 
+    public static final int RANDOM = 99;
+    public static final int NORMAL = 100;
+
     protected static final int MAX_DIB = 1;
     protected static final int MAX_ADV = 1;
 
@@ -106,7 +109,7 @@ public class Game {
     }
 
     public void deletePlayer(String user) throws GameException {
-        if (players.get(user) != null) {
+        if (players.containsKey(user)) {
             int rol = players.get(user).getRol();
             if (rol == ADIVINAN) {
                 --count_adivinan;
@@ -117,6 +120,10 @@ public class Game {
         } else {
             throw new GameException("Jugador " + user + " no se encuentra en la partida");
         }
+    }
+
+    public int getPlayerRol(String user) {
+        return players.get(user).getRol();
     }
 
     public boolean ready() {

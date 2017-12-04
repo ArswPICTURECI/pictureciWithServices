@@ -40,17 +40,6 @@ var app = (function () {
         });
     };
 
-//    putRandomGame = function () {
-//        var gameid = $("#topic").val();
-//        var word = "perro";
-//        return $.ajax({
-//            url: "/pictureci/random/" + gameid,
-//            type: "PUT",
-//            data: word,
-//            contentType: "application/json"
-//        });
-//    };
-
     connectPlayerRandom = function () {
         var user = sessionStorage.getItem("currentuser");
         return $.ajax({
@@ -58,9 +47,10 @@ var app = (function () {
             type: "PUT",
             data: sessionStorage.getItem("currentrandomid"),
             contentType: "application/json",
-            success: function () {
-                $("#iniciarrandombtn").prop("disabled", true);
-                $("#regresarrandombtn").prop("disabled", true);
+            success: function (data) {
+                sessionStorage.setItem("rol", getRolString(data));
+                $("#iniciarpartidabtn").prop("disabled", true);
+                $("#regresarbtn").prop("disabled", true);
             },
             error: function () {
                 document.getElementById('messageCancel').style.visibility = 'hidden';
@@ -123,10 +113,23 @@ var app = (function () {
                 console.log('Connected to room ' + gameid + ': ' + frame);
                 document.getElementById("messageCancel").innerHTML = "Esperando a que se conecten los demas usuarios... ";
                 document.getElementById("cancelqueuebtn").innerHTML = "<button type='button' onclick='app.cancelQueueRandom()'>Cancelar Suscripcion al juego</button><br>";
-                stompClient.subscribe('/topic/rndready.' + gameid, function () {
-                    app.makeGame();
+                stompClient.subscribe('/topic/rndready.' + gameid, function (data) {
+                    var rol = sessionStorage.getItem("rol");
+                    if (rol === null) {
+                        if (data.body === -1) {
+                            location.href = "rapidaDibujante.html";
+                        } else {
+                            location.href = "rapidaAdivinador.html";
+                        }
+                    } else {
+                        if (rol === "Dibujar") {
+                            location.href = "rapidaDibujante.html";
+                        } else {
+                            location.href = "rapidaAdivinador.html";
+                        }
+                    }
                 });
-                stompClient.subscribe('/topic/disconnect.' + gameid, function () {
+                stompClient.subscribe('/topic/disconnectrandom.' + gameid, function () {
                 });
             });
         });
@@ -224,12 +227,21 @@ var app = (function () {
         subscribeToWinner: function () {
             console.info('Connecting to WS...');
             var socket = new SockJS('/stompendpoint');
-            var gameid = sessionStorage.getItem("currentgame");
+            var gameid;
+            var prefix;
+
+            if (sessionStorage.getItem("mode") === "normal") {
+                gameid = sessionStorage.getItem("currentgame");
+                prefix = "/topic/winner.";
+            } else {
+                gameid = sessionStorage.getItem("currentrandomid");
+                prefix = "/topic/winner-";
+            }
 
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
                 console.log('Connected to game ' + gameid + ': ' + frame);
-                stompClient.subscribe('/topic/winner.' + gameid, function (eventbody) {
+                stompClient.subscribe(prefix + gameid, function (eventbody) {
                     alert("Winner: " + eventbody.body);
                     //Correccion para salir despues de que alguien gana
                     //No estoy seguro si la alerta se le muestra a todos los usuarios
@@ -264,11 +276,6 @@ var app = (function () {
             subscribeRandom().then(function () {
                 connectPlayerRandom();
             });
-//            putRandomGame().then(function () {
-//                app.subscribeRandom();
-//            }).then(function () {
-//                connectPlayerRandom();
-//            });
         },
         makeGame: function () {
             if (sessionStorage.getItem("rol") === "Adivinar") {
@@ -285,22 +292,33 @@ var app = (function () {
             console.log("Disconnected from game: " + sessionStorage.getItem("currentgame"));
         },
         attempt: function () {
-            var cgame = sessionStorage.getItem("currentgame");
+            var mode = sessionStorage.getItem("mode");
             var cuser = sessionStorage.getItem("currentuser");
             var att = {"username": cuser, "phrase": $("#guess_input").val()};
-            return $.ajax({
-                url: "/pictureci/normalMode/" + cgame + "/guess",
-                type: "POST",
-                data: JSON.stringify(att),
-                contentType: "application/json"
-            });
+            if (mode === "normal") {
+                var cgame = sessionStorage.getItem("currentgame");
+                return $.ajax({
+                    url: "/pictureci/normalMode/" + cgame + "/guess",
+                    type: "POST",
+                    data: JSON.stringify(att),
+                    contentType: "application/json"
+                });
+            } else {
+                var cgame = sessionStorage.getItem("currentrandomid");
+                return $.ajax({
+                    url: "/pictureci/randomMode/" + cgame + "/guess",
+                    type: "POST",
+                    data: JSON.stringify(att),
+                    contentType: "application/json"
+                });
+            }
         },
         tempo: function () {
             var numero = parseInt($("#Restante").text()),
                     tiempo = setInterval(function () {
                         numero = numero - 1;
                         $("#Restante").text(numero);
-                        if (numero == 0) {
+                        if (numero === 0) {
                             $("#Restante").text("LA PARTIDA HA FINALIZADO");
                             clearInterval(tiempo);
                         }

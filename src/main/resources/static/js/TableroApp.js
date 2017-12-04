@@ -15,6 +15,7 @@ var tableroapp = (function () {
     var flagPaint = false;
     var actualPos;
     var sala = null;
+    var mode;
 
     var getMousePos = function (canvas, evt) {
         var rect = canvas.getBoundingClientRect();
@@ -25,11 +26,23 @@ var tableroapp = (function () {
     };
 
     var connect = function () {
+        mode = sessionStorage.getItem("mode");
+        console.log("Modo: " + mode);
         var socket = new SockJS('/stompendpoint');
+        var prefix, prefix2;
+        if (mode === "normal") {
+            sala = sessionStorage.getItem("currentgame");
+            prefix = "/topic/";
+            prefix2 = prefix + "erase.";
+        } else {
+            sala = sessionStorage.getItem("currentrandomid");
+            prefix = "/topic/-";
+            prefix2 = "/topic/erase-";
+        }
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/' + sala, function (data) {
+            stompClient.subscribe(prefix + sala, function (data) {
                 theObject = JSON.parse(data.body);
                 var ctx = canvas.getContext('2d');
                 ctx.beginPath();
@@ -37,7 +50,7 @@ var tableroapp = (function () {
                 ctx.stroke();
             });
 
-            stompClient.subscribe('/topic/erase.' + sala, function (data) {
+            stompClient.subscribe(prefix2 + sala, function (data) {
                 var ctx = canvas.getContext('2d');
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
             });
@@ -98,7 +111,11 @@ var tableroapp = (function () {
     };
 
     var sendPoint = function () {
-        stompClient.send("/topic/" + sala, {}, JSON.stringify({x: x, y: y}));
+        if (sessionStorage.getItem("mode") === "normal") {
+            stompClient.send("/topic/" + sala, {}, JSON.stringify({x: x, y: y}));
+        } else {
+            stompClient.send("/topic/-" + sala, {}, JSON.stringify({x: x, y: y}));
+        }
     };
 
     var hc = function () {
@@ -112,7 +129,6 @@ var tableroapp = (function () {
     return {
 
         init: function (val) {
-            sala = sessionStorage.getItem("currentgame");
             connect();
             console.info('connecting to websockets');
             canvas = document.getElementById('myCanvas');
@@ -140,7 +156,11 @@ var tableroapp = (function () {
         },
 
         erase: function () {
-            stompClient.send("/topic/erase." + sala, {}, "");
+            if (sessionStorage.getItem("mode") === "normal") {
+                stompClient.send("/topic/erase." + sala, {}, "");
+            } else {
+                stompClient.send("/topic/erase-" + sala, {}, "");
+            }
         }
     };
 })();

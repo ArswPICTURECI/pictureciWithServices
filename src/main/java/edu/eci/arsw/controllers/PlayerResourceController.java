@@ -51,7 +51,7 @@ public class PlayerResourceController {
         try {
             //pes.addPlayer(gameid, new Player("guest", Game.DIBUJAN));
             pes.addPlayer(gameid, new Player(user, gameid, Game.DIBUJAN));
-            boolean ready = pes.gameReady(gameid);
+            boolean ready = pes.gameReady(gameid, Game.NORMAL);
             System.out.println("Jugador Agregado Sala (" + gameid + ") + : " + user + " Rol: Dibuja");
             if (ready) {
                 Thread.sleep(200);
@@ -72,7 +72,7 @@ public class PlayerResourceController {
     public ResponseEntity<?> postAdivinanGameNormalMode(@PathVariable String user, @RequestBody Integer gameid) {
         try {
             pes.addPlayer(gameid, new Player(user, gameid, Game.ADIVINAN));
-            boolean ready = pes.gameReady(gameid);
+            boolean ready = pes.gameReady(gameid, Game.NORMAL);
             System.out.println("Jugador Agregado Sala (" + gameid + ") + : " + user + " Rol: Adivina");
             if (ready) {
                 Thread.sleep(200);
@@ -93,14 +93,14 @@ public class PlayerResourceController {
     @RequestMapping(value = "/randomGame/{user}", method = RequestMethod.PUT)
     public ResponseEntity<?> putPlayerInRandom(@PathVariable String user, @RequestBody Integer subscription) {
         try {
-            boolean ready = pes.joinRandomGame(user);
+            int rol = pes.joinRandomGame(user);
             System.out.println("Usuario :" + user + " agregado a sala aleatoria");
-            if (ready) {
+            if (pes.gameReady(subscription, Game.RANDOM)) {
                 Thread.sleep(200);
                 System.out.println("Game: " + subscription + " is ready");
-                msmt.convertAndSend("/topic/rndready." + subscription, Game.ADIVINAN);
+                msmt.convertAndSend("/topic/rndready." + subscription, rol);
             }
-            return new ResponseEntity<>(ready, HttpStatus.OK);
+            return new ResponseEntity<>(rol, HttpStatus.OK);
         } catch (CacheException ex) {
             Logger.getLogger(PlayerResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -125,6 +125,6 @@ public class PlayerResourceController {
 
     @RequestMapping(value = "/{gameid}", method = RequestMethod.GET)
     public ResponseEntity<?> getPlayersGame(@PathVariable Integer gameid) {
-        return new ResponseEntity<>(pes.getPlayersFrom(gameid), HttpStatus.OK);
+        return new ResponseEntity<>(pes.getPlayersFrom(gameid, Game.NORMAL), HttpStatus.OK);
     }
 }
