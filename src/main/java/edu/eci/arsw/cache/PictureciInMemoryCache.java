@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
  *
  * @author rami
  */
-@Service
+//@Service
 public class PictureciInMemoryCache implements PictureciCache {
 
     private final ConcurrentMap<Integer, Game> gamesState = new ConcurrentHashMap<>();
