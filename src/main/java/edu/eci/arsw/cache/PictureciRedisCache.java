@@ -26,7 +26,10 @@ public class PictureciRedisCache implements PictureciCache {
 
     @Override
     public void createGame(int gameid, String word) throws CacheException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String game ="game:"+gameid;
+        template.opsForHash().put(game, "word", word);
+        template.opsForHash().put(game, "guessedWord", "");
+        template.opsForHash().put(game, "winner", "");
     }
 
     @Override
